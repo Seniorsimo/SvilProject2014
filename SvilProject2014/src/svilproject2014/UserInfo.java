@@ -10,4 +10,8 @@ package svilproject2014;
  */
 public class UserInfo {
     
+    private String id;
+    private String nome;
+    private String cognome;
+    
 }

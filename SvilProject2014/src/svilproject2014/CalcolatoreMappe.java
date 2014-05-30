@@ -10,4 +10,15 @@ package svilproject2014;
  */
 public class CalcolatoreMappe {
     
+    public static CalcolatoreMappe create(String met){
+        //da implementare
+        
+        return null;
+    }
+    
+    public Mappatura calcola(String chiave){
+        //da implementare
+        
+        return null;
+    }
 }

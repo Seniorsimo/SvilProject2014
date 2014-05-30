@@ -10,4 +10,19 @@ package svilproject2014;
  */
 public class Mappatura {
     
+    private char[] mappa;
+    private char[] mappaInversa;
+    
+    public char map(char c){
+        //da implementare
+        
+        return ' ';
+    }
+    
+    public char inverseMap(char c){
+        //da implementare
+        
+        return ' ';
+    }
+    
 }

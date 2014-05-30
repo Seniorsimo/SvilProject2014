@@ -10,4 +10,16 @@ package svilproject2014;
  */
 public class Cifratore {
     
+    public static String cifra(Mappatura map, String testo){
+        //da implementare
+        
+        return null;
+    }
+    
+    public static String decifra(Mappatura map, String testo){
+        //da implementare
+        
+        return null;
+    }
+    
 }

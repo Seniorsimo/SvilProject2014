@@ -10,4 +10,10 @@ package svilproject2014;
  */
 public class Studente {
     
+    private String nome;
+    private String cognome;
+    private String id;
+    private String login;
+    private String pwd;
+    
 }

@@ -6,10 +6,6 @@
 
 package svilproject2014;
 
-/**
- *
- * @author Mirko
- */
 public class SvilProject2014 {
 
     /**

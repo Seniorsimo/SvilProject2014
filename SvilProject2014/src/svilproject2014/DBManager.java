@@ -12,6 +12,10 @@ import java.sql.*;
  */
 public class DBManager {
     
+    static String url = "jdbc:derby://localhost:1527/dbsvil";
+    static String user = "adminsvil";
+    static String pwd = "adminsvil";
+    
     public ResultSet execute(Statement q){
         //da implementare
         

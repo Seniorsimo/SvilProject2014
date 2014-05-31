@@ -35,12 +35,26 @@ public class DBManager {
     
     //inizializzazione Statement per query e eventuale creazione di tabelle.
     private static Connection conn;
-    private static Statement st = init();
+    private static Statement st = init(); //in questo modo il metodo viene invocato al caricamento della classe garantendo la creazione di una connessione
+    
+    /*IMPORTANTE
+     * non vengono effettuate close() ne sullo Statement ne sulla Connection.
+     * Queste connessioni vengono create a runtime durante il caricamento della classe.
+     * Verificare o controllare che effettivamente a terminazione del programma queste vengano hiuse, in caso contrario sarà
+     * necessario provvedere noi a chiuderle in qualche modo
+     */
     
     
     public ResultSet execute(String q){
-        //da implementare
         
+        //utilizzando lo statemente già creato eseguo la query e restituisco il resultSet risultato
+        try {
+            ResultSet rs = st.executeQuery(q);
+            return rs;
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.WARNING,"Errore nell'esecuzione della query: " + ex.getMessage());
+            ex.printStackTrace();
+        }
         return null;
     }
     

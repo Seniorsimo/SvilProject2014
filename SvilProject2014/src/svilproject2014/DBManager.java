@@ -5,6 +5,8 @@
 package svilproject2014;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,14 +29,98 @@ import java.sql.*;
  */
 public class DBManager {
     
-    static String url = "jdbc:derby://localhost:1527/dbsvil";
-    static String user = "adminsvil";
-    static String pwd = "adminsvil";
+    private static String url = "jdbc:derby://localhost:1527/dbsvil";
+    private static String user = "adminsvil";
+    private static String pwd = "adminsvil";
     
-    public ResultSet execute(Statement q){
+    //inizializzazione Statement per query e eventuale creazione di tabelle.
+    private static Connection conn;
+    private static Statement st = init();
+    
+    
+    public ResultSet execute(String q){
         //da implementare
         
         return null;
+    }
+    
+    //metodo scritto esclusivamente a fini pratici, in quanto da GUI non è possibile creare tabelle con chiavi auto incrementate.
+    private static Statement init(){
+        
+        //creo la connessione al DB
+        try {
+            conn = DriverManager.getConnection(url, user, pwd);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //creo lo statement
+        try {
+            st = conn.createStatement();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //tabella STUDENTI
+        try {
+            String sql = "CREATE TABLE STUDENTI ("
+                    + "ID INT not null primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+                    + "NOME VARCHAR(20) NOT NULL,"
+                    + "COGNOME VARCHAR(20) NOT NULL"
+                    + ")";
+            st.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella studenti già esistente.");
+        }
+        
+        //tabella SDC
+        try {
+            String sql = "CREATE TABLE SDC ("
+                    + "ID INT not null primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+                    + "CHIAVE VARCHAR(20) NOT NULL,"
+                    + "METODO VARCHAR(20) NOT NULL,"
+                    + "ID_CREATORE INT NOT NULL"
+                    + ")";
+            st.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella sdc già esistente.");
+        }
+        
+        //tabella PROPOSTE
+        try {
+            String sql = "CREATE TABLE PROPOSTE ("
+                    + "ID INT not null primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+                    + "STATO VARCHAR(20) NOT NULL,"
+                    + "NOTIFICATA INT NOT NULL DEFAULT 0,"
+                    + "ID_PROPONENTE INT NOT NULL,"
+                    + "ID_PARTNER INT NOT NULL,"
+                    + "ID_SDC INT NOT NULL"
+                    + ")";
+            st.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella proposte già esistente.");
+        }
+        
+        //tabella MESSAGGI
+        try {
+            String sql = "CREATE TABLE MESSAGGI ("
+                    + "ID INT not null primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+                    + "TESTO VARCHAR(10000) NOT NULL,"
+                    + "TESTO_CIFRATO VARCHAR(10000) NOT NULL,"
+                    + "LINGUA VARCHAR(20) NOT NULL,"
+                    + "TITOLO VARCHAR(20) NOT NULL,"
+                    + "BOZZA INT NOT NULL DEFAULT 1,"
+                    + "LETTO INT NOT NULL DEFAULT 0,"
+                    + "ID_MITTENTE INT NOT NULL,"
+                    + "ID_DESTINATARIO INT NOT NULL,"
+                    + "ID_SDC INT NOT NULL"
+                    + ")";
+            st.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella messaggi già esistente.");
+        }
+        
+        return st;
     }
     
 }

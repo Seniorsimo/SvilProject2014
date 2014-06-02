@@ -43,9 +43,10 @@ public class CommunicationController {
     }
     
     public static Messaggio apriMessaggioRicevuto(String id){
-        //da implementare
-        
-        return null;
+        Messaggio m = Messaggio.load(id);
+        m.setLetto(true);
+        m.salva();
+        return m;
     }
     
 }

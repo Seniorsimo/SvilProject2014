@@ -37,6 +37,16 @@ public class DBManager {
     private static Connection conn;
     private static Statement st = init(); //in questo modo il metodo viene invocato al caricamento della classe garantendo la creazione di una connessione
     
+    //Perchè più DBManager? Creo un metodo statico che ne cra uno e restituisce sempre lo stesso.
+    private static DBManager dbm;
+    
+    public static DBManager getDBManager(){
+        if(dbm==null){
+            dbm = new DBManager();
+        }
+        return dbm;
+    }
+    
     /*IMPORTANTE
      * non vengono effettuate close() ne sullo Statement ne sulla Connection.
      * Queste connessioni vengono create a runtime durante il caricamento della classe.

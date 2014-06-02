@@ -6,6 +6,7 @@ package svilproject2014;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,21 +35,22 @@ public class Messaggio {
     
     public Messaggio(ResultSet info){
         try {
-            info.next();
-            id = "" + info.getInt("ID");
-            testo = info.getString("TESTO");
-            testoCifrato = info.getString("TESTO_CIFRATO");
-            lingua = info.getString("LINGUA");
-            titolo = info.getString("TITOLO");
-            int temp = info.getInt("BOZZA");
-            if(temp==0) bozza = false;
-            else bozza = true;
-            temp = info.getInt("LETTO");
-            if(temp==0) letto = false;
-            else letto = true;
-            idSdc = "" + info.getInt("ID_SDC");
-            idDest = "" + info.getInt("ID_DESTINATARIO");
-            idMitt = "" + info.getInt("ID_MITTENTE");
+            if(info.next()){
+                id = "" + info.getInt("ID");
+                testo = info.getString("TESTO");
+                testoCifrato = info.getString("TESTO_CIFRATO");
+                lingua = info.getString("LINGUA");
+                titolo = info.getString("TITOLO");
+                int temp = info.getInt("BOZZA");
+                if(temp==0) bozza = false;
+                else bozza = true;
+                temp = info.getInt("LETTO");
+                if(temp==0) letto = false;
+                else letto = true;
+                idSdc = "" + info.getInt("ID_SDC");
+                idDest = "" + info.getInt("ID_DESTINATARIO");
+                idMitt = "" + info.getInt("ID_MITTENTE");
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Messaggio.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -75,21 +77,45 @@ public class Messaggio {
     }
     
     public static List<Messaggio> caricaBozze(Studente stud){
-        //da implementare
+        String idStud = stud.getId();
         
-        return null;
+        String sql = "SELECT * FROM MESSAGGI WHERE ID_MITTENTE='" + idStud + "' AND BOZZA=1";
+        ResultSet rs = DBManager.getDBManager().execute(sql);
+        ArrayList<Messaggio> list = new ArrayList<>();
+        while(createNextMessage(rs, list));
+        return list;
     }
     
     public static List<Messaggio> caricaInviati(Studente stud){
-        //da implementare
+        String idStud = stud.getId();
         
-        return null;
+        String sql = "SELECT * FROM MESSAGGI WHERE ID_MITTENTE='" + idStud + "' AND BOZZA=0";
+        ResultSet rs = DBManager.getDBManager().execute(sql);
+        ArrayList<Messaggio> list = new ArrayList<>();
+        while(createNextMessage(rs, list));
+        return list;
     }
     
     public static List<Messaggio> caricaRicevuti(Studente stud){
-        //da implementare
+        String idStud = stud.getId();
         
-        return null;
+        String sql = "SELECT * FROM MESSAGGI WHERE ID_DESTINATARIO='" + idStud + "'";
+        ResultSet rs = DBManager.getDBManager().execute(sql);
+        ArrayList<Messaggio> list = new ArrayList<>();
+        while(createNextMessage(rs, list));
+        return list;
+    }
+    
+    private static boolean createNextMessage(ResultSet rs, List<Messaggio> list){
+        Messaggio m = new Messaggio(rs);
+        String idM = m.getId();
+        if(idM!=null){
+            if(Integer.parseInt(idM)>0){
+                list.add(m);
+                return true;
+            }
+        }
+        return false;
     }
     
     public boolean elimina(){
@@ -142,7 +168,48 @@ public class Messaggio {
     }
     
     public void cifra(){
-        //da implementare
+        //verifico ed eventualmente carico il sistema di cifratura
+        if(sisCif==null){
+            //nel caso ne abbia il riferimento ma non sia carico lo creo.
+            if(idSdc!=null){
+                sisCif = SistemaDiCifratura.load(idSdc);
+            }
+            //altrimenti lo genero cercando la prima proposta nel DB
+            else{
+                Proposta p = Proposta.caricaAttiva(idMitt, idDest);
+                sisCif = p.getSdc();
+            }
+        }
+        
+        //nel caso di errori (sisCif == null termino
+        if(sisCif==null){
+            Logger.getLogger(Messaggio.class.getName()).log(Level.WARNING, "Impossibile cifrare il messaggio: nessun sistema di cifratura trovato.");
+            return;
+        }
+        
+        //cifro
+        Mappatura map = sisCif.getMappatura();
+        testoCifrato = Cifratore.cifra(map, testo);
+    }
+    
+    public void decifra(){
+        //se non c'è un testo cifrato termino
+        if(testoCifrato==null||testoCifrato.equals("")){
+            Logger.getLogger(Messaggio.class.getName()).log(Level.WARNING, "Impossibile decifrare il messaggio: il messaggio non contiene testo cifrato.");
+            return;
+        }
+        
+        //carico il sdc (non carico nulla di defaul come in cifra, ma carico solo se sisCif è null ma idSdc esiste.
+        if(sisCif==null){
+            if(idSdc==null){
+                Logger.getLogger(Messaggio.class.getName()).log(Level.WARNING, "Impossibile decifrare il messaggio: Sistema di cifratura non presente");
+                return;
+            }
+            sisCif = SistemaDiCifratura.load(idSdc);
+        }
+        
+        Mappatura map = sisCif.getMappatura();
+        testo = Cifratore.decifra(map, testoCifrato);
     }
     
     public void send(){
@@ -151,6 +218,10 @@ public class Messaggio {
     
     public void setLetto(boolean l){
         letto = l;
+    }
+    
+    public String getId(){
+        return id;
     }
     
 }

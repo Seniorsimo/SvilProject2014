@@ -16,4 +16,8 @@ public class Studente {
     private String login;
     private String pwd;
     
+    public String getId(){
+        return id;
+    }
+    
 }

@@ -4,7 +4,11 @@
  */
 package svilproject2014;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,6 +20,8 @@ public class SistemaDiCifratura {
     private String chiave;
     private String metodo;
     
+    private String idCreatore;
+    
     private CalcolatoreMappe calcMap;
     private Mappatura map;
     private UserInfo creatore;
@@ -26,8 +32,16 @@ public class SistemaDiCifratura {
         //da implementare
     }
     
-    public SistemaDiCifratura(/*queryResult info*/){
-        //da implementare
+    public SistemaDiCifratura(ResultSet info){
+        try {
+            info.next();
+            id = "" + info.getInt("ID");
+            chiave = info.getString("CHIAVE");
+            metodo = info.getString("METODO");
+            idCreatore = "" + info.getInt("ID_CREATORE");
+        } catch (SQLException ex) {
+            Logger.getLogger(Proposta.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public static List<SistemaDiCifratura> caricaSistemiCifratura(Studente stud){
@@ -37,9 +51,10 @@ public class SistemaDiCifratura {
     }
     
     public static SistemaDiCifratura load(String id){
-        //da implementare
-        
-        return null;
+        if(Integer.parseInt(id)<1) return null;
+        String sql = "SELECT * FROM SDC WHERE ID=" + Integer.parseInt(id);
+        ResultSet rs = DBManager.getDBManager().execute(sql);
+        return new SistemaDiCifratura(rs);
     }
     
     public void calcolaMappatura(){
@@ -47,9 +62,11 @@ public class SistemaDiCifratura {
     }
     
     public String prova(String testo){
-        //da implementare
+        //nel caso map sia nullo termino immediatamente e rirono null
+        if(map==null) return null;
         
-        return null;
+        String testoCifrato = Cifratore.cifra(map, testo);
+        return testoCifrato;
     }
     
     public boolean salva(){
@@ -62,6 +79,10 @@ public class SistemaDiCifratura {
         //da implementare
         
         return false;
+    }
+    
+    public Mappatura getMappatura(){
+        return map;
     }
     
 }

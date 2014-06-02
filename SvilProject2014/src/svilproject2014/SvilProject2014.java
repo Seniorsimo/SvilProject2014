@@ -13,6 +13,16 @@ public class SvilProject2014 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        //utilizzo veloce come testing
+        
+        //TESTING SAVE/LOAD MESSAGGIO
+        
+        //Messaggio m = new Messaggio();
+        //Messaggio m = Messaggio.load("1");
+        //m.setLetto(false);
+        //m.salva();
+        //Messaggio m = CommunicationController.apriMessaggioRicevuto("1");
+        
     }
     
 }

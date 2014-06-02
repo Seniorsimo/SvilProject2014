@@ -109,7 +109,7 @@ public class Messaggio {
                     + "TITOLO='" + titolo + "',";
             if(bozza) sql += "BOZZA=1,";
             else sql += "BOZZA=0,";
-            if(letto) sql += "LETTO=1,";
+            if(letto) sql += "LETTO=1";
             else sql += "LETTO=0";
             
             if(idMitt!=null) sql += ",ID_MITTENTE=" + Integer.parseInt(idMitt);
@@ -120,7 +120,7 @@ public class Messaggio {
         }
         //non ho ancora un id, quindi devo inserire il messaggio in DB
         else{
-            sql = "INSERT INTO MESSAGGI (TESTO, TESTO_CIFRATO, LINGUA, TITOLO, BOZZA, LETTO, ID_MITTENTE, ID_DETINATARIO, ID_SDC) VALUES ("
+            sql = "INSERT INTO MESSAGGI (TESTO, TESTO_CIFRATO, LINGUA, TITOLO, BOZZA, LETTO, ID_MITTENTE, ID_DESTINATARIO, ID_SDC) VALUES ("
                     + "'" + testo + "',"
                     + "'" + testoCifrato + "',"
                     + "'" + lingua + "',"
@@ -129,12 +129,12 @@ public class Messaggio {
             else sql += "0,";
             if(letto) sql += "1,";
             else sql += "0,";
-            if(idMitt!=null) sql += "'" + idMitt + "',";
-            else sql += "'',";
-            if(idDest!=null) sql += "'" + idDest + "',";
-            else sql += "'',";
-            if(idSdc!=null) sql += "'" + idSdc + "'";
-            else sql += "''";
+            if(idMitt!=null) sql += idMitt + ",";
+            else sql += "0,";
+            if(idDest!=null) sql += idDest + ",";
+            else sql += "0,";
+            if(idSdc!=null) sql += idSdc + "";
+            else sql += "0";
             sql += ")";
         }
         int i = DBManager.getDBManager().save(sql);

@@ -68,6 +68,17 @@ public class DBManager {
         return null;
     }
     
+    public int save(String q){
+        
+        try {
+            return st.executeUpdate(q);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.WARNING,"Errore nell'esecuzione della query: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return -1;
+    }
+    
     //metodo scritto esclusivamente a fini pratici, in quanto da GUI non è possibile creare tabelle con chiavi auto incrementate.
     private static Statement init(){
         

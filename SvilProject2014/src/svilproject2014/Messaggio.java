@@ -21,8 +21,8 @@ public class Messaggio {
     private String testoCifrato;
     private String lingua;
     private String titolo;
-    private boolean bozza;
-    private boolean letto;
+    private boolean bozza = true;
+    private boolean letto = false;
     
     private String idSdc;
     private String idDest;
@@ -46,15 +46,23 @@ public class Messaggio {
             temp = info.getInt("LETTO");
             if(temp==0) letto = false;
             else letto = true;
-            idSdc = info.getString("ID_SDC");
-            idDest = info.getString("ID_DESTINATARIO");
-            idMitt = info.getString("ID_MITTENTE");
+            idSdc = "" + info.getInt("ID_SDC");
+            idDest = "" + info.getInt("ID_DESTINATARIO");
+            idMitt = "" + info.getInt("ID_MITTENTE");
         } catch (SQLException ex) {
             Logger.getLogger(Messaggio.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
+    //mancava il costruttore per i nuovi messaggi?
+    public Messaggio(){
+        //non deve fare nulla...credo.
+    }
+    
     public static Messaggio load(String id){
+        //id deve contenere un numero e questo deve essere strettamente positivo, altrimenti errore.      
+        if(Integer.parseInt(id)<1) return null;
+        
         String sql = "SELECT * FROM MESSAGGI WHERE ID=" + id;
         DBManager db = DBManager.getDBManager();
         ResultSet rs = db.execute(sql);
@@ -91,9 +99,46 @@ public class Messaggio {
     }
     
     public boolean salva(){
-        //da implemenatare
-        
-        return false;
+        String sql;
+        //ho già un id quindi il messaggio esiste già nel DB e deve essere aggiornato.
+        if(id!=null){
+            sql = "UPDATE MESSAGGI SET "
+                    + "TESTO='" + testo + "',"
+                    + "TESTO_CIFRATO='" + testoCifrato + "',"
+                    + "LINGUA='" + lingua + "',"
+                    + "TITOLO='" + titolo + "',";
+            if(bozza) sql += "BOZZA=1,";
+            else sql += "BOZZA=0,";
+            if(letto) sql += "LETTO=1,";
+            else sql += "LETTO=0";
+            
+            if(idMitt!=null) sql += ",ID_MITTENTE=" + Integer.parseInt(idMitt);
+            if(idDest!=null) sql += ",ID_DESTINATARIO=" + Integer.parseInt(idDest);
+            if(idSdc!=null) sql += ",ID_SDC=" + Integer.parseInt(idSdc);
+            
+            sql += " WHERE ID=" + Integer.parseInt(id);
+        }
+        //non ho ancora un id, quindi devo inserire il messaggio in DB
+        else{
+            sql = "INSERT INTO MESSAGGI (TESTO, TESTO_CIFRATO, LINGUA, TITOLO, BOZZA, LETTO, ID_MITTENTE, ID_DETINATARIO, ID_SDC) VALUES ("
+                    + "'" + testo + "',"
+                    + "'" + testoCifrato + "',"
+                    + "'" + lingua + "',"
+                    + "'" + titolo + "',";
+            if(bozza) sql += "1,";
+            else sql += "0,";
+            if(letto) sql += "1,";
+            else sql += "0,";
+            if(idMitt!=null) sql += "'" + idMitt + "',";
+            else sql += "'',";
+            if(idDest!=null) sql += "'" + idDest + "',";
+            else sql += "'',";
+            if(idSdc!=null) sql += "'" + idSdc + "'";
+            else sql += "''";
+            sql += ")";
+        }
+        int i = DBManager.getDBManager().save(sql);
+        return i>0 ? true : false;
     }
     
     public void cifra(){

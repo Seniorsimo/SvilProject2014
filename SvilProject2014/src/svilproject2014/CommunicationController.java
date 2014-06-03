@@ -4,6 +4,8 @@
  */
 package svilproject2014;
 
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,9 +19,29 @@ public class CommunicationController {
     }
     
     public static List<UserInfo> getDestinatari(Studente usr){
-        //da implementare
+        String idStud = usr.getId();
         
-        return null;
+        String sql = "SELECT ID,NOME,COGNOME FROM STUDENTI WHERE ID IN " +
+            "(SELECT ID_PARTNER FROM PROPOSTE " +
+            "WHERE ID_PROPONENTE=" + Integer.parseInt(idStud) + " AND STATO='accettata')";
+        ResultSet rs = DBManager.getDBManager().execute(sql);
+        ArrayList<UserInfo> listaDest = new ArrayList<>();
+        
+        while(createNextUserInfo(rs, listaDest));
+        
+        return listaDest;
+    }
+    
+    private static boolean createNextUserInfo(ResultSet rs, List<UserInfo> list){
+        UserInfo u = new UserInfo(rs);
+        String idU = u.getId();
+        if(idU!=null){
+            if(Integer.parseInt(idU)>0){
+                list.add(u);
+                return true;
+            }
+        }
+        return false;
     }
     
     public static void inviaProposta(Studente usr, UserInfo partner, SistemaDiCifratura sdc){
@@ -38,8 +60,19 @@ public class CommunicationController {
         return null;
     }
     
-    public static void inviaDecisione(Proposta prop, String dec){
-        //da implementare
+    public static boolean inviaDecisione(Proposta prop, String dec){
+        
+        if(dec.equals("accettata")){
+            Proposta old = Proposta.caricaAttiva(prop.getIdProponente(), prop.getIdPartner());
+            
+            if(old!=null){
+                old.setStato("expired");
+                old.salva(); 
+            }
+        }
+        
+        prop.setStato(dec);
+        return prop.salva();
     }
     
     public static Messaggio apriMessaggioRicevuto(String id){

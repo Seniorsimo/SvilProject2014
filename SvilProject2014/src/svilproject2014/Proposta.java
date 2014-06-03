@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class Proposta {
     
     private String id;
-    private String stato;
+    private String stato = "pending";
     private boolean notificata;
     
     private String idSdc;

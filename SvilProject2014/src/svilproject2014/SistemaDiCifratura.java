@@ -31,8 +31,7 @@ public class SistemaDiCifratura {
         chiave = key;
         this.metodo = metodo;
         
-        calcMap = CalcolatoreMappe.create(metodo);
-        map = calcMap.calcola(key);
+        calcolaMappatura();
     }
     
     public SistemaDiCifratura(ResultSet info){
@@ -79,7 +78,8 @@ public class SistemaDiCifratura {
     }
     
     public void calcolaMappatura(){
-        //da implementare
+        calcMap = CalcolatoreMappe.create(metodo);
+        map = calcMap.calcola(chiave);
     }
     
     public String prova(String testo){

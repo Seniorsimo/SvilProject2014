@@ -4,21 +4,24 @@
  */
 package svilproject2014;
 
+import svilproject2014.calcolatori.*;
+
 /**
  *
  * @author Simone
  */
-public class CalcolatoreMappe {
+public abstract class CalcolatoreMappe {
     
     public static CalcolatoreMappe create(String met){
-        CalcolatoreMappe c = new CalcolatoreMappe();
         
-        return c;
+        if(met.equals("cesare")){
+            return new CalcolatoreCesare();
+        }
+        else if(met.equals("chiave")){
+            return new CalcolatoreChiave();
+        }
+        else return new CalcolatorePseudo();
     }
     
-    public Mappatura calcola(String chiave){
-        //da implementare
-        //creare le 3 classi x i metodi di cifratura e fargli implementare questo metodo, eventualmente imostare la classe come abstract.
-        return null;
-    }
+    abstract public Mappatura calcola(String chiave);
 }

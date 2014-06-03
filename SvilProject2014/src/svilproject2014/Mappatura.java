@@ -25,4 +25,9 @@ public class Mappatura {
         return ' ';
     }
     
+    public Mappatura(char[] map, char[] inverseMap){
+        mappa = map;
+        mappaInversa = inverseMap;
+    }
+    
 }

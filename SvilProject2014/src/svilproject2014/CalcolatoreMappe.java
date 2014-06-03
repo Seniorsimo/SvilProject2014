@@ -11,14 +11,14 @@ package svilproject2014;
 public class CalcolatoreMappe {
     
     public static CalcolatoreMappe create(String met){
-        //da implementare
+        CalcolatoreMappe c = new CalcolatoreMappe();
         
-        return null;
+        return c;
     }
     
     public Mappatura calcola(String chiave){
         //da implementare
-        
+        //creare le 3 classi x i metodi di cifratura e fargli implementare questo metodo, eventualmente imostare la classe come abstract.
         return null;
     }
 }

@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class CommunicationController {
     
-    public static void send(Messaggio msg){
-        //da implementare
+    public static boolean send(Messaggio msg){
+        return msg.send();
     }
     
     public static List<UserInfo> getDestinatari(Studente usr){
@@ -44,12 +44,13 @@ public class CommunicationController {
         return false;
     }
     
-    public static void inviaProposta(Studente usr, UserInfo partner, SistemaDiCifratura sdc){
-        //da implementare
+    public static boolean inviaProposta(Studente usr, UserInfo partner, SistemaDiCifratura sdc){
+        Proposta prop = new Proposta(usr.getUserInfo(), partner, sdc);
+        return prop.salva();
     }
     
     public static List<Proposta> getAccettazioneProposte(Studente usr){
-        //da implementare
+        
         
         return null;
     }

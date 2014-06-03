@@ -6,6 +6,7 @@ package svilproject2014;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +30,9 @@ public class SistemaDiCifratura {
     public SistemaDiCifratura(String key, String metodo){
         chiave = key;
         this.metodo = metodo;
-        //da implementare
+        
+        calcMap = CalcolatoreMappe.create(metodo);
+        map = calcMap.calcola(key);
     }
     
     public SistemaDiCifratura(ResultSet info){
@@ -45,9 +48,27 @@ public class SistemaDiCifratura {
     }
     
     public static List<SistemaDiCifratura> caricaSistemiCifratura(Studente stud){
-        //da implementare
+        String idStud = stud.getId();
         
-        return null;
+        String sql = "SELECT * FROM SDC WHERE ID_CREATORE=" + Integer.parseInt(idStud);
+        ResultSet rs = DBManager.getDBManager().execute(sql);
+        ArrayList<SistemaDiCifratura> listaSdc = new ArrayList<>();
+        
+        while(createNextSistemaDiCifratura(rs, listaSdc));
+        
+        return listaSdc;
+    }
+    
+    private static boolean createNextSistemaDiCifratura(ResultSet rs, List<SistemaDiCifratura> list){
+        SistemaDiCifratura sdc = new SistemaDiCifratura(rs);
+        String idSdc = sdc.getId();
+        if(idSdc!=null){
+            if(Integer.parseInt(idSdc)>0){
+                list.add(sdc);
+                return true;
+            }
+        }
+        return false;
     }
     
     public static SistemaDiCifratura load(String id){
@@ -70,19 +91,40 @@ public class SistemaDiCifratura {
     }
     
     public boolean salva(){
-        //da implementare
-        
-        return false;
+        String sql;
+        //ho già un id quindi il SDC esiste già nel DB e deve essere aggiornato.
+        if(id!=null){
+            sql = "UPDATE SDC SET "
+                    + "CHIAVE='" + chiave + "',"
+                    + "METODO='" + metodo + "',";
+            if(idCreatore!=null) sql += ",ID_CREATORE=" + Integer.parseInt(idCreatore);
+            
+            sql += " WHERE ID=" + Integer.parseInt(id);
+        }
+        //non ho ancora un id, quindi devo inserire il Sdc in DB
+        else{
+            sql = "INSERT INTO SDC (CHIAVE, METODO, ID_CREATORE) VALUES ("
+                    + "'" + chiave + "',"
+                    + "'" + metodo + "',";
+            if(idCreatore!=null) sql += idCreatore;
+            else sql += "0";
+        }
+        int i = DBManager.getDBManager().save(sql);
+        return i>0 ? true : false;
     }
     
     public boolean elimina(){
-        //da implementare
-        
-        return false;
+        String sql = "DELETE FROM SDC WHERE ID=" + Integer.parseInt(id);
+        int i = DBManager.getDBManager().save(sql);
+        return i>0 ? true : false;
     }
     
     public Mappatura getMappatura(){
         return map;
+    }
+    
+    public String getId(){
+        return id;
     }
     
 }

@@ -119,9 +119,9 @@ public class Messaggio {
     }
     
     public boolean elimina(){
-        //da implementare
-        
-        return false;
+        String sql = "DELETE FROM MESSAGGI WHERE ID=" + Integer.parseInt(id);
+        int i = DBManager.getDBManager().save(sql);
+        return i>0 ? true : false;
     }
     
     public boolean salva(){
@@ -212,8 +212,9 @@ public class Messaggio {
         testo = Cifratore.decifra(map, testoCifrato);
     }
     
-    public void send(){
-        //da implementare
+    public boolean send(){
+        bozza = false;
+        return salva();
     }
     
     public void setLetto(boolean l){

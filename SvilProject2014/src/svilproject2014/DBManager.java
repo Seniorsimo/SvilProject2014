@@ -155,6 +155,17 @@ public class DBManager {
             Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella messaggi già esistente.");
         }
         
+        //tabella LINGUAGE
+        try {
+            String sql = "CREATE TABLE LANGUAGE ("
+                    + "ID INT not null primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+                    + "NOME VARCHAR(20) NOT NULL"
+                    + ")";
+            st.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella messaggi già esistente.");
+        }
+        
         return st;
     }
     

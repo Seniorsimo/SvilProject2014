@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package svilproject2014;
+package svilproject2014.utility;
 
 public class SvilProject2014 {
 

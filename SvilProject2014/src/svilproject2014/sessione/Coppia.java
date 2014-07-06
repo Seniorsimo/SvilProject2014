@@ -10,4 +10,6 @@ package svilproject2014.sessione;
  */
 public class Coppia {
     
+    private Coppia coppiaIpotesi;
+    
 }

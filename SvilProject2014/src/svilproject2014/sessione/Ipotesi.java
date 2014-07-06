@@ -4,10 +4,15 @@
  */
 package svilproject2014.sessione;
 
+import java.util.List;
+
 /**
  *
  * @author User
  */
 public class Ipotesi {
+    
+    private Coppia padre;
+    private List<Coppia> figli;
     
 }

@@ -4,10 +4,16 @@
  */
 package svilproject2014.sessione;
 
+import svilproject2014.Messaggio;
+
 /**
  *
  * @author User
  */
 public class SessioneDiLavoro {
+    
+    private Messaggio messaggio;
+    private GestoreIpotesi gestoreIpotesi;
+    private StrumentiDiSupporto strumentiSupporto;
     
 }

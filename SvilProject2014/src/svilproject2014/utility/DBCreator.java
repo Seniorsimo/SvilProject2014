@@ -12,7 +12,7 @@ import svilproject2014.DBManager;
  */
 public class DBCreator {
     public static void main(String[] args){
-        DBManager  db = new DBManager();
+        DBManager  db = DBManager.getDBManager();
         
     }
 }

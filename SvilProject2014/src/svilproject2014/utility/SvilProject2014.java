@@ -6,6 +6,9 @@
 
 package svilproject2014.utility;
 
+import java.util.List;
+import svilproject2014.sessione.strumenti.Dizionario;
+
 public class SvilProject2014 {
 
     /**
@@ -23,6 +26,13 @@ public class SvilProject2014 {
         //m.salva();
         //Messaggio m = CommunicationController.apriMessaggioRicevuto("1");
         
+        //TESTING DIZIONARIO
+        
+//        Dizionario d = Dizionario.load(1);
+//        List<String> list = d.cerca("gfTncvTpO");
+//        while(!list.isEmpty()){
+//            System.out.println(list.remove(0));
+//        }
     }
     
 }

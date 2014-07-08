@@ -7,6 +7,7 @@
 package svilproject2014.utility;
 
 import java.util.List;
+import svilproject2014.sessione.StrumentiDiSupporto;
 import svilproject2014.sessione.strumenti.Dizionario;
 import svilproject2014.sessione.strumenti.Frequenze;
 
@@ -36,8 +37,16 @@ public class SvilProject2014 {
 //        }
         
         //TESTING FREQUENZE
-        Frequenze f = Frequenze.load(1);
-        System.out.println(f.getFrequenza('z'));
+//        Frequenze f = Frequenze.load(1);
+//        System.out.println(f.getFrequenza('z'));
+        
+        //TESTING STRUMENTI SUPPORTO
+        StrumentiDiSupporto s = new StrumentiDiSupporto(1);
+        List<String> list = s.cercaPatternSulDizionario("gfTncvTpO");
+        while(!list.isEmpty()){
+            System.out.println(list.remove(0));
+        }
+        System.out.println(s.getFrequenza('z'));
     }
     
 }

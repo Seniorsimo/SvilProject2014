@@ -53,7 +53,7 @@ public class Dizionario {
     public List<String> cerca(String pattern){
         //memorizza lunghezza del pattern e inizializza la list
         int l = pattern.length();
-        char[] word = new char[l];
+        char[] word;
         word = pattern.toCharArray();
         ArrayList<String> list = new ArrayList<>();
         

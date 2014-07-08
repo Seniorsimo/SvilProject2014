@@ -17,26 +17,21 @@ public class StrumentiDiSupporto {
     private Frequenze frequenze;
     
     public StrumentiDiSupporto(int idLingua){
-        //da implementare
-        
+        aggiornaLingua(idLingua);
     }
     
     public boolean aggiornaLingua(int idLingua){
-        //da implementare
-        return false;
-        
+        dizionario = Dizionario.load(idLingua);
+        frequenze = Frequenze.load(idLingua);
+        return true;
     }
     
     public List<String> cercaPatternSulDizionario(String pattern){
-        //da implementare
-        return null;
-        
+        return dizionario.cerca(pattern);
     }
     
     public double getFrequenza(char carattere){
-        //da implementare
-        return 0;
-        
+        return frequenze.getFrequenza(carattere);
     }
     
 }

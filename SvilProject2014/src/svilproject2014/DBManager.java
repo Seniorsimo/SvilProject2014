@@ -159,7 +159,7 @@ public class DBManager {
             Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella messaggi già esistente.");
         }
         
-        //tabella LINGUAGE
+        //tabella LANGUAGE
         try {
             String sql = "CREATE TABLE LANGUAGE ("
                     + "ID INT not null primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
@@ -167,7 +167,20 @@ public class DBManager {
                     + ")";
             st.executeUpdate(sql);
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella messaggi già esistente.");
+            Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella lingue già esistente.");
+        }
+        
+        //tabella FREQUENZE
+        try {
+            String sql = "CREATE TABLE FREQUENZE ("
+                    + "ID INT not null primary key";
+                    for(int i= 0; i<26; i++){
+                        sql += ",L" + i + " DOUBLE NOT NULL";
+                    }
+                    sql += ")";
+            st.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella frequenze già esistente.");
         }
         
         return st;

@@ -8,6 +8,7 @@ package svilproject2014.utility;
 
 import java.util.List;
 import svilproject2014.sessione.strumenti.Dizionario;
+import svilproject2014.sessione.strumenti.Frequenze;
 
 public class SvilProject2014 {
 
@@ -33,6 +34,10 @@ public class SvilProject2014 {
 //        while(!list.isEmpty()){
 //            System.out.println(list.remove(0));
 //        }
+        
+        //TESTING FREQUENZE
+        Frequenze f = Frequenze.load(1);
+        System.out.println(f.getFrequenza('z'));
     }
     
 }

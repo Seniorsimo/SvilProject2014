@@ -36,7 +36,6 @@ public class SistemaDiCifratura {
     
     public SistemaDiCifratura(ResultSet info){
         try {
-            info.next();
             id = "" + info.getInt("ID");
             chiave = info.getString("CHIAVE");
             metodo = info.getString("METODO");
@@ -59,7 +58,7 @@ public class SistemaDiCifratura {
     }
     
     private static boolean createNextSistemaDiCifratura(ResultSet rs, List<SistemaDiCifratura> list){
-        SistemaDiCifratura sdc = new SistemaDiCifratura(rs);
+        SistemaDiCifratura sdc = SistemaDiCifratura.creaSistemaDiCifratura(rs);
         String idSdc = sdc.getId();
         if(idSdc!=null){
             if(Integer.parseInt(idSdc)>0){
@@ -74,7 +73,16 @@ public class SistemaDiCifratura {
         if(Integer.parseInt(id)<1) return null;
         String sql = "SELECT * FROM SDC WHERE ID=" + Integer.parseInt(id);
         ResultSet rs = DBManager.getDBManager().execute(sql);
-        return new SistemaDiCifratura(rs);
+        return SistemaDiCifratura.creaSistemaDiCifratura(rs);
+    }
+    
+    private static SistemaDiCifratura creaSistemaDiCifratura(ResultSet rs){
+        try {
+            if(rs.next()) return new SistemaDiCifratura(rs);
+        } catch (SQLException ex) {
+            Logger.getLogger(SistemaDiCifratura.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public void calcolaMappatura(){

@@ -22,13 +22,11 @@ public class Frequenze {
     
     public Frequenze(ResultSet info){
         try {
-            if(info.next()){
                     idLingua = info.getInt("ID");
                     listaFrequenze = new double[26];
                     for(int i=0; i<26; i++){
                         listaFrequenze[i] = info.getDouble("L"+i);
                     }
-                }
         } catch (SQLException ex) {
             Logger.getLogger(Frequenze.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -39,8 +37,17 @@ public class Frequenze {
         if(id<1) return null;
         String sql = "SELECT * FROM FREQUENZE WHERE ID=" + id;
         ResultSet rs = DBManager.getDBManager().execute(sql);
-        return new Frequenze(rs);
+        return Frequenze.creaFrequenze(rs);
         
+    }
+    
+    private static Frequenze creaFrequenze(ResultSet rs){
+        try {
+            if(rs.next()) return new Frequenze(rs);
+        } catch (SQLException ex) {
+            Logger.getLogger(Frequenze.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public double getFrequenza(char carattere){

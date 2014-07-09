@@ -35,7 +35,6 @@ public class Messaggio {
     
     public Messaggio(ResultSet info){
         try {
-            if(info.next()){
                 id = "" + info.getInt("ID");
                 testo = info.getString("TESTO");
                 testoCifrato = info.getString("TESTO_CIFRATO");
@@ -50,7 +49,6 @@ public class Messaggio {
                 idSdc = "" + info.getInt("ID_SDC");
                 idDest = "" + info.getInt("ID_DESTINATARIO");
                 idMitt = "" + info.getInt("ID_MITTENTE");
-            }
         } catch (SQLException ex) {
             Logger.getLogger(Messaggio.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -72,8 +70,17 @@ public class Messaggio {
             Logger.getLogger(Messaggio.class.getName()).log(Level.WARNING,"Errore: Impossibile caricare il messaggio con id: " + id);
             return null;
         }
-        Messaggio m = new Messaggio(rs);
+        Messaggio m = Messaggio.creaMessaggio(rs);
         return m;
+    }
+    
+    private static Messaggio creaMessaggio(ResultSet rs){
+        try {
+            if(rs.next()) return new Messaggio(rs);
+        } catch (SQLException ex) {
+            Logger.getLogger(Messaggio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public static List<Messaggio> caricaBozze(Studente stud){
@@ -107,7 +114,7 @@ public class Messaggio {
     }
     
     private static boolean createNextMessage(ResultSet rs, List<Messaggio> list){
-        Messaggio m = new Messaggio(rs);
+        Messaggio m = Messaggio.creaMessaggio(rs);
         String idM = m.getId();
         if(idM!=null){
             if(Integer.parseInt(idM)>0){
@@ -167,7 +174,7 @@ public class Messaggio {
         return i>0 ? true : false;
     }
     
-    public void cifra(){
+    public String cifra(){
         //verifico ed eventualmente carico il sistema di cifratura
         if(sisCif==null){
             //nel caso ne abbia il riferimento ma non sia carico lo creo.
@@ -184,32 +191,34 @@ public class Messaggio {
         //nel caso di errori (sisCif == null termino
         if(sisCif==null){
             Logger.getLogger(Messaggio.class.getName()).log(Level.WARNING, "Impossibile cifrare il messaggio: nessun sistema di cifratura trovato.");
-            return;
+            return null;
         }
         
         //cifro
         Mappatura map = sisCif.getMappatura();
         testoCifrato = Cifratore.cifra(map, testo);
+        return testoCifrato;
     }
     
-    public void decifra(){
+    public String decifra(){
         //se non c'è un testo cifrato termino
         if(testoCifrato==null||testoCifrato.equals("")){
             Logger.getLogger(Messaggio.class.getName()).log(Level.WARNING, "Impossibile decifrare il messaggio: il messaggio non contiene testo cifrato.");
-            return;
+            return null;
         }
         
         //carico il sdc (non carico nulla di defaul come in cifra, ma carico solo se sisCif è null ma idSdc esiste.
         if(sisCif==null){
             if(idSdc==null){
                 Logger.getLogger(Messaggio.class.getName()).log(Level.WARNING, "Impossibile decifrare il messaggio: Sistema di cifratura non presente");
-                return;
+                return null;
             }
             sisCif = SistemaDiCifratura.load(idSdc);
         }
         
         Mappatura map = sisCif.getMappatura();
         testo = Cifratore.decifra(map, testoCifrato);
+        return testo;
     }
     
     public boolean send(){

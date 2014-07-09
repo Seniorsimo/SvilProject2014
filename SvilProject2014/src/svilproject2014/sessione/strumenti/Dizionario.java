@@ -23,10 +23,8 @@ public class Dizionario {
     
     public Dizionario(ResultSet info){
         try {
-            if(info.next()){
                 idLingua = info.getInt("ID");
                 nomeLingua = info.getString("NOME");
-            }
         } catch (SQLException ex) {
             Logger.getLogger(Dizionario.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -41,8 +39,17 @@ public class Dizionario {
             Logger.getLogger(Dizionario.class.getName()).log(Level.WARNING,"Errore: Impossibile caricare la lingua con id: " + id);
             return null;
         }
-        Dizionario d = new Dizionario(rs);
+        Dizionario d = Dizionario.creaDizionario(rs);
         return d;
+    }
+    
+    private static Dizionario creaDizionario(ResultSet rs){
+        try {
+            if(rs.next()) return new Dizionario(rs);
+        } catch (SQLException ex) {
+            Logger.getLogger(Dizionario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     /*

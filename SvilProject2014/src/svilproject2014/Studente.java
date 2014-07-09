@@ -26,7 +26,7 @@ public class Studente {
     public UserInfo getUserInfo(){
         String sql = "SELECT ID,NOME,COGNOME FROM STUDENTI WHERE ID=" + Integer.parseInt(id);
         ResultSet rs = DBManager.getDBManager().execute(sql);
-        return new UserInfo(rs);
+        return UserInfo.creaUserInfo(rs);
     }
     
 }

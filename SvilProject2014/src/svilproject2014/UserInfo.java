@@ -21,14 +21,21 @@ public class UserInfo {
     
     public UserInfo(ResultSet info){
         try {
-            if(info.next()){
                 id = "" + info.getInt("ID");
                 nome = info.getString("NOME");
                 cognome = info.getString("COGNOME");
-            }
         } catch (SQLException ex) {
             Logger.getLogger(UserInfo.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    protected static UserInfo creaUserInfo(ResultSet rs){
+        try {
+            if(rs.next()) return new UserInfo(rs);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserInfo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     //get

@@ -16,14 +16,15 @@ import java.util.logging.Logger;
  * Il db si trova nella cartella del progetto con il nome "dbsvil".
  * purtroppo git non lo sincronizza e ora che ci penso ha senso, ma la cosa crea problemi.
  * come già fatto x tweb ripeto: la cartella del progetto è presente non solo su git,
- * ma anche in drive: SvilProject2014 o come si chiama, al suo interno trovate il db.
+ * ma anche in drive(non più sincronizzata con i sorgenti, ma il db è sempre quello): SvilProject2014 o come si chiama, al suo interno trovate il db.
  * 
  * Per installarlo semplicemente salvatevelo sul pc (non credo importi dove) e in netbeans andate
  * su servizi > database. Clic destro su Java DB > Proprietà. Modificate la location alla
  * cartella del db scaricata oppure inserite in quella location il db scaricato. il risultato
  * è lo stesso.
  * 
- * IMPORTANTE: Se fate modifiche al DB ricaricatelo poi su drive e informate gli altri che così
+ * IMPORTANTE: Se fate modifiche al DB (strutturali! evitate di ricaricare DB se avete inserito un nome o corretto un dato, caricatelo se modificate le tabelle o ne create altre)
+ * ricaricatelo poi su drive e informate gli altri che così
  * si scaricano la versione aggiornata.
  * 
  */
@@ -47,14 +48,16 @@ public class DBManager {
         return dbm;
     }
     
+    private DBManager(){}
+    
     /*IMPORTANTE
      * non vengono effettuate close() ne sullo Statement ne sulla Connection.
      * Queste connessioni vengono create a runtime durante il caricamento della classe.
-     * Verificare o controllare che effettivamente a terminazione del programma queste vengano hiuse, in caso contrario sarà
-     * necessario provvedere noi a chiuderle in qualche modo
+     * inserire close?
      */
     
     
+    //metodo per eseguire query che hanno la finalità di reperire informazioni
     public ResultSet execute(String q){
         
         //utilizzando lo statemente già creato eseguo la query e restituisco il resultSet risultato
@@ -68,6 +71,7 @@ public class DBManager {
         return null;
     }
     
+    //metodo per eseguire query che modificano la struttura dei dati e non presentano un return in termini di dati
     public int save(String q){
         
         try {
@@ -153,6 +157,30 @@ public class DBManager {
             st.executeUpdate(sql);
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella messaggi già esistente.");
+        }
+        
+        //tabella LANGUAGE
+        try {
+            String sql = "CREATE TABLE LANGUAGE ("
+                    + "ID INT not null primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+                    + "NOME VARCHAR(20) NOT NULL"
+                    + ")";
+            st.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella lingue già esistente.");
+        }
+        
+        //tabella FREQUENZE
+        try {
+            String sql = "CREATE TABLE FREQUENZE ("
+                    + "ID INT not null primary key";
+                    for(int i= 0; i<26; i++){
+                        sql += ",L" + i + " DOUBLE NOT NULL";
+                    }
+                    sql += ")";
+            st.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella frequenze già esistente.");
         }
         
         return st;

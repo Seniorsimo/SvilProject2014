@@ -6,6 +6,7 @@
 
 package svilproject2014.sessione;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -40,31 +41,53 @@ public class GestoreIpotesiTest {
     }
 
     /**
-     * Test of load method, of class GestoreIpotesi.
+     * Test del metodo load della classe GestoreIpotesi.
+     * Verifiche: id non valido restituisce null.
+     *            id valido (coerente con il database) restituisce un oggetto non vuoto.
      */
     @Test
     public void testLoad() {
-        System.out.println("load");
+        System.out.println("load - id < 1");
         int id = 0;
-        GestoreIpotesi expResult = null;
+//        GestoreIpotesi expResult = null;
         GestoreIpotesi result = GestoreIpotesi.load(id);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNull(result);
+        
+ /*       System.out.println("load - id = 1 - id non presente nel database");
+        id = 1;
+        result = GestoreIpotesi.load(id);
+        System.out.println("load result null? " + (result == null));
+        assertNull(result);
+   */         
+        
+        System.out.println("load - id = 8 - id presente nel db");
+        id = 8;
+        result = GestoreIpotesi.load(id);
+        assertNotNull(result);
+        
+ /*       System.out.println("load - id = 9 - id non presente nel db");
+        id = 9;
+        result = GestoreIpotesi.load(id);
+        assertNull(result);
+*/
     }
 
     /**
-     * Test of visualizzaAssociazioni method, of class GestoreIpotesi.
+     * Test del metodo visualizzaAssociazioni della classe GestoreIpotesi.
+     * La root non viene mai stampata, quindi si considera la listaAssociazioni a partire dal nodo 1.
      */
     @Test
     public void testVisualizzaAssociazioni() {
         System.out.println("visualizzaAssociazioni");
-        GestoreIpotesi instance = null;
-        List<Coppia> expResult = null;
+        GestoreIpotesi instance = GestoreIpotesi.load(8);
+        System.out.println("visualizzaAssociazioni - instance " + instance.toString());
+        List<Coppia> expResult = new ArrayList<>();
+        expResult.add(new Coppia('x','o', new Coppia(' ',' ', null))); //creo un figlio della radice
+        System.out.println("visualizzaAssociazioni - expResult " + expResult.toString());      
         List<Coppia> result = instance.visualizzaAssociazioni();
+        System.out.println("visualizzaAssociazioni - result vuoto " + result.isEmpty()); 
+        System.out.println("visualizzaAssociazioni - result vuoto " + result.get(0).toString()); //dà 1 null
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -150,6 +173,20 @@ public class GestoreIpotesiTest {
         GestoreIpotesi instance = null;
         boolean expResult = false;
         boolean result = instance.salva();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of toString method, of class GestoreIpotesi.
+     */
+    @Test
+    public void testToString() {
+        System.out.println("toString");
+        GestoreIpotesi instance = null;
+        String expResult = "";
+        String result = instance.toString();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

@@ -51,8 +51,18 @@ public class GestoreIpotesi {
                 listaAssociazioni = new Coppia[27];
                 listaAssociazioni[0] = new Coppia(' ', ' ', null);
                 
-                listaAssociazioni[0].load(ref);
+                Coppia last = listaAssociazioni[0].load(ref);
                 
+                int temp = indiceStatoCorrente;
+                boolean end = false;
+                while(!end){
+                    if(last==null) end = true;
+                    else{
+                        listaAssociazioni[temp] = last;
+                        temp--;
+                        last = last.getPadre();
+                    }
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(Messaggio.class.getName()).log(Level.SEVERE, null, ex);

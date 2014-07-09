@@ -48,7 +48,8 @@ public class Coppia {
         return out;
     }
     
-    public void load(List<Character> ref) {
+    public Coppia load(List<Character> ref) {
+        Coppia last = this;
         ref.remove(0); //toglie la parentesi inisiale
         vecchiaL = ref.remove(0); //legge il primo char
         nuovaL = ref.remove(0);   //legge il secondo char
@@ -66,9 +67,10 @@ public class Coppia {
         }
         for(int i=0; i<q; i++){
             Coppia c = new Coppia(' ', ' ', this);
-            c.load(ref);
+            last = c.load(ref);
         }
         ref.remove(0);  //tolgo l'ulima parentesi
+        return last;
     }
 
     public char getVecchiaL() {

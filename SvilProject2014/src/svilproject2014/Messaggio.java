@@ -174,7 +174,7 @@ public class Messaggio {
         return i>0 ? true : false;
     }
     
-    public void cifra(){
+    public String cifra(){
         //verifico ed eventualmente carico il sistema di cifratura
         if(sisCif==null){
             //nel caso ne abbia il riferimento ma non sia carico lo creo.
@@ -191,32 +191,34 @@ public class Messaggio {
         //nel caso di errori (sisCif == null termino
         if(sisCif==null){
             Logger.getLogger(Messaggio.class.getName()).log(Level.WARNING, "Impossibile cifrare il messaggio: nessun sistema di cifratura trovato.");
-            return;
+            return null;
         }
         
         //cifro
         Mappatura map = sisCif.getMappatura();
         testoCifrato = Cifratore.cifra(map, testo);
+        return testoCifrato;
     }
     
-    public void decifra(){
+    public String decifra(){
         //se non c'è un testo cifrato termino
         if(testoCifrato==null||testoCifrato.equals("")){
             Logger.getLogger(Messaggio.class.getName()).log(Level.WARNING, "Impossibile decifrare il messaggio: il messaggio non contiene testo cifrato.");
-            return;
+            return null;
         }
         
         //carico il sdc (non carico nulla di defaul come in cifra, ma carico solo se sisCif è null ma idSdc esiste.
         if(sisCif==null){
             if(idSdc==null){
                 Logger.getLogger(Messaggio.class.getName()).log(Level.WARNING, "Impossibile decifrare il messaggio: Sistema di cifratura non presente");
-                return;
+                return null;
             }
             sisCif = SistemaDiCifratura.load(idSdc);
         }
         
         Mappatura map = sisCif.getMappatura();
         testo = Cifratore.decifra(map, testoCifrato);
+        return testo;
     }
     
     public boolean send(){

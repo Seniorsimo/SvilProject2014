@@ -16,4 +16,17 @@ public class SessioneDiLavoro {
     private GestoreIpotesi gestoreIpotesi;
     private StrumentiDiSupporto strumentiSupporto;
     
+    public SessioneDiLavoro(){
+        //da implementare
+    }
+
+    public GestoreIpotesi getGestoreIpotesi() {
+        return gestoreIpotesi;
+    }
+
+    public StrumentiDiSupporto getStrumentiSupporto() {
+        return strumentiSupporto;
+    }
+    
+    
 }

@@ -35,7 +35,6 @@ public class GestoreIpotesi {
         
         //carico id, avanti, indietro, stato e testi da db
         try {
-            if(info.next()){
                 id = info.getInt("ID");
                 avantiPossibili = info.getInt("AVANTI");
                 indietroPossibili = info.getInt("INDIETRO");
@@ -63,7 +62,6 @@ public class GestoreIpotesi {
                         last = last.getPadre();
                     }
                 }
-            }
         } catch (SQLException ex) {
             Logger.getLogger(Messaggio.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -94,8 +92,17 @@ public class GestoreIpotesi {
             Logger.getLogger(Messaggio.class.getName()).log(Level.WARNING,"Errore: Impossibile caricare il gestoreipotesi con id: " + id);
             return null;
         }
-        return new GestoreIpotesi(rs);
+        return GestoreIpotesi.creaGestoreIpotesi(rs);
         
+    }
+    
+    private static GestoreIpotesi creaGestoreIpotesi(ResultSet rs){
+        try {
+            if(rs.next()) return new GestoreIpotesi(rs);
+        } catch (SQLException ex) {
+            Logger.getLogger(GestoreIpotesi.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public List<Coppia> visualizzaAssociazioni(){

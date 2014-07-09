@@ -29,7 +29,6 @@ public class Proposta {
     
     public Proposta(ResultSet info){
         try {
-            if(info.next()){
                 id = "" + info.getInt("ID");
                 stato = info.getString("STATO");
                 int temp = info.getInt("NOTIFICATA");
@@ -39,7 +38,6 @@ public class Proposta {
                 idProp = "" + info.getInt("ID_PROPONENTE");
                 idPart = "" + info.getInt("ID_PARTNER");
                 sisCif = SistemaDiCifratura.load(idSdc);
-            }
         } catch (SQLException ex) {
             Logger.getLogger(Proposta.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -52,6 +50,15 @@ public class Proposta {
         //da implementare
     }
     
+    protected static Proposta creaProposta(ResultSet rs){
+        try {
+            if(rs.next()) return new Proposta(rs);
+        } catch (SQLException ex) {
+            Logger.getLogger(Proposta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public static Proposta caricaAttiva(String idProp, String idPart){
         if(Integer.parseInt(idProp)<1||Integer.parseInt(idPart)<1){
             Logger.getLogger(Proposta.class.getName()).log(Level.WARNING, "Impossibile caricare una Proposta: Uno degli id non è corretto");
@@ -59,7 +66,7 @@ public class Proposta {
         }
         String sql = "SELECT + FROM PROPOSTE WHERE ID_PROPONENTE='" + idProp + "' AND ID_PARTNER='" + idPart + "'";
         ResultSet rs = DBManager.getDBManager().execute(sql);
-        Proposta p = new Proposta(rs);
+        Proposta p = Proposta.creaProposta(rs);
         if(p.getId()!=null) return p;
         return null;
     }

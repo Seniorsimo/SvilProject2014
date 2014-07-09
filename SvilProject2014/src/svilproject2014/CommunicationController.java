@@ -33,7 +33,7 @@ public class CommunicationController {
     }
     
     private static boolean createNextUserInfo(ResultSet rs, List<UserInfo> list){
-        UserInfo u = new UserInfo(rs);
+        UserInfo u = UserInfo.creaUserInfo(rs);
         String idU = u.getId();
         if(idU!=null){
             if(Integer.parseInt(idU)>0){
@@ -60,7 +60,7 @@ public class CommunicationController {
     }
     
     private static boolean createNextProposta(ResultSet rs, List<Proposta> list){
-        Proposta p = new Proposta(rs);
+        Proposta p = Proposta.creaProposta(rs);
         String idP = p.getId();
         if(idP!=null){
             if(Integer.parseInt(idP)>0){

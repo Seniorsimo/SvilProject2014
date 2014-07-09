@@ -82,57 +82,73 @@ public class GestoreIpotesiTest {
         GestoreIpotesi instance = GestoreIpotesi.load(8);
         System.out.println("visualizzaAssociazioni - instance " + instance.toString());
         List<Coppia> expResult = new ArrayList<>();
-        expResult.add(new Coppia('x','o', new Coppia(' ',' ', null))); //creo un figlio della radice
+        expResult.add(new Coppia('x','o', new Coppia(' ',' ', instance.visualizzaStoria()))); //creo un figlio della radice
         System.out.println("visualizzaAssociazioni - expResult " + expResult.toString());      
         List<Coppia> result = instance.visualizzaAssociazioni();
         System.out.println("visualizzaAssociazioni - result vuoto " + result.isEmpty()); 
-        System.out.println("visualizzaAssociazioni - result vuoto " + result.get(0).toString()); //dà 1 null
+        System.out.println("visualizzaAssociazioni - result elemento 0 " + result.get(0).toString()); 
         assertEquals(expResult, result);
     }
 
     /**
-     * Test of aggiungiIpotesi method, of class GestoreIpotesi.
+     * Test del metodo aggiungiIpotesi, della classe GestoreIpotesi.
      */
     @Test
     public void testAggiungiIpotesi() {
-        System.out.println("aggiungiIpotesi");
-        char vecchiaLettera = ' ';
-        char nuovaLettera = ' ';
-        GestoreIpotesi instance = null;
+        System.out.println("aggiungiIpotesi - vecchiaLettera = x (già presente)");
+        char vecchiaLettera = 'x';
+        char nuovaLettera = 'a';
+        GestoreIpotesi instance = GestoreIpotesi.load(8);
         boolean expResult = false;
         boolean result = instance.aggiungiIpotesi(vecchiaLettera, nuovaLettera);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        System.out.println("aggiungiIpotesi - nuovaLettera = o (già presente)");
+        vecchiaLettera = 'a';
+        nuovaLettera = 'o';
+        result = instance.aggiungiIpotesi(vecchiaLettera, nuovaLettera);
+        assertEquals(expResult, result);
+        
+        System.out.println("aggiungiIpotesi - lettere non utilizzate per le associazioni prima");
+        vecchiaLettera = 'a';
+        nuovaLettera = 's';
+        expResult = true;
+        result = instance.aggiungiIpotesi(vecchiaLettera, nuovaLettera);
+        assertEquals(expResult, result);
     }
 
     /**
-     * Test of visualizzaStoria method, of class GestoreIpotesi.
+     * Test del metodo visualizzaStoria della classe GestoreIpotesi.
      */
     @Test
     public void testVisualizzaStoria() {
         System.out.println("visualizzaStoria");
-        GestoreIpotesi instance = null;
-        Coppia expResult = null;
+        GestoreIpotesi instance = GestoreIpotesi.load(8);
+        Coppia expResult = new Coppia(' ',' ',null);
         Coppia result = instance.visualizzaStoria();
+        result = new Coppia(' ',' ',null);
+        System.out.println("visualizzaStoria - coppie equals "+expResult.equals(result));
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
-     * Test of avanti method, of class GestoreIpotesi.
+     * Test del metodo avanti della classe GestoreIpotesi.
      */
     @Test
     public void testAvanti() {
-        System.out.println("avanti");
-        int n = 0;
-        GestoreIpotesi instance = null;
-        boolean expResult = false;
-        boolean result = instance.avanti(n);
+         System.out.println("avanti - n=1 possibili = 1");
+        int n = 1;
+        GestoreIpotesi instance = GestoreIpotesi.load(8);
+        boolean expResult = true;
+        boolean result = instance.indietro(n);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        System.out.println("avanti - n=4 possibili = 1");
+        n = 4;
+        expResult = false;
+        result = instance.indietro(n);
+        assertEquals(expResult, result);
+
     }
 
     /**
@@ -140,47 +156,58 @@ public class GestoreIpotesiTest {
      */
     @Test
     public void testIndietro() {
-        System.out.println("indietro");
-        int n = 0;
-        GestoreIpotesi instance = null;
-        boolean expResult = false;
+        System.out.println("indietro - n=1 possibili = 2");
+        int n = 1;
+        GestoreIpotesi instance = GestoreIpotesi.load(8);
+        boolean expResult = true;
         boolean result = instance.indietro(n);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        System.out.println("indietro - n=4 possibili = 2");
+        n = 4;
+        expResult = false;
+        result = instance.indietro(n);
+        assertEquals(expResult, result);
     }
 
     /**
-     * Test of verificaRisoluzione method, of class GestoreIpotesi.
+     * Test del metodo verificaRisoluzione della classe GestoreIpotesi.
      */
     @Test
     public void testVerificaRisoluzione() {
-        System.out.println("verificaRisoluzione");
-        GestoreIpotesi instance = null;
-        boolean expResult = false;
+        System.out.println("verificaRisoluzione - testoParziale e originale null");
+        GestoreIpotesi instance = GestoreIpotesi.load(8);
+        boolean expResult = true;
         boolean result = instance.verificaRisoluzione();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        System.out.println("verificaRisoluzione - testoParziale e originale uguali");
+        result = instance.verificaRisoluzione();
+        assertEquals(expResult, result);
+        
+        System.out.println("verificaRisoluzione - testoParziale e originale diversi");
+        expResult = true;
+        result = instance.verificaRisoluzione();
+//        assertEquals(expResult, result);
     }
 
     /**
-     * Test of salva method, of class GestoreIpotesi.
+     * Test del metodo salva della classe GestoreIpotesi.
      */
+    
     @Test
     public void testSalva() {
         System.out.println("salva");
-        GestoreIpotesi instance = null;
-        boolean expResult = false;
+        GestoreIpotesi instance = GestoreIpotesi.load(8);
+        boolean expResult = true;
         boolean result = instance.salva();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
      * Test of toString method, of class GestoreIpotesi.
      */
+    //Non saprei come testarla, dopotutto si vede se funziona o no.
     @Test
     public void testToString() {
         System.out.println("toString");

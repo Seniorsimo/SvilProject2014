@@ -71,9 +71,9 @@ public class SvilProject2014 {
 //        GestoreIpotesi g = GestoreIpotesi.load(1);
 ////        System.out.println(g);
         g.aggiungiIpotesi('x', 'o');
-////        g.aggiungiIpotesi('r', 'g');
-////        g.indietro(1);
-//        g.salva();
+        g.aggiungiIpotesi('r', 'g');
+        g.indietro(1);
+        g.salva();
         System.out.println(g);
     }
     

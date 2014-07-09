@@ -19,9 +19,9 @@ public class Coppia {
     private char vecchiaL;
     private char nuovaL;
     
-    public Coppia(char nuovaL, char vecchiaL, Coppia padre){
-        this.nuovaL = nuovaL;
+    public Coppia(char vecchiaL, char nuovaL, Coppia padre){
         this.vecchiaL = vecchiaL;
+        this.nuovaL = nuovaL;        
         this.padre = padre;
         figli = new ArrayList<>();
         if(padre!=null)padre.addFiglio(this);
@@ -90,6 +90,16 @@ public class Coppia {
         }
         out += ")";
         return out;
+    }
+    
+    public boolean equals(Coppia c) {
+        if(c==null) return false;
+        if(vecchiaL != c.getVecchiaL()) return false;
+        if(nuovaL != c.getNuovaL()) return false;
+        if((padre!=null && c.getPadre()==null)||(padre==null && c.getPadre()!=null)) return false;
+        if(padre==null && c.getPadre()==null) return true;
+        if(!padre.equals(c.getPadre())) return false;
+        return true;
     }
 
 }

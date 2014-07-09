@@ -16,6 +16,11 @@ public class SessioneDiLavoro {
     private GestoreIpotesi gestoreIpotesi;
     private StrumentiDiSupporto strumentiSupporto;
     
+    private int id;
+    private int id_messaggio;
+    private int id_gestore;
+    private int id_lingua;
+    
     public SessioneDiLavoro(){
         //da implementare
     }
@@ -28,5 +33,21 @@ public class SessioneDiLavoro {
         return strumentiSupporto;
     }
     
+    public static SessioneDiLavoro load(int id){
+        //da implementare
+        return null;
+               
+    }
+    
+    public boolean salva(){
+        //da implementare
+        return false;
+        
+    }
+    
+    public void abbandona(){
+        //da implementare
+        
+    }
     
 }

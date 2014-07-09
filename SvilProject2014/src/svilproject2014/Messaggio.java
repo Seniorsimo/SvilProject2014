@@ -224,5 +224,18 @@ public class Messaggio {
     public String getId(){
         return id;
     }
+
+    public String getTesto() {
+        return testo;
+    }
+
+    public String getTestoCifrato() {
+        return testoCifrato;
+    }
+
+    public String getTitolo() {
+        return titolo;
+    }
+    
     
 }

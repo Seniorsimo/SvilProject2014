@@ -19,26 +19,30 @@ public class Coppia {
     private char nuovaL;
     
     public Coppia(char nuovaL, char vecchiaL, Coppia padre){
-        //da implementare
-        
+        this.nuovaL = nuovaL;
+        this.vecchiaL = vecchiaL;
+        this.padre = padre;
+        padre.addFiglio(this);
     }
     
     public List<Coppia> getFigli(){
-        //da implementare
-        return null;
-        
+        return figli;
     }
     
     public Coppia getPadre(){
-        //da implementare
-        return null;
-        
+        return padre;
     }
     
     public boolean addFiglio(Coppia c){
-        //da implementare
-        return false;
-        
+        return figli.add(c);
+    }
+
+    public char getVecchiaL() {
+        return vecchiaL;
+    }
+
+    public char getNuovaL() {
+        return nuovaL;
     }
     
 }

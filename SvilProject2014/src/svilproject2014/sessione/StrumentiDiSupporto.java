@@ -21,6 +21,7 @@ public class StrumentiDiSupporto {
     }
     
     public boolean aggiornaLingua(int idLingua){
+        if(idLingua<1) return false;
         dizionario = Dizionario.load(idLingua);
         frequenze = Frequenze.load(idLingua);
         return true;

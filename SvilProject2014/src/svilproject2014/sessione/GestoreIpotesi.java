@@ -5,8 +5,12 @@
 package svilproject2014.sessione;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import svilproject2014.DBManager;
 import svilproject2014.Messaggio;
 
 /**
@@ -18,7 +22,7 @@ public class GestoreIpotesi {
     private Messaggio messaggio;
     private Coppia[] listaAssociazioni;
     
-    private int id;
+    private int id = 0;
     private int avantiPossibili = 0;
     private int indietroPossibili = 0;
     private int indiceStatoCorrente = 0;
@@ -27,11 +31,35 @@ public class GestoreIpotesi {
     private char[] testoParziale;
     
     public GestoreIpotesi(ResultSet info){
-        //da implementare
+        int messageId = 0;
         
         //carico id, avanti, indietro, stato e testi da db
+        try {
+            if(info.next()){
+                id = info.getInt("ID");
+                avantiPossibili = info.getInt("AVANTI");
+                indietroPossibili = info.getInt("INDIETRO");
+                indiceStatoCorrente = info.getInt("STATO");
+                messageId = info.getInt("ID_MESSAGGIO");
+                testoOriginale = info.getString("TESTO_ORIGINALE").toCharArray();
+                testoParziale = info.getString("TESTO_PARZIALE").toCharArray();
+                char[] list = info.getString("LISTA").toCharArray();
+                ArrayList<Character> ref = new ArrayList<>();
+                for(char c:list){
+                    ref.add(c);
+                }
+                listaAssociazioni = new Coppia[27];
+                listaAssociazioni[0] = new Coppia(' ', ' ', null);
+                
+                listaAssociazioni[0].load(ref);
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Messaggio.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         //tramite id messaggio lo carico da db
+        messaggio = Messaggio.load(""+messageId);
         
     }
     
@@ -43,16 +71,20 @@ public class GestoreIpotesi {
         String txt = m.getTestoCifrato();
         txt = txt.toLowerCase();
         testoOriginale = txt.toCharArray();
-        testoParziale = testoOriginale;
+        testoParziale = txt.toCharArray();
     }
     
     public static GestoreIpotesi load(int id){
-        //da implementare
-        //uso il costruttore con con query
+        if(id<1) return null;
         
-        //ripristino stato listaAssociazioni.
-        
-        return null;
+        String sql = "SELECT * FROM GESTOREIPOTESI WHERE ID=" + id;
+        DBManager db = DBManager.getDBManager();
+        ResultSet rs = db.execute(sql);
+        if(rs==null){
+            Logger.getLogger(Messaggio.class.getName()).log(Level.WARNING,"Errore: Impossibile caricare il gestoreipotesi con id: " + id);
+            return null;
+        }
+        return new GestoreIpotesi(rs);
         
     }
     
@@ -74,6 +106,7 @@ public class GestoreIpotesi {
         boolean exist = false;
         while(!exist && i<indiceStatoCorrente+1){
             if(listaAssociazioni[i].getVecchiaL()==vecchiaLettera) exist=true;
+            i++;
         }
         if(exist) return false;
         
@@ -120,19 +153,43 @@ public class GestoreIpotesi {
     
     public boolean verificaRisoluzione(){
         String original = messaggio.getTesto();
-        String solution = testoParziale.toString();
+        String solution = String.copyValueOf(testoParziale);
         
         return solution.equalsIgnoreCase(original);
         
     }
     
     public boolean salva(){
-        //da implementare
         //calcolo una stringa x listaAssociazioni e getID messaggio
+        String lista = listaAssociazioni[0].salva();
+        int messageId = Integer.parseInt(messaggio.getId());
         
         //salvo su db
-        
-        return false;
+        String sql;
+        if(id!=0){
+            sql = "UPDATE GESTOREIPOTESI SET "
+                    + "AVANTI=" + avantiPossibili + ","
+                    + "INDIETRO=" + indietroPossibili + ","
+                    + "STATO=" + indiceStatoCorrente + ","
+                    + "ID_MESSAGGIO=" + messageId + ","
+                    + "TESTO_ORIGINALE='" + String.copyValueOf(testoOriginale) + "',"
+                    + "TESTO_PARZIALE='" + String.copyValueOf(testoParziale) + "',"
+                    + "LISTA='" + lista + "'";
+            sql += " WHERE ID=" + id;
+        }
+        else{
+            sql = "INSERT INTO GESTOREIPOTESI (AVANTI, INDIETRO, STATO, ID_MESSAGGIO, TESTO_ORIGINALE, TESTO_PARZIALE, LISTA) VALUES ("
+                    + avantiPossibili + ","
+                    + indietroPossibili + ","
+                    + indiceStatoCorrente + ","
+                    + messageId + ","
+                    + "'" + String.copyValueOf(testoOriginale) + "',"
+                    + "'" + String.copyValueOf(testoParziale) + "',"
+                    + "'" + lista + "'";
+            sql += ")";
+        }
+        int i = DBManager.getDBManager().save(sql);
+        return i>0 ? true : false;
         
     }
     
@@ -157,6 +214,19 @@ public class GestoreIpotesi {
         }
         return true;
         
+    }
+    
+    @Override
+    public String toString(){
+        String out = "";
+        out += "id: "+ id;
+        out += "\navanti: "+ avantiPossibili;
+        out += "\nindietro: "+ indietroPossibili;
+        out += "\nstato: "+ indiceStatoCorrente;
+        out += "\ntesto originale: "+ String.copyValueOf(testoOriginale);
+        out += "\ntesto parziale: "+ String.copyValueOf(testoParziale);
+        out += "\n" + listaAssociazioni[0].toString();
+        return out;
     }
     
 }

@@ -183,6 +183,23 @@ public class DBManager {
             Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella frequenze già esistente.");
         }
         
+        //tabella GESTOREIPOTESI
+        try {
+            String sql = "CREATE TABLE GESTOREIPOTESI ("
+                    + "ID INT not null primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+                    + "AVANTI INT not null,"
+                    + "INDIETRO INT not null,"
+                    + "STATO INT not null,"
+                    + "ID_MESSAGGIO INT not null,"
+                    + "TESTO_ORIGINALE VARCHAR(10000) NOT NULL,"
+                    + "TESTO_PARZIALE VARCHAR(10000) NOT NULL,"
+                    + "LISTA VARCHAR(10000) NOT NULL"
+                    + ")";
+            st.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella gestoreipotesi già esistente.");
+        }
+        
         return st;
     }
     

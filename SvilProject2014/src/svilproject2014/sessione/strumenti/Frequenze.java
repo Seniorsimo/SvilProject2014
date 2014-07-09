@@ -36,6 +36,7 @@ public class Frequenze {
     }
     
     public static Frequenze load(int id){
+        if(id<1) return null;
         String sql = "SELECT * FROM FREQUENZE WHERE ID=" + id;
         ResultSet rs = DBManager.getDBManager().execute(sql);
         return new Frequenze(rs);

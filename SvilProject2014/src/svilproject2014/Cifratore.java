@@ -11,7 +11,8 @@ package svilproject2014;
 public class Cifratore {
     
     public static String cifra(Mappatura map, String testo){
-        char[] txt = testo.toCharArray();
+        char[] txt = testo.toLowerCase().toCharArray();
+        
         char[] out = new char[txt.length];
         
         for(int i=0; i<txt.length; i++){
@@ -24,7 +25,7 @@ public class Cifratore {
     }
     
     public static String decifra(Mappatura map, String testo){
-        char[] txt = testo.toCharArray();
+        char[] txt = testo.toLowerCase().toCharArray();
         char[] out = new char[txt.length];
         
         for(int i=0; i<txt.length; i++){

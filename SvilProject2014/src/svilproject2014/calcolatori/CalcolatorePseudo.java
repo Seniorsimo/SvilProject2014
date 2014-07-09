@@ -34,7 +34,7 @@ public class CalcolatorePseudo extends CalcolatoreMappe{
         
         //genero: estraggo a caso una lettera da insere per ogni lettera dell'alfabeto
         for(int i=0; i<alfabeto.length; i++){
-            int target = (int)Math.random() * daInserire.size();
+            int target = (int)(Math.random() * daInserire.size());
             char a = daInserire.remove(target);
             int indexA = position(a, alfabeto);
             

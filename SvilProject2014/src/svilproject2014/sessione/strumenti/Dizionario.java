@@ -33,6 +33,7 @@ public class Dizionario {
     }
         
     public static Dizionario load(int id){
+        if(id<1) return null;
         String sql = "SELECT * FROM LANGUAGE WHERE ID=" + id;
         DBManager db = DBManager.getDBManager();
         ResultSet rs = db.execute(sql);

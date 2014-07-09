@@ -19,7 +19,7 @@ public class Mappatura {
         int position = getPosition(c, alfabeto);
         
         //nel caso il char non sia presente restituisco il char iniziale
-        if(c<0) return c;
+        if(position<0) return c;
         
         //altrimenti restituisco il char associato
         return mappa[position];
@@ -45,6 +45,11 @@ public class Mappatura {
             if(list[i]==c) return i;
         }
         return -1;
+    }
+    
+    @Override
+    public String toString(){
+        return "map: "+ String.copyValueOf(mappa) + "\ninversa: " + String.copyValueOf(mappaInversa);
     }
     
 }

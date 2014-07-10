@@ -34,6 +34,7 @@ public abstract class Messaggio {
     }
     
     private static Messaggio creaMessaggio(ResultSet rs){
+        if(rs==null)return null;
         try {
             if(rs.next()) return new MessaggioProxy(rs);
         } catch (SQLException ex) {
@@ -45,7 +46,7 @@ public abstract class Messaggio {
     public static List<Messaggio> caricaBozze(Studente stud){
         String idStud = stud.getId();
         
-        String sql = "SELECT * FROM MESSAGGI WHERE ID_MITTENTE='" + idStud + "' AND BOZZA=1";
+        String sql = "SELECT * FROM MESSAGGI WHERE ID_MITTENTE=" + idStud + " AND BOZZA=1";
         ResultSet rs = DBManager.getDBManager().execute(sql);
         ArrayList<Messaggio> list = new ArrayList<>();
         while(createNextMessage(rs, list));
@@ -55,7 +56,7 @@ public abstract class Messaggio {
     public static List<Messaggio> caricaInviati(Studente stud){
         String idStud = stud.getId();
         
-        String sql = "SELECT * FROM MESSAGGI WHERE ID_MITTENTE='" + idStud + "' AND BOZZA=0";
+        String sql = "SELECT * FROM MESSAGGI WHERE ID_MITTENTE=" + idStud + " AND BOZZA=0";
         ResultSet rs = DBManager.getDBManager().execute(sql);
         ArrayList<Messaggio> list = new ArrayList<>();
         while(createNextMessage(rs, list));
@@ -65,7 +66,7 @@ public abstract class Messaggio {
     public static List<Messaggio> caricaRicevuti(Studente stud){
         String idStud = stud.getId();
         
-        String sql = "SELECT * FROM MESSAGGI WHERE ID_DESTINATARIO='" + idStud + "'";
+        String sql = "SELECT * FROM MESSAGGI WHERE ID_DESTINATARIO=" + idStud + " AND BOZZA=0";
         ResultSet rs = DBManager.getDBManager().execute(sql);
         ArrayList<Messaggio> list = new ArrayList<>();
         while(createNextMessage(rs, list));
@@ -75,7 +76,7 @@ public abstract class Messaggio {
     public static List<Messaggio> caricaSpiabili(Studente stud){
         String idStud = stud.getId();
         
-        String sql = "SELECT * FROM MESSAGGI WHERE ID_DESTINATARIO<>'" + idStud + "' AND ID_MITTENTE<>'" + idStud + "'";
+        String sql = "SELECT * FROM MESSAGGI WHERE ID_DESTINATARIO!=" + idStud + " AND ID_MITTENTE!=" + idStud + " AND BOZZA=0";
         ResultSet rs = DBManager.getDBManager().execute(sql);
         ArrayList<Messaggio> list = new ArrayList<>();
         while(createNextMessage(rs, list));
@@ -124,6 +125,8 @@ public abstract class Messaggio {
     public abstract String getLingua();
 
     public abstract boolean isBozza();
+    
+    public abstract boolean isLetto();
 
     public abstract UserInfo getMittente();
 

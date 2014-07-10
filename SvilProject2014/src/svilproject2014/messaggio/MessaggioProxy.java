@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import svilproject2014.DBManager;
 import svilproject2014.Messaggio;
 import svilproject2014.SistemaDiCifratura;
 import svilproject2014.UserInfo;
@@ -147,7 +148,29 @@ public class MessaggioProxy extends Messaggio{
     }
     
     private void caricaReale(){
-        
+        String sql = "SELECT * FROM MESSAGGI WHERE ID=" + id;
+        DBManager db = DBManager.getDBManager();
+        ResultSet rs = db.execute(sql);
+        if(rs==null){
+            Logger.getLogger(Messaggio.class.getName()).log(Level.WARNING,"Errore: Impossibile caricare il messaggio con id: " + id);
+        }
+        messaggio = MessaggioProxy.creaMessaggio(rs);
+    }
+    
+    private static Messaggio creaMessaggio(ResultSet rs){
+        if(rs==null)return null;
+        try {
+            if(rs.next()) return new MessaggioReale(rs);
+        } catch (SQLException ex) {
+            Logger.getLogger(Messaggio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isLetto() {
+        if(messaggio==null) return letto;
+        return messaggio.isLetto();
     }
     
 }

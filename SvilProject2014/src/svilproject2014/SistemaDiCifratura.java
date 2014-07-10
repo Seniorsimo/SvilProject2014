@@ -59,9 +59,8 @@ public class SistemaDiCifratura {
     
     private static boolean createNextSistemaDiCifratura(ResultSet rs, List<SistemaDiCifratura> list){
         SistemaDiCifratura sdc = SistemaDiCifratura.creaSistemaDiCifratura(rs);
-        String idSdc = sdc.getId();
-        if(idSdc!=null){
-            if(Integer.parseInt(idSdc)>0){
+        if(sdc!=null){
+            if(Integer.parseInt(sdc.getId())>0){
                 list.add(sdc);
                 return true;
             }
@@ -91,8 +90,7 @@ public class SistemaDiCifratura {
     }
     
     public String prova(String testo){
-        //nel caso map sia nullo termino immediatamente e rirono null
-        if(map==null) return null;
+        if(map==null) calcolaMappatura();
         
         String testoCifrato = Cifratore.cifra(map, testo);
         return testoCifrato;
@@ -145,11 +143,22 @@ public class SistemaDiCifratura {
     }
     
     public Mappatura getMappatura(){
+        if(map==null) calcolaMappatura();
         return map;
     }
     
     public String getId(){
         return id;
     }
+
+    public String getChiave() {
+        return chiave;
+    }
+
+    public String getMetodo() {
+        return metodo;
+    }
+    
+    
     
 }

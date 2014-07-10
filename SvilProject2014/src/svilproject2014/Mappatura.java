@@ -51,5 +51,13 @@ public class Mappatura {
     public String toString(){
         return "map: "+ String.copyValueOf(mappa) + "\ninversa: " + String.copyValueOf(mappaInversa);
     }
+
+    public char[] getMappa() {
+        return mappa;
+    }
+
+    public char[] getMappaInversa() {
+        return mappaInversa;
+    }
     
 }

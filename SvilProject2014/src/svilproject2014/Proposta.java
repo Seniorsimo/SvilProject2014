@@ -51,6 +51,7 @@ public class Proposta {
     }
     
     protected static Proposta creaProposta(ResultSet rs){
+        if(rs==null) return null;
         try {
             if(rs.next()) return new Proposta(rs);
         } catch (SQLException ex) {
@@ -64,11 +65,10 @@ public class Proposta {
             Logger.getLogger(Proposta.class.getName()).log(Level.WARNING, "Impossibile caricare una Proposta: Uno degli id non è corretto");
             return null;
         }
-        String sql = "SELECT * FROM PROPOSTE WHERE ID_PROPONENTE='" + idProp + "' AND ID_PARTNER='" + idPart + "' AND STATO=''";
+        String sql = "SELECT * FROM PROPOSTE WHERE ID_PROPONENTE=" + idProp + " AND ID_PARTNER=" + idPart + " AND STATO='accepted'";
         ResultSet rs = DBManager.getDBManager().execute(sql);
         Proposta p = Proposta.creaProposta(rs);
-        if(p.getId()!=null) return p;
-        return null;
+        return p;
     }
     
     public boolean salva(){
@@ -125,6 +125,7 @@ public class Proposta {
     
     //get
     public SistemaDiCifratura getSdc(){
+        if(sisCif==null) sisCif = SistemaDiCifratura.load(idSdc);
         return sisCif;
     }
     
@@ -147,5 +148,10 @@ public class Proposta {
     public void setStato(String stato){
         this.stato = stato;
     }
+
+    public boolean isNotificata() {
+        return notificata;
+    }
+    
     
 }

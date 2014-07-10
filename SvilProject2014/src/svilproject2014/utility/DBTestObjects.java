@@ -23,9 +23,11 @@ public class DBTestObjects {
         //ID    nome        cognome
         //1     'Marco'     'Rossi'
         //2     'Giovanna'  'Verdi'
+        //3     'Maria'     'Rosa'
         sql = "INSERT INTO STUDENTI (NOME,COGNOME)"
                         + " VALUES ('Marco','Rossi')"
-                                + ",('Giovanna','Verdi')";
+                                + ",('Giovanna','Verdi')"
+                                + ",('Maria','Rosa')";
         execute(sql);
         
         //SistemaDiCifratura
@@ -34,7 +36,7 @@ public class DBTestObjects {
         //2     'casa'      'chiave'    1
         //3     'bu'        'casuale'   2
         sql = "INSERT INTO SDC (CHIAVE,METODO,ID_CREATORE)"
-                    + " VALUES ('3','CESARE',1)"
+                    + " VALUES ('3','cesare',1)"
                             + ",('casa','chiave',1)"
                             + ",('bu','casuale',2)";
         execute(sql);
@@ -44,7 +46,7 @@ public class DBTestObjects {
         //1     'accepted'  0           1               2           2
         //2     'pending'   0           1               2           3
         sql = "INSERT INTO PROPOSTE (STATO,NOTIFICATA,ID_PROPONENTE,ID_PARTNER,ID_SDC)"
-                            + " VALUES ('pendng',0,1,2,2)"
+                            + " VALUES ('accepted',0,1,2,2)"
                                     + ",('pending',0,1,2,3)";
         execute(sql);
         
@@ -52,7 +54,9 @@ public class DBTestObjects {
         //ID    testo       testocifrato    lingua      titolo  bozza   letto   id_mittente id_destinatario id_sdc
         //1     'Ciao'      ''              'Italiano'  'Test'  1       0       1           2               2
         sql = "INSERT INTO MESSAGGI (TESTO,TESTO_CIFRATO,LINGUA,TITOLO,BOZZA,LETTO,ID_MITTENTE,ID_DESTINATARIO,ID_SDC)"
-                        + " VALUES ('Ciao','','Italiano','Test',1,0,1,2,2)";
+                        + " VALUES ('Ciao','','Italiano','Test',1,0,1,2,2)"
+                                + ",('Ciao2','','Italiano','Test',0,0,1,2,2)"
+                                + ",('Ciao3','','Italiano','Test',0,0,2,3,3)";
         execute(sql);
         
         //GestoreIpotesi

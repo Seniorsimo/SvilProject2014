@@ -15,6 +15,7 @@ import java.util.List;
 public class CommunicationController {
     
     public static boolean send(Messaggio msg){
+        if(msg==null) return false;
         return msg.send();
     }
     
@@ -34,9 +35,8 @@ public class CommunicationController {
     
     private static boolean createNextUserInfo(ResultSet rs, List<UserInfo> list){
         UserInfo u = UserInfo.creaUserInfo(rs);
-        String idU = u.getId();
-        if(idU!=null){
-            if(Integer.parseInt(idU)>0){
+        if(u!=null){
+            if(Integer.parseInt(u.getId())>0){
                 list.add(u);
                 return true;
             }
@@ -45,6 +45,7 @@ public class CommunicationController {
     }
     
     public static boolean inviaProposta(Studente usr, UserInfo partner, SistemaDiCifratura sdc){
+        if(usr==null||partner==null||sdc==null) return false;
         Proposta prop = new Proposta(usr.getUserInfo(), partner, sdc);
         return prop.salva();
     }
@@ -61,9 +62,8 @@ public class CommunicationController {
     
     private static boolean createNextProposta(ResultSet rs, List<Proposta> list){
         Proposta p = Proposta.creaProposta(rs);
-        String idP = p.getId();
-        if(idP!=null){
-            if(Integer.parseInt(idP)>0){
+        if(p!=null){
+            if(Integer.parseInt(p.getId())>0){
                 list.add(p);
                 return true;
             }
@@ -82,7 +82,8 @@ public class CommunicationController {
     }
     
     public static boolean inviaDecisione(Proposta prop, String dec){
-        
+        if(prop==null||dec==null) return false;
+        if(!dec.equals("accepted")&&!dec.equals("refused")) return false;
         if(dec.equals("accepted")){
             Proposta old = Proposta.caricaAttiva(prop.getIdProponente(), prop.getIdPartner());
             
@@ -98,6 +99,7 @@ public class CommunicationController {
     
     public static Messaggio apriMessaggioRicevuto(String id){
         Messaggio m = Messaggio.load(id);
+        if(m==null) return null;
         m.setLetto(true);
         m.salva();
         return m;

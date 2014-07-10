@@ -235,14 +235,21 @@ public class MessaggioReale extends Messaggio {
     public boolean isBozza() {
         return bozza;
     }
+    
+    @Override
+    public boolean isLetto() {
+        return letto;
+    }
 
     @Override
     public UserInfo getMittente() {
+        if(mittente==null) mittente = UserInfo.load(idMitt);
         return mittente;
     }
 
     @Override
     public UserInfo getDestinatario() {
+        if(destinatario==null) destinatario = UserInfo.load(idDest);
         return destinatario;
     }
     

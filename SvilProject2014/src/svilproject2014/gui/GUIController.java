@@ -203,6 +203,12 @@ public class GUIController {
         
     }
     
+    public void mostraMessaggiSpiabili(){
+        List<Messaggio> list = Messaggio.caricaSpiabili(user);
+        //visualizza
+        
+    }
+    
     public void salvaSessioneDiLavoro(){
         boolean success = sdl.salva();
         //visualizza

@@ -113,6 +113,16 @@ public class Messaggio {
         return list;
     }
     
+    public static List<Messaggio> caricaSpiabili(Studente stud){
+        String idStud = stud.getId();
+        
+        String sql = "SELECT * FROM MESSAGGI WHERE ID_DESTINATARIO<>'" + idStud + "' AND ID_MITTENTE<>'" + idStud + "'";
+        ResultSet rs = DBManager.getDBManager().execute(sql);
+        ArrayList<Messaggio> list = new ArrayList<>();
+        while(createNextMessage(rs, list));
+        return list;
+    }
+    
     private static boolean createNextMessage(ResultSet rs, List<Messaggio> list){
         Messaggio m = Messaggio.creaMessaggio(rs);
         if(m!=null){

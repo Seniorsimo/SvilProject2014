@@ -92,7 +92,7 @@ public class Coppia {
         return out;
     }
     
-    public boolean equals(Coppia c) {
+    /*public boolean equals(Coppia c) {
         if(c==null) return false;
         if(vecchiaL != c.getVecchiaL()) return false;
         if(nuovaL != c.getNuovaL()) return false;
@@ -100,7 +100,7 @@ public class Coppia {
         if(padre==null && c.getPadre()==null) return true;
         if(!padre.equals(c.getPadre())) return false;
         return true;
-    }
+    }*/
     
     @Override
     public boolean equals(Object o){

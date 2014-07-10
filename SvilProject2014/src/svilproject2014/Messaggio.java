@@ -276,6 +276,18 @@ public class Messaggio {
     public String getTitolo() {
         return titolo;
     }
+
+    public void setTesto(String testo) {
+        this.testo = testo;
+    }
+
+    public void setTitolo(String titolo) {
+        this.titolo = titolo;
+    }
+
+    public void setSisCif(SistemaDiCifratura sisCif) {
+        this.sisCif = sisCif;
+    }
     
     
 }

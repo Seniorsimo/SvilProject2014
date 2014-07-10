@@ -233,4 +233,12 @@ public class GUIController {
         
     }
     
+    //METODI DI EMULAZIONE
+    
+    public void getListaStudenti(){
+        List<Studente> list = Studente.gelListaStudenti();
+        //visualizza
+        
+    }
+    
 }

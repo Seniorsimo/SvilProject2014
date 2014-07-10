@@ -89,7 +89,7 @@ public class GestoreIpotesi {
         DBManager db = DBManager.getDBManager();
         ResultSet rs = db.execute(sql);
         if(rs==null){
-            Logger.getLogger(Messaggio.class.getName()).log(Level.WARNING,"Errore: Impossibile caricare il gestoreipotesi con id: " + id);
+            Logger.getLogger(GestoreIpotesi.class.getName()).log(Level.WARNING,"Errore: Impossibile caricare il gestoreipotesi con id: " + id);
             return null;
         }
         return GestoreIpotesi.creaGestoreIpotesi(rs);
@@ -232,6 +232,10 @@ public class GestoreIpotesi {
         }
         return true;
         
+    }
+
+    public Messaggio getMessaggio() {
+        return messaggio;
     }
     
     @Override

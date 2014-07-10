@@ -115,5 +115,11 @@ public class Dizionario {
             Logger.getLogger(Dizionario.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;  
-    }        
+    }       
+
+    public int getIdLingua() {
+        return idLingua;
+    }
+    
+    
 }

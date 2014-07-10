@@ -200,6 +200,21 @@ public class DBManager {
             Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella gestoreipotesi già esistente.");
         }
         
+        //tabella SESSIONEDILAVORO
+        try {
+            String sql = "CREATE TABLE SESSIONEDILAVORO ("
+                    + "ID INT not null primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+                    + "ID_MESSAGGIO INT not null,"
+                    + "ID_GESTORE INT not null,"
+                    + "ID_LINGUA INT not null,"
+                    + "ID_UTENTE INT not null,"
+                    + "STATO VARCHAR(20) NOT NULL"
+                    + ")";
+            st.executeUpdate(sql);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.INFO,"Tabella sessionedilavoro già esistente.");
+        }
+        
         return st;
     }
     

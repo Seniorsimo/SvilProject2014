@@ -35,4 +35,8 @@ public class StrumentiDiSupporto {
         return frequenze.getFrequenza(carattere);
     }
     
+    public int getLingua(){
+        return dizionario.getIdLingua();
+    }
+    
 }

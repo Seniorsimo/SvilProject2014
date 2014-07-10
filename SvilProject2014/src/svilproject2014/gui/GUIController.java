@@ -14,6 +14,7 @@ import svilproject2014.Studente;
 import svilproject2014.UserInfo;
 import svilproject2014.sessione.Coppia;
 import svilproject2014.sessione.GestoreIpotesi;
+import svilproject2014.sessione.SessioneDiLavoro;
 import svilproject2014.sessione.StrumentiDiSupporto;
 
 /**
@@ -35,11 +36,14 @@ public class GUIController {
     private String key;
     private StrumentiDiSupporto sos;
     private GestoreIpotesi g;
+    private SessioneDiLavoro sdl;
     
     
     public GUIController(){
         //vuoto
     }
+    
+    //UC1
     
     public void apriMessaggoBozza(String id){
         Messaggio m = Messaggio.load(id);
@@ -173,6 +177,8 @@ public class GUIController {
         
     }
     
+    //UC2
+    
     public void aggiornaLingua(int id){
         boolean success = sos.aggiornaLingua(id);
         //visualizza
@@ -185,14 +191,26 @@ public class GUIController {
         
     }
     
-    public void vaiAvantiNelleIpotesi(int n){
-        boolean success = g.avanti(n);
+    public void caricaSessioneDiLavoro(int id){
+        sdl = SessioneDiLavoro.load(id);
         //visualizza
         
     }
     
     public void cercaPatternSulDizionario(String pattern){
         List<String> list = sos.cercaPatternSulDizionario(pattern);
+        //visualizza
+        
+    }
+    
+    public void salvaSessioneDiLavoro(){
+        boolean success = sdl.salva();
+        //visualizza
+        
+    }
+    
+    public void vaiAvantiNelleIpotesi(int n){
+        boolean success = g.avanti(n);
         //visualizza
         
     }

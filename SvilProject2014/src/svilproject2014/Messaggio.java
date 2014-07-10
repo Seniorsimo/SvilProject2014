@@ -115,12 +115,9 @@ public class Messaggio {
     
     private static boolean createNextMessage(ResultSet rs, List<Messaggio> list){
         Messaggio m = Messaggio.creaMessaggio(rs);
-        String idM = m.getId();
-        if(idM!=null){
-            if(Integer.parseInt(idM)>0){
-                list.add(m);
-                return true;
-            }
+        if(m!=null){
+            list.add(m);
+            return true;
         }
         return false;
     }

@@ -104,7 +104,7 @@ public class SistemaDiCifratura {
         if(id!=null){
             sql = "UPDATE SDC SET "
                     + "CHIAVE='" + chiave + "',"
-                    + "METODO='" + metodo + "',";
+                    + "METODO='" + metodo + "'";
             if(idCreatore!=null) sql += ",ID_CREATORE=" + Integer.parseInt(idCreatore);
             
             sql += " WHERE ID=" + Integer.parseInt(id);
@@ -118,6 +118,23 @@ public class SistemaDiCifratura {
             else sql += "0";
         }
         int i = DBManager.getDBManager().save(sql);
+        
+        if(id==null){
+            sql = "SELECT ID FROM SDC WHERE "
+                    + "CHIAVE='" + chiave + "' AND "
+                    + "METODO='" + metodo + "'";
+            if(idCreatore!=null) sql += " AND ID_CREATORE=" + Integer.parseInt(idCreatore);
+            
+            ResultSet rs = DBManager.getDBManager().execute(sql);
+            try {
+                if(rs.next()){ 
+                    id = "" + rs.getInt("ID"); 
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(SistemaDiCifratura.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
         return i>0 ? true : false;
     }
     

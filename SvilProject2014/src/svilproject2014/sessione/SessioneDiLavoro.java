@@ -108,6 +108,24 @@ public class SessioneDiLavoro {
             sql += ")";
         }
         int i = DBManager.getDBManager().save(sql);
+        if(id==0){
+            sql = "SELECT ID FROM SESSIONEDILAVORO WHERE "
+                    + "ID_MESSAGGIO=" + id_messaggio + " AND "
+                    + "ID_GESTORE=" + id_gestore + " AND "
+                    + "ID_LINGUA=" + id_lingua + " AND "
+                    + "ID_UTENTE=" + id_utente + " AND "
+                    + "STATO='" + stato + "'";
+            
+            ResultSet rs = DBManager.getDBManager().execute(sql);
+            try {
+                if(rs.next()){ 
+                    id = rs.getInt("ID"); 
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(SessioneDiLavoro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
         return i>0 ? true : false;
         
     }

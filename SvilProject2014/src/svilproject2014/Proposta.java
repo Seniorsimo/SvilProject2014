@@ -77,8 +77,8 @@ public class Proposta {
         if(id!=null){
             sql = "UPDATE PROPOSTE SET "
                     + "STATO='" + stato + "',";
-            if(notificata) sql += "NOTIFICATA=1,";
-            else sql += "NOTIFICATA=0,";
+            if(notificata) sql += "NOTIFICATA=1";
+            else sql += "NOTIFICATA=0";
             
             if(idProp!=null) sql += ",ID_PROPONENTE=" + Integer.parseInt(idProp);
             if(idPart!=null) sql += ",ID_PARTNER=" + Integer.parseInt(idPart);
@@ -101,6 +101,25 @@ public class Proposta {
             sql += ")";
         }
         int i = DBManager.getDBManager().save(sql);
+        if(id==null){
+            sql = "SELECT ID FROM PROPOSTE WHERE "
+                    + "STATO='" + stato + "' AND ";
+            if(notificata) sql += "NOTIFICATA=1";
+            else sql += "NOTIFICATA=0";
+            
+            if(idProp!=null) sql += " AND ID_PROPONENTE=" + Integer.parseInt(idProp);
+            if(idPart!=null) sql += " AND ID_PARTNER=" + Integer.parseInt(idPart);
+            if(idSdc!=null) sql += " AND ID_SDC=" + Integer.parseInt(idSdc);
+            
+            ResultSet rs = DBManager.getDBManager().execute(sql);
+            try {
+                if(rs.next()){ 
+                    id = "" + rs.getInt("ID"); 
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Proposta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         return i>0 ? true : false;
     }
     

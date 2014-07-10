@@ -168,6 +168,30 @@ public class Messaggio {
             sql += ")";
         }
         int i = DBManager.getDBManager().save(sql);
+        if(id==null){
+            sql = "SELECT ID FROM MESSAGGI WHERE "
+                    + "TESTO='" + testo + "' AND "
+                    + "TESTO_CIFRATO='" + testoCifrato + "' AND "
+                    + "LINGUA='" + lingua + "' AND "
+                    + "TITOLO='" + titolo + "' AND ";
+            if(bozza) sql += "BOZZA=1 AND ";
+            else sql += "BOZZA=0 AND ";
+            if(letto) sql += "LETTO=1";
+            else sql += "LETTO=0";
+            
+            if(idMitt!=null) sql += " AND ID_MITTENTE=" + Integer.parseInt(idMitt);
+            if(idDest!=null) sql += " AND ID_DESTINATARIO=" + Integer.parseInt(idDest);
+            if(idSdc!=null) sql += " AND ID_SDC=" + Integer.parseInt(idSdc);
+            
+            ResultSet rs = DBManager.getDBManager().execute(sql);
+            try {
+                if(rs.next()){ 
+                    id = "" + rs.getInt("ID"); 
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Messaggio.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         return i>0 ? true : false;
     }
     

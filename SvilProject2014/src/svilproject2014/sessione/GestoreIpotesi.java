@@ -207,6 +207,26 @@ public class GestoreIpotesi {
             sql += ")";
         }
         int i = DBManager.getDBManager().save(sql);
+        
+        if(id==0){
+            sql = "SELECT ID FROM GESTOREIPOTESI WHERE "
+                    + "AVANTI=" + avantiPossibili + " AND "
+                    + "INDIETRO=" + indietroPossibili + " AND "
+                    + "STATO=" + indiceStatoCorrente + " AND "
+                    + "ID_MESSAGGIO=" + messageId + " AND "
+                    + "TESTO_ORIGINALE='" + String.copyValueOf(testoOriginale) + "' AND "
+                    + "TESTO_PARZIALE='" + String.copyValueOf(testoParziale) + "' AND "
+                    + "LISTA='" + lista + "'";
+            
+            ResultSet rs = DBManager.getDBManager().execute(sql);
+            try {
+                if(rs.next()){ 
+                    id = rs.getInt("ID"); 
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(GestoreIpotesi.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         return i>0 ? true : false;
         
     }

@@ -6,6 +6,7 @@
 
 package svilproject2014.sessione;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -45,12 +46,15 @@ public class CoppiaTest {
     @Test
     public void testGetFigli() {
         System.out.println("getFigli");
-        Coppia instance = null;
-        List<Coppia> expResult = null;
+        Coppia instance = new Coppia('c','a',null);
+        List<Coppia> expResult = new ArrayList<>();
         List<Coppia> result = instance.getFigli();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        Coppia c = new Coppia('d','e',instance);
+        expResult.add(c);
+        result = instance.getFigli();
+        assertEquals(expResult, result);
     }
 
     /**

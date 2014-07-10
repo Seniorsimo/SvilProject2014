@@ -29,6 +29,21 @@ public class UserInfo {
         }
     }
     
+    public static UserInfo load(String id){
+        //id deve contenere un numero e questo deve essere strettamente positivo, altrimenti errore.      
+        if(Integer.parseInt(id)<1) return null;
+        
+        String sql = "SELECT * FROM STUDENTI WHERE ID=" + id;
+        DBManager db = DBManager.getDBManager();
+        ResultSet rs = db.execute(sql);
+        if(rs==null){
+            Logger.getLogger(UserInfo.class.getName()).log(Level.WARNING,"Errore: Impossibile caricare l'utente con id: " + id);
+            return null;
+        }
+        UserInfo m = UserInfo.creaUserInfo(rs);
+        return m;
+    }
+    
     protected static UserInfo creaUserInfo(ResultSet rs){
         try {
             if(rs.next()) return new UserInfo(rs);
@@ -42,5 +57,7 @@ public class UserInfo {
     public String getId(){
         return id;
     }
+    
+    
     
 }

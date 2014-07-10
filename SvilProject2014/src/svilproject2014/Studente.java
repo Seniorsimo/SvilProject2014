@@ -26,6 +26,14 @@ public class Studente {
     public String getId(){
         return id;
     }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getCognome() {
+        return cognome;
+    }
     
     //get
     public UserInfo getUserInfo(){

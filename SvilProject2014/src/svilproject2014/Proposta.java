@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class Proposta {
     
     private String id;
-    private String stato = "pending";
+    private String stato = "pending"; //pending, accepted, refused, expired
     private boolean notificata;
     
     private String idSdc;
@@ -64,7 +64,7 @@ public class Proposta {
             Logger.getLogger(Proposta.class.getName()).log(Level.WARNING, "Impossibile caricare una Proposta: Uno degli id non è corretto");
             return null;
         }
-        String sql = "SELECT + FROM PROPOSTE WHERE ID_PROPONENTE='" + idProp + "' AND ID_PARTNER='" + idPart + "'";
+        String sql = "SELECT * FROM PROPOSTE WHERE ID_PROPONENTE='" + idProp + "' AND ID_PARTNER='" + idPart + "' AND STATO=''";
         ResultSet rs = DBManager.getDBManager().execute(sql);
         Proposta p = Proposta.creaProposta(rs);
         if(p.getId()!=null) return p;

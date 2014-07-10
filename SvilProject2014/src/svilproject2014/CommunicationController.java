@@ -83,7 +83,7 @@ public class CommunicationController {
     
     public static boolean inviaDecisione(Proposta prop, String dec){
         
-        if(dec.equals("accettata")){
+        if(dec.equals("accepted")){
             Proposta old = Proposta.caricaAttiva(prop.getIdProponente(), prop.getIdPartner());
             
             if(old!=null){

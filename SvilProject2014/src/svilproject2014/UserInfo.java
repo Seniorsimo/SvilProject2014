@@ -57,6 +57,14 @@ public class UserInfo {
     public String getId(){
         return id;
     }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getCognome() {
+        return cognome;
+    }
     
     
     

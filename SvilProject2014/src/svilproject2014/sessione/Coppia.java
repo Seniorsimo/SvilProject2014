@@ -101,5 +101,17 @@ public class Coppia {
         if(!padre.equals(c.getPadre())) return false;
         return true;
     }
+    
+    @Override
+    public boolean equals(Object o){
+        if(o==null) return false;
+        Coppia c = (Coppia) o;
+        if(vecchiaL != c.getVecchiaL()) return false;
+        if(nuovaL != c.getNuovaL()) return false;
+        if(padre==null && c.getPadre()!=null) return false;
+        if(padre!=null&&(!padre.equals(c.getPadre()))) return false;
+        if(!getFigli().equals(c.getFigli()))return false;
+        return true;
+    }
 
 }

@@ -247,4 +247,10 @@ public class GUIController {
         
     }
     
+    public void login(Studente s){
+        user = s;
+        //visualizza
+        
+    }
+    
 }

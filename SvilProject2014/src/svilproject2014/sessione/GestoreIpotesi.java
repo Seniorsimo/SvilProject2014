@@ -107,8 +107,8 @@ public class GestoreIpotesi {
     
     public List<Coppia> visualizzaAssociazioni(){
         ArrayList<Coppia> list = new ArrayList<>();
-        for(int i=0; i<indiceStatoCorrente; i++){   //[0, indice-1] ma 0=root=ipotesivuota --> non serve! && indice=ultima ipotesi --> da stampare
-            list.add(listaAssociazioni[i+1]);       //shift di uno a destra: salto 0 e includo indiceCorrente
+        for(int i=1; i<=indiceStatoCorrente; i++){   //indice=ultima ipotesi --> da stampare //TODO dovrebbe partire da 1 per non visualizzare la root
+            list.add(listaAssociazioni[i]);       
         }
         return list;
     }
@@ -121,8 +121,9 @@ public class GestoreIpotesi {
         
         int i = 1;
         boolean exist = false;
-        while(!exist && i<indiceStatoCorrente+1){
+        while(!exist && i<=indiceStatoCorrente){
             if(listaAssociazioni[i].getVecchiaL()==vecchiaLettera) exist=true;
+            if(listaAssociazioni[i].getNuovaL()==nuovaLettera) exist=true;
             i++;
         }
         if(exist) return false;

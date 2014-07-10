@@ -27,10 +27,10 @@ public class SvilProject2014 {
         
         //TESTING SAVE/LOAD MESSAGGIO
         
-        //Messaggio m = new Messaggio();
-        //Messaggio m = Messaggio.load("1");
-        //m.setLetto(false);
-        //m.salva();
+//        Messaggio m = new Messaggio();
+//        Messaggio m = Messaggio.load("1");
+//        m.setLetto(false);
+//        m.salva();
         //Messaggio m = CommunicationController.apriMessaggioRicevuto("1");
         
         //TESTING DIZIONARIO
@@ -54,26 +54,27 @@ public class SvilProject2014 {
 //        System.out.println(s.getFrequenza('z'));
         
           //TESTING GESTORE IPOTESI
-//        Messaggio m = Messaggio.load("1");
-////        Mappatura map = CalcolatoreMappe.create("").calcola("");
-////        System.out.println(Cifratore.cifra(map, m.getTesto()));
-//        GestoreIpotesi g = new GestoreIpotesi(m);
-//        System.out.println(g);
-////        g.aggiungiIpotesi('x', 'o');
-////        g.aggiungiIpotesi('r', 'g');
-////        g.indietro(1);
-////        g.aggiungiIpotesi('z', 'i');
-////        g.indietro(1);
-////        g.avanti(1);
+        Messaggio m = Messaggio.load("1");
+//        m = Messaggio.load("1");
+//        Mappatura map = CalcolatoreMappe.create("").calcola("");
+//        System.out.println(Cifratore.cifra(map, m.getTesto()));
+        GestoreIpotesi g = new GestoreIpotesi(m);
+        System.out.println(g);
+//        g.aggiungiIpotesi('x', 'o');
+//        g.aggiungiIpotesi('r', 'g');
+//        g.indietro(1);
+//        g.aggiungiIpotesi('z', 'i');
+//        g.indietro(1);
+//        g.avanti(1);
 //        g.salva();
         
 //        GestoreIpotesi g = GestoreIpotesi.load(1);
 ////        System.out.println(g);
-////        g.aggiungiIpotesi('x', 'o');
-////        g.aggiungiIpotesi('r', 'g');
-////        g.indietro(1);
-////        g.salva();
-//        System.out.println(g);
+        g.aggiungiIpotesi('x', 'o');
+        g.aggiungiIpotesi('r', 'g');
+        g.indietro(1);
+        g.salva();
+        System.out.println(g);
     }
     
 }

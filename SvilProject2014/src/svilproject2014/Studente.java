@@ -53,7 +53,7 @@ public class Studente {
         }
     }
     
-    public static List<Studente> gelListaStudenti(){
+    public static List<Studente> getListaStudenti(){
         String sql = "SELECT * FROM STUDENTI";
         ResultSet rs = DBManager.getDBManager().execute(sql);
         ArrayList<Studente> list = new ArrayList<>();

@@ -56,7 +56,7 @@ public class CommunicationControllerTest {
     @Test
     public void testGetDestinatari() {
         System.out.println("getDestinatari");
-        Studente usr = Studente.gelListaStudenti().get(0);
+        Studente usr = Studente.getListaStudenti().get(0);
         List result = CommunicationController.getDestinatari(usr);
         assertEquals("2", ((UserInfo)result.get(0)).getId());
         assertEquals("Giovanna", ((UserInfo)result.get(0)).getNome());
@@ -70,8 +70,8 @@ public class CommunicationControllerTest {
     @Test
     public void testInviaProposta() {
         System.out.println("inviaProposta");
-        Studente usr = Studente.gelListaStudenti().get(0);
-        UserInfo partner = Studente.gelListaStudenti().get(1).getUserInfo();
+        Studente usr = Studente.getListaStudenti().get(0);
+        UserInfo partner = Studente.getListaStudenti().get(1).getUserInfo();
         SistemaDiCifratura sdc = SistemaDiCifratura.load("2");
         boolean expResult = false;
         boolean result = CommunicationController.inviaProposta(usr, partner, null);
@@ -88,7 +88,7 @@ public class CommunicationControllerTest {
     @Test
     public void testGetAccettazioneProposte() {
         System.out.println("getAccettazioneProposte");
-        Studente usr = Studente.gelListaStudenti().get(1);
+        Studente usr = Studente.getListaStudenti().get(1);
         List result = CommunicationController.getAccettazioneProposte(usr);
         assertEquals("1", ((Proposta)result.get(0)).getId());
         assertEquals("2", ((Proposta)result.get(0)).getIdPartner());
@@ -103,7 +103,7 @@ public class CommunicationControllerTest {
     @Test
     public void testGetProposte() {
         System.out.println("getProposte");
-        Studente usr = Studente.gelListaStudenti().get(1);
+        Studente usr = Studente.getListaStudenti().get(1);
         List result = CommunicationController.getProposte(usr);
         assertEquals("2", ((Proposta)result.get(0)).getId());
         assertEquals("2", ((Proposta)result.get(0)).getIdPartner());

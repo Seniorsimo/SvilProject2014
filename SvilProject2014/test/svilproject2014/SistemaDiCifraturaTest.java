@@ -43,7 +43,7 @@ public class SistemaDiCifraturaTest {
     @Test
     public void testCaricaSistemiCifratura() {
         System.out.println("caricaSistemiCifratura");
-        Studente stud = Studente.gelListaStudenti().get(0);
+        Studente stud = Studente.getListaStudenti().get(0);
         List result = SistemaDiCifratura.caricaSistemiCifratura(stud);
         assertEquals("1", ((SistemaDiCifratura)result.get(0)).getId());
         assertEquals("3", ((SistemaDiCifratura)result.get(0)).getChiave());

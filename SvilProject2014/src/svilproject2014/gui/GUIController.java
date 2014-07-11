@@ -45,7 +45,7 @@ public class GUIController {
     
     
     public GUIController(){
-        user = Studente.gelListaStudenti().get(2); //da spostare su una qualche richiesta
+        user = Studente.getListaStudenti().get(2); //da spostare su una qualche richiesta
     }
     
     //UC1
@@ -251,9 +251,14 @@ public class GUIController {
     
     //METODI DI EMULAZIONE
     
-    public List<Studente> getListaStudenti(){
-        List<Studente> list = Studente.gelListaStudenti();
+    public List<Studente> getListaStudenti(){//esclude dalla lista se stessi
+        List<Studente> list = Studente.getListaStudenti();
         //visualizza
+        int i = 0;
+        while(i<list.size()){
+            if(list.get(i).getId().equals(user.getId())) list.remove(i);
+            else i++;
+        }
         return list;
     }
     

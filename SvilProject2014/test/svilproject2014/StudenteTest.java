@@ -44,7 +44,7 @@ public class StudenteTest {
     @Test
     public void testGetUserInfo() {
         System.out.println("getUserInfo");
-        Studente instance = Studente.gelListaStudenti().get(0);
+        Studente instance = Studente.getListaStudenti().get(0);
         UserInfo result = instance.getUserInfo();
         assertEquals("1", result.getId());
         assertEquals("Marco", result.getNome());
@@ -57,7 +57,7 @@ public class StudenteTest {
     @Test
     public void testGelListaStudenti() {
         System.out.println("gelListaStudenti");
-        List result = Studente.gelListaStudenti();
+        List result = Studente.getListaStudenti();
         assertEquals("1", ((Studente)result.get(0)).getId());
         assertEquals("Marco", ((Studente)result.get(0)).getNome());
         assertEquals("Rossi", ((Studente)result.get(0)).getCognome());

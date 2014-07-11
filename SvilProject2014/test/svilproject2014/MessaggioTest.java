@@ -62,7 +62,7 @@ public class MessaggioTest {
     @Test
     public void testCaricaBozze() {
         System.out.println("caricaBozze");
-        Studente stud = Studente.gelListaStudenti().get(0);
+        Studente stud = Studente.getListaStudenti().get(0);
         List result = Messaggio.caricaBozze(stud);
         assertEquals("1", ((Messaggio)result.get(0)).getId());
         assertEquals("Ciao", ((Messaggio)result.get(0)).getTesto());
@@ -81,7 +81,7 @@ public class MessaggioTest {
     @Test
     public void testCaricaInviati() {
         System.out.println("caricaInviati");
-        Studente stud = Studente.gelListaStudenti().get(0);
+        Studente stud = Studente.getListaStudenti().get(0);
         List result = Messaggio.caricaInviati(stud);
         assertEquals("2", ((Messaggio)result.get(0)).getId());
         assertEquals("Ciao2", ((Messaggio)result.get(0)).getTesto());
@@ -100,7 +100,7 @@ public class MessaggioTest {
     @Test
     public void testCaricaRicevuti() {
         System.out.println("caricaRicevuti");
-        Studente stud = Studente.gelListaStudenti().get(1);
+        Studente stud = Studente.getListaStudenti().get(1);
         List result = Messaggio.caricaRicevuti(stud);
         assertEquals("2", ((Messaggio)result.get(0)).getId());
         assertEquals("Ciao2", ((Messaggio)result.get(0)).getTesto());
@@ -119,7 +119,7 @@ public class MessaggioTest {
     @Test
     public void testCaricaSpiabili() {
         System.out.println("caricaSpiabili");
-        Studente stud = Studente.gelListaStudenti().get(0);
+        Studente stud = Studente.getListaStudenti().get(0);
         List result = Messaggio.caricaSpiabili(stud);
         assertEquals("3", ((Messaggio)result.get(0)).getId());
         assertEquals("Ciao3", ((Messaggio)result.get(0)).getTesto());

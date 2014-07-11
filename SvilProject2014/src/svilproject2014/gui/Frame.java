@@ -113,33 +113,33 @@ class Frame extends JFrame{
         add(propostePanel);
         pack();
     }
-		public JPanel gridOrizz(Component[]comp){
-			JPanel panel=new JPanel();
-			panel.setLayout(new GridLayout(1,comp.length));
-			for(int i=0;i<comp.length;i++)
-				panel.add(comp[i]);
-			return panel;
-		}
-		public JPanel gridVert(Component[]comp){
-			JPanel panel=new JPanel();
-			panel.setLayout(new GridLayout(comp.length,1));
-			for(int i=0;i<comp.length;i++)
-				panel.add(comp[i]);
-			return panel;
-		}
+    public JPanel gridOrizz(Component[]comp){
+            JPanel panel=new JPanel();
+            panel.setLayout(new GridLayout(1,comp.length));
+            for(int i=0;i<comp.length;i++)
+                    panel.add(comp[i]);
+            return panel;
+    }
+    public JPanel gridVert(Component[]comp){
+            JPanel panel=new JPanel();
+            panel.setLayout(new GridLayout(comp.length,1));
+            for(int i=0;i<comp.length;i++)
+                    panel.add(comp[i]);
+            return panel;
+    }
     public JPanel editLeft(JLabel lbl,Component comp,JTextField titolo,JTextField mex,ArrayList <JButton> btns){
         JPanel mexPanel=new JPanel();
         JPanel buttonPanel=new JPanel();
         JButton home=new JButton("Home");
         mex.setPreferredSize(new Dimension(300,200));
         home.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if(sceltaPanel==null)
-                        sceltaPanel=new sceltaJPanel();
-                    visualizzaScelta();
-                }});
-				Component[]comp1={lbl,comp};//orizz
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(sceltaPanel==null)
+                    sceltaPanel=new sceltaJPanel();
+                visualizzaScelta();
+            }});
+        Component[]comp1={lbl,comp};//orizz
         Component[]comp2={new JLabel("Titolo"),titolo};//orizz
         Component[]comp3={gridOrizz(comp1),gridOrizz(comp2)};//vert
                 
@@ -154,105 +154,105 @@ class Frame extends JFrame{
         return mexPanel;
     }
     public JPanel editTabella(String txt,JTable table){
-				JPanel panel=new JPanel();
-				panel.setLayout(new BorderLayout());
-				panel.add(new JLabel(txt),BorderLayout.NORTH);
-				panel.add(table,BorderLayout.CENTER);
-				return panel;
-		}
+        JPanel panel=new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.add(new JLabel(txt),BorderLayout.NORTH);
+        panel.add(table,BorderLayout.CENTER);
+        return panel;
+    }
     public class proposteJPanel extends JPanel{
-			JRadioButton opt1 = new JRadioButton("Cifrario di Cesare");
-			JRadioButton opt2 = new JRadioButton("Cifrario a Chiave");
-			JRadioButton opt3 = new JRadioButton("Cifrario Casuale");
-			JButton rnd=new JButton("Random");
-			JTextField shift=new JTextField();
-			JTextField key=new JTextField();
-			JTextField anteprima=new JTextField();
-			/**************************************/
-			JButton btn2=new JButton("Aggiorna");
-			public proposteJPanel(){
-				Choice user=new Choice();
-				user.add("Max210491");
-				user.add("SeniornSimo");
-				user.add("NoPuffi");
-				ButtonGroup group = new ButtonGroup();
-				group.add(opt1);
-				group.add(opt2);
-				group.add(opt3);
-				anteprima.setText("Cesare "+shift.getText());
-				opt1.setSelected(true);
-				opt1.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-								anteprima.setText("Cesare "+shift.getText());
-						}});
-				opt2.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-								anteprima.setText("Chiave "+key.getText());
-						}});
-				opt3.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-								anteprima.setText("Casuale");
-						}});
-				shift.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-								anteprima.setText("Cesare "+shift.getText());
-								opt1.setSelected(true);
-						}});
-				key.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-								anteprima.setText("Chiave "+key.getText());
-								opt2.setSelected(true);
-						}});
-				rnd.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-								anteprima.setText("New Random");
-								opt3.setSelected(true);
-						}});
-				Component[]comp1={editCifrario(opt1,shift),editCifrario(opt2,key),editCifrario(opt3,rnd)};//vert
-				JPanel panel=new JPanel();
-				panel.setLayout(new BorderLayout());
-				panel.add(new JLabel("Anteprima"),BorderLayout.NORTH);
-				panel.add(anteprima,BorderLayout.CENTER);
-				Component[]leftCenter={user,gridVert(comp1),panel,};
-				JPanel left=new JPanel();
-				left.setLayout(new  BorderLayout());
-				left.add(user,BorderLayout.NORTH);
-				left.add(gridVert(leftCenter),BorderLayout.CENTER);
-				JButton home=new JButton("Home");
-				home.addActionListener(new ActionListener() {
+        JRadioButton opt1 = new JRadioButton("Cifrario di Cesare");
+        JRadioButton opt2 = new JRadioButton("Cifrario a Chiave");
+        JRadioButton opt3 = new JRadioButton("Cifrario Casuale");
+        JButton rnd=new JButton("Random");
+        JTextField shift=new JTextField();
+        JTextField key=new JTextField();
+        JTextField anteprima=new JTextField();
+        /**************************************/
+        JButton btn2=new JButton("Aggiorna");
+        public proposteJPanel(){
+            Choice user=new Choice();
+            user.add("Max210491");
+            user.add("SeniornSimo");
+            user.add("NoPuffi");
+            ButtonGroup group = new ButtonGroup();
+            group.add(opt1);
+            group.add(opt2);
+            group.add(opt3);
+            anteprima.setText("Cesare "+shift.getText());
+            opt1.setSelected(true);
+            opt1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                                anteprima.setText("Cesare "+shift.getText());
+                }});
+            opt2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                                anteprima.setText("Chiave "+key.getText());
+                }});
+            opt3.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                                anteprima.setText("Casuale");
+                }});
+            shift.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                                anteprima.setText("Cesare "+shift.getText());
+                                opt1.setSelected(true);
+                }});
+            key.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                                anteprima.setText("Chiave "+key.getText());
+                                opt2.setSelected(true);
+                }});
+            rnd.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                                anteprima.setText("New Random");
+                                opt3.setSelected(true);
+                }});
+            Component[]comp1={editCifrario(opt1,shift),editCifrario(opt2,key),editCifrario(opt3,rnd)};//vert
+            JPanel panel=new JPanel();
+            panel.setLayout(new BorderLayout());
+            panel.add(new JLabel("Anteprima"),BorderLayout.NORTH);
+            panel.add(anteprima,BorderLayout.CENTER);
+            Component[]leftCenter={user,gridVert(comp1),panel,};
+            JPanel left=new JPanel();
+            left.setLayout(new  BorderLayout());
+            left.add(user,BorderLayout.NORTH);
+            left.add(gridVert(leftCenter),BorderLayout.CENTER);
+            JButton home=new JButton("Home");
+            home.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(sceltaPanel==null)
                         sceltaPanel=new sceltaJPanel();
                     visualizzaScelta();
                 }});
-				Component[]comp={new Button("Invia"),home};
-				left.add(gridOrizz(comp),BorderLayout.SOUTH);
-				/*************************************/
-			  Object [][]testo={{"max210491","tilooo1"},{"seniorsimo","tilooo2"}};
-				Object []nomi={"ID","Titolo"};
-				JTable table1=new JTable(testo,nomi);
-				JPanel panel1=new JPanel();
-				JPanel panel2=new JPanel();
-				panel2.setLayout(new GridLayout(1,1));
-				panel2.add(editTabella("Proposte",table1));
-				panel1.setLayout(new BorderLayout());
-				panel1.add(panel2,BorderLayout.NORTH);
-				panel1.add(btn2,BorderLayout.SOUTH);
-				/*************************************/
-				setLayout(new GridLayout(1,2));
-				add(left);
-				add(panel1);
-			}
-			 public JPanel editCifrario(JRadioButton opt,Component obj){
-						Component[]comp={opt,obj};
-						return gridVert(comp);
-				}
-		}
+            Component[]comp={new Button("Invia"),home};
+            left.add(gridOrizz(comp),BorderLayout.SOUTH);
+            /*************************************/
+            Object [][]testo={{"max210491","tilooo1"},{"seniorsimo","tilooo2"}};
+            Object []nomi={"ID","Titolo"};
+            JTable table1=new JTable(testo,nomi);
+            JPanel panel1=new JPanel();
+            JPanel panel2=new JPanel();
+            panel2.setLayout(new GridLayout(1,1));
+            panel2.add(editTabella("Proposte",table1));
+            panel1.setLayout(new BorderLayout());
+            panel1.add(panel2,BorderLayout.NORTH);
+            panel1.add(btn2,BorderLayout.SOUTH);
+            /*************************************/
+            setLayout(new GridLayout(1,2));
+            add(left);
+            add(panel1);
+        }
+         public JPanel editCifrario(JRadioButton opt,Component obj){
+            Component[]comp={opt,obj};
+            return gridVert(comp);
+        }
+    }
     public class scriviJPanel extends JPanel{
         JLabel userlbl=new JLabel("Destinatario");
         Choice user=new Choice();
@@ -261,11 +261,11 @@ class Frame extends JFrame{
         JButton btn=new JButton("Invia");
         /*************************************/
         Object [][]testo={{"max210491","tilooo1"},{"seniorsimo","tilooo2"}};
-				Object []nomi={"ID","Titolo"};
-				JTable table1=new JTable(testo,nomi);
-				JPanel panel1=new JPanel();
-				JPanel panel2=new JPanel();
-				JButton btn2=new JButton("Cancella");
+        Object []nomi={"ID","Titolo"};
+        JTable table1=new JTable(testo,nomi);
+        JPanel panel1=new JPanel();
+        JPanel panel2=new JPanel();
+        JButton btn2=new JButton("Cancella");
         public scriviJPanel(){
             super();
             /*************************************/
@@ -280,10 +280,10 @@ class Frame extends JFrame{
             user.add("NoPuffi");
             /*************************************/
             panel2.setLayout(new GridLayout(1,1));
-						panel2.add(editTabella("BOZZE",table1));
-						panel1.setLayout(new BorderLayout());
-						panel1.add(panel2,BorderLayout.NORTH);
-						panel1.add(btn2,BorderLayout.SOUTH);   
+            panel2.add(editTabella("BOZZE",table1));
+            panel1.setLayout(new BorderLayout());
+            panel1.add(panel2,BorderLayout.NORTH);
+            panel1.add(btn2,BorderLayout.SOUTH);   
             /*************************************/
             setLayout(new GridLayout(1,2));
             add(editLeft(userlbl,user,titolo,messaggio,temp));
@@ -395,18 +395,15 @@ class Frame extends JFrame{
                         spiaPanel=new spiaJPanel();
                     visualizzaSpia();
                 }});
-						button4.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-								if(propostePanel==null)
-										propostePanel=new proposteJPanel();
-								visualizzaProposte();
-						}});
-						Component[]temp={button1,button4,button2,button3};
+            button4.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if(propostePanel==null)
+                                    propostePanel=new proposteJPanel();
+                    visualizzaProposte();
+                }});
+            Component[]temp={button1,button4,button2,button3};
             add(gridOrizz(temp));
-            //add(button4);
-            //add(button2);
-            //add(button3);
         }
     }
 }

@@ -37,7 +37,7 @@ public class SessioneDiLavoro {
     public SessioneDiLavoro(ResultSet info){
         try {
                 id = info.getInt("ID");
-                id_messaggio = info.getInt("ID_MESAGGIO");
+                id_messaggio = info.getInt("ID_MESSAGGIO");
                 id_gestore = info.getInt("ID_GESTORE");
                 id_lingua = info.getInt("ID_LINGUA");
                 id_utente = info.getInt("ID_UTENTE");
@@ -134,6 +134,31 @@ public class SessioneDiLavoro {
         stato = "abbandonato";
         return salva();
         
+    }
+
+    public Messaggio getMessaggio() {
+        if(messaggio==null) messaggio = Messaggio.load(""+id_messaggio);
+        return messaggio;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getId_lingua() {
+        return id_lingua;
+    }
+
+    public int getId_utente() {
+        return id_utente;
+    }
+
+    public String getStato() {
+        return stato;
+    }
+
+    public void setStato(String stato) {
+        this.stato = stato;
     }
     
     

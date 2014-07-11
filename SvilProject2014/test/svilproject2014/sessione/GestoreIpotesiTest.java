@@ -61,7 +61,7 @@ public class GestoreIpotesiTest {
    */         
         
         System.out.println("load - id = 8 - id presente nel db");
-        id = 8;
+        id = 1;
         result = GestoreIpotesi.load(id);
         assertNotNull(result);
         
@@ -189,34 +189,6 @@ public class GestoreIpotesiTest {
         expResult = true;
         result = instance.verificaRisoluzione();
 //        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test del metodo salva della classe GestoreIpotesi.
-     */
-    
-    @Test
-    public void testSalva() {
-        System.out.println("salva");
-        GestoreIpotesi instance = GestoreIpotesi.load(8);
-        boolean expResult = true;
-        boolean result = instance.salva();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of toString method, of class GestoreIpotesi.
-     */
-    //Non saprei come testarla, dopotutto si vede se funziona o no.
-    @Test
-    public void testToString() {
-        System.out.println("toString");
-        GestoreIpotesi instance = null;
-        String expResult = "";
-        String result = instance.toString();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

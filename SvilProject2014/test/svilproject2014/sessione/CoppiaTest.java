@@ -40,50 +40,19 @@ public class CoppiaTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of getFigli method, of class Coppia.
-     */
-    @Test
-    public void testGetFigli() {
-        System.out.println("getFigli");
-        Coppia instance = new Coppia('c','a',null);
-        List<Coppia> expResult = new ArrayList<>();
-        List<Coppia> result = instance.getFigli();
-        assertEquals(expResult, result);
-        
-        Coppia c = new Coppia('d','e',instance);
-        expResult.add(c);
-        result = instance.getFigli();
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getPadre method, of class Coppia.
-     */
-    @Test
-    public void testGetPadre() {
-        System.out.println("getPadre");
-        Coppia instance = null;
-        Coppia expResult = null;
-        Coppia result = instance.getPadre();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
+    
     /**
      * Test of addFiglio method, of class Coppia.
      */
     @Test
     public void testAddFiglio() {
         System.out.println("addFiglio");
-        Coppia c = null;
-        Coppia instance = null;
-        boolean expResult = false;
-        boolean result = instance.addFiglio(c);
+        Coppia instance = new Coppia('f','n',null);
+        boolean expResult = true;
+        boolean result = instance.addFiglio(new Coppia('a','f',null));
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(1, instance.getFigli().size());
+        assertEquals(new Coppia('a','f',null), instance.getFigli().get(0));
     }
 
     /**
@@ -92,12 +61,10 @@ public class CoppiaTest {
     @Test
     public void testSalva() {
         System.out.println("salva");
-        Coppia instance = null;
-        String expResult = "";
+        Coppia instance = new Coppia('f','n',null);
+        String expResult = "(fn,0,)";
         String result = instance.salva();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -106,39 +73,17 @@ public class CoppiaTest {
     @Test
     public void testLoad() {
         System.out.println("load");
-        List<Character> ref = null;
-        Coppia instance = null;
+        List<Character> ref = new ArrayList<>();
+        ref.add('(');
+        ref.add('f');
+        ref.add('n');
+        ref.add(',');
+        ref.add('0');
+        ref.add(',');
+        ref.add(')');
+        Coppia instance = new Coppia(' ',' ',null);
         instance.load(ref);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getVecchiaL method, of class Coppia.
-     */
-    @Test
-    public void testGetVecchiaL() {
-        System.out.println("getVecchiaL");
-        Coppia instance = null;
-        char expResult = ' ';
-        char result = instance.getVecchiaL();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getNuovaL method, of class Coppia.
-     */
-    @Test
-    public void testGetNuovaL() {
-        System.out.println("getNuovaL");
-        Coppia instance = null;
-        char expResult = ' ';
-        char result = instance.getNuovaL();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(new Coppia('f','n',null),instance);
     }
 
     /**
@@ -147,12 +92,10 @@ public class CoppiaTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        Coppia instance = null;
-        String expResult = "";
+        Coppia instance = new Coppia('f','n',null);
+        String expResult = "(fn,)";
         String result = instance.toString();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

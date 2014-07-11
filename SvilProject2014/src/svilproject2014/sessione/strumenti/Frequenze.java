@@ -84,5 +84,9 @@ public class Frequenze {
         return -1;
         
     }
+
+    public int getIdLingua() {
+        return idLingua;
+    }
     
 }

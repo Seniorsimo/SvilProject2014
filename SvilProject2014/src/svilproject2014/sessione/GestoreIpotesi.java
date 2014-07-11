@@ -257,6 +257,20 @@ public class GestoreIpotesi {
     public Messaggio getMessaggio() {
         return messaggio;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getAvantiPossibili() {
+        return avantiPossibili;
+    }
+
+    public int getIndietroPossibili() {
+        return indietroPossibili;
+    }
+    
+    
     
     @Override
     public String toString(){

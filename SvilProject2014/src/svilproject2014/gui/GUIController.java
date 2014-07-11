@@ -37,6 +37,7 @@ public class GUIController {
     private StrumentiDiSupporto sos;
     private GestoreIpotesi g;
     private SessioneDiLavoro sdl;
+    private Messaggio msgScrivi, msgLeggi;
     
     public static void main(String[] args){
         Frame f = new Frame();
@@ -53,13 +54,13 @@ public class GUIController {
     public void apriMessaggoBozza(String id){
         Messaggio m = Messaggio.load(id);
         //visualizza qualcosa
-        
+        msgScrivi = m;
     }
     
     public void apriMessaggioRicevuto(String id){
         Messaggio m = CommunicationController.apriMessaggioRicevuto(id);
         //visualizza
-        
+        msgLeggi = m;
     }
     
     public void cifra(String testo, SistemaDiCifratura sdc){
@@ -139,16 +140,17 @@ public class GUIController {
     }
     
     public boolean proponiSistemaCifratura(/*SistemaDiCifratura sdc,*/ UserInfo partner){
-            if(salvaSistemaCifratura(sdc)) return false;
+            if(!salvaSistemaCifratura(sdc)) return false;
+            System.out.println("sonovivo");
             boolean success = CommunicationController.inviaProposta(user, partner, sdc);
             //visualizza
             return success;
     }
     
-    public void salvaMessaggioBozza(Messaggio m){
+    public boolean salvaMessaggioBozza(Messaggio m){
         boolean success = m.salva();
         //visualizza
-        
+        return success;
     }
     
     public boolean salvaSistemaCifratura(SistemaDiCifratura sdc){
@@ -157,10 +159,14 @@ public class GUIController {
         return success;
     }
     
-    public void spedisciMessaggio(Messaggio m){
-        boolean success = CommunicationController.send(m);
-        //visualizza
-        
+    public boolean spedisciMessaggio(Messaggio m){
+        String temp = m.cifra();
+        if(temp!=null){
+            m.setTestoCifrato(temp);
+            if(!m.salva())return false;
+            return CommunicationController.send(m);
+        }
+        return false;
     }
     
     public void vediNotificheAccettazioneProposte(){
@@ -178,7 +184,7 @@ public class GUIController {
     public void visualizzaMessaggioInviato(String id){
         Messaggio m = Messaggio.load(id);
         //visualizza
-        
+        msgLeggi = m;
     }
     
     public SistemaDiCifratura visualizzaSistemaCifratura(String id){
@@ -266,6 +272,14 @@ public class GUIController {
         user = s;
         //visualizza
         
+    }
+    
+    public UserInfo getUser(){
+        return user.getUserInfo();
+    }
+    
+    public SistemaDiCifratura getSdcAttivo(UserInfo partner){
+        return Proposta.caricaAttiva(user.getId(), partner.getId()).getSdc();
     }
     
 }

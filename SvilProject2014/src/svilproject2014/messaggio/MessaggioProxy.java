@@ -172,5 +172,23 @@ public class MessaggioProxy extends Messaggio{
         if(messaggio==null) return letto;
         return messaggio.isLetto();
     }
+
+    @Override
+    public void setLingua(String l) {
+        if(messaggio==null) caricaReale();
+        messaggio.setLingua(l);
+    }
+
+    @Override
+    public void setDestinatario(UserInfo dest) {
+        if(messaggio==null) caricaReale();
+        messaggio.setDestinatario(dest);
+    }
+
+    @Override
+    public void setTestoCifrato(String testo) {
+        if(messaggio==null) caricaReale();
+        messaggio.setTestoCifrato(testo);
+    }
     
 }

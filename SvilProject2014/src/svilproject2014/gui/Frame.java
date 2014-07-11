@@ -26,6 +26,7 @@ import javax.swing.*;
 import java.lang.*;
 import java.util.*;
 import javax.swing.event.*;
+import svilproject2014.messaggio.MessaggioReale;
 /*public class prova{
 	public static void main(String[]args){
 			new Frame();
@@ -225,7 +226,8 @@ class Frame extends JFrame{
             opt3.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Mappatura map = gc.generaMappatura("", "casuale");
+                    String k = (int)(Math.random()*100000) + "";
+                    Mappatura map = gc.generaMappatura(k, "casuale");
                     anteprima.setText("Metodo: casuale\nChiave: ???\n\nMappatura:\n" + String.copyValueOf(map.getMappa()) + "\n\nMappatura inversa:\n" + String.copyValueOf(map.getMappaInversa()));
                 }});
             shift.addActionListener(new ActionListener() {
@@ -245,7 +247,8 @@ class Frame extends JFrame{
             rnd.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Mappatura map = gc.generaMappatura("", "casuale");
+                    String k = (int)(Math.random()*100000) + "";
+                    Mappatura map = gc.generaMappatura(k, "casuale");
                     anteprima.setText("Metodo: casuale\nChiave: ???\n\nMappatura:\n" + String.copyValueOf(map.getMappa()) + "\n\nMappatura inversa:\n" + String.copyValueOf(map.getMappaInversa()));
                     opt3.setSelected(true);
                 }});
@@ -271,9 +274,11 @@ class Frame extends JFrame{
             invia.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    gc.proponiSistemaCifratura(studenti.get(user.getSelectedIndex()).getUserInfo());
-                    //manca la visualizzazione di un alert
-                    //!!!
+                    boolean success = gc.proponiSistemaCifratura(studenti.get(user.getSelectedIndex()).getUserInfo());
+                    String out;
+                    if(success) out="Proposta di un sistema di cifratura inviata correttamente.";
+                    else out="Si è verificato un errore. Impossibile inviare la proposta.";
+                    DialogMessage.popupTesto(out);
                 }});
             Component[]comp={invia,home};
             left.add(gridOrizz(comp),BorderLayout.SOUTH);
@@ -318,6 +323,7 @@ class Frame extends JFrame{
         JTextField titolo=new JTextField("Titolo");
         JButton btn=new JButton("Invia");
         List<UserInfo> destinatari;
+        Messaggio msgScrivi;
         /*************************************/
         List<Messaggio> bozze = gc.elencaMessaggiBozza();
         
@@ -333,7 +339,11 @@ class Frame extends JFrame{
             btn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("Inviato a "+user.getSelectedItem()+" Mex: "+messaggio.getText());
+                    boolean success = send();
+                    String out;
+                    if(success) out="Messaggio inviato";
+                    else out = "Impossibile inviare il messaggio";
+                    DialogMessage.popupTesto(out);
                 }});
             ArrayList<JButton> temp=new ArrayList<JButton>();
             temp.add(btn);
@@ -367,6 +377,22 @@ class Frame extends JFrame{
             setLayout(new GridLayout(1,2));
             add(editLeft(userlbl,user,titolo,messaggio,temp));
             add(panel1);
+        }
+        
+        public boolean salva(){
+            if(msgScrivi==null){
+                msgScrivi = new MessaggioReale(gc.getUser());
+                msgScrivi.setTitolo(titolo.getText());
+                msgScrivi.setTesto(messaggio.getText());
+                msgScrivi.setSisCif(gc.getSdcAttivo(destinatari.get(user.getSelectedIndex())));
+                msgScrivi.setDestinatario(destinatari.get(user.getSelectedIndex()));
+                msgScrivi.setLingua("Italiano");
+            }
+            return gc.salvaMessaggioBozza(msgScrivi);
+        }
+        public boolean send(){
+            if(!salva())return false;
+            return gc.spedisciMessaggio(msgScrivi);
         }
     }
     public class gestisciJPanel extends JPanel{

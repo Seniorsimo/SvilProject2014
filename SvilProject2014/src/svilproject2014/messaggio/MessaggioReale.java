@@ -59,8 +59,10 @@ public class MessaggioReale extends Messaggio {
         }
     }
     
-    public MessaggioReale(){
+    public MessaggioReale(UserInfo mit){
         //non deve fare nulla...credo.
+        mittente = mit;
+        idMitt = mittente.getId();
     }
     
     @Override
@@ -204,6 +206,13 @@ public class MessaggioReale extends Messaggio {
     @Override
     public void setSisCif(SistemaDiCifratura sisCif) {
         this.sisCif = sisCif;
+        idSdc = sisCif.getId();
+    }
+    
+    @Override
+    public void setDestinatario(UserInfo dest){
+        destinatario = dest;
+        idDest = destinatario.getId();
     }
     
     @Override
@@ -253,5 +262,13 @@ public class MessaggioReale extends Messaggio {
         return destinatario;
     }
     
-    
+    public void setLingua(String l){
+        lingua = l;
+    }
+
+    @Override
+    public void setTestoCifrato(String testo) {
+        testoCifrato = testo;
+    }
+
 }

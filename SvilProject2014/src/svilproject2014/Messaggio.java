@@ -131,4 +131,10 @@ public abstract class Messaggio {
     public abstract UserInfo getMittente();
 
     public abstract UserInfo getDestinatario();
+    
+    public abstract void setLingua(String l);
+    
+    public abstract void setDestinatario(UserInfo dest);
+    
+    public abstract void setTestoCifrato(String testo);
 }

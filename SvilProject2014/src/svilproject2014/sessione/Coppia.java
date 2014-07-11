@@ -110,7 +110,7 @@ public class Coppia {
         if(nuovaL != c.getNuovaL()) return false;
         if(padre==null && c.getPadre()!=null) return false;
         if(padre!=null&&(!padre.equals(c.getPadre()))) return false;
-        if(!getFigli().equals(c.getFigli()))return false;
+        //if(!getFigli().equals(c.getFigli()))return false; loop nel caso di ricorsivo
         return true;
     }
 

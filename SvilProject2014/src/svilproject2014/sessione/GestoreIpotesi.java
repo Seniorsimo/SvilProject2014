@@ -52,16 +52,21 @@ public class GestoreIpotesi {
                 
                 Coppia last = listaAssociazioni[0].load(ref);
                 
-                int temp = indiceStatoCorrente;
+                List<Coppia> insert = new ArrayList<>();
                 boolean end = false;
                 while(!end){
                     if(last==null) end = true;
                     else{
-                        listaAssociazioni[temp] = last;
-                        temp--;
+                        insert.add(0, last);
                         last = last.getPadre();
                     }
                 }
+                int temp = 0;
+                while(!insert.isEmpty()){
+                    listaAssociazioni[temp] = insert.remove(0);
+                    temp++;
+                }
+                
         } catch (SQLException ex) {
             Logger.getLogger(Messaggio.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -128,7 +133,7 @@ public class GestoreIpotesi {
         }
         if(exist) return false;
         
-        Coppia c = new Coppia(nuovaLettera, vecchiaLettera, listaAssociazioni[indiceStatoCorrente]);
+        Coppia c = new Coppia(vecchiaLettera, nuovaLettera, listaAssociazioni[indiceStatoCorrente]);
         indiceStatoCorrente++;
         listaAssociazioni[indiceStatoCorrente] = c;
         boolean temp = applicaIpotesi(c);

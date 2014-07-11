@@ -49,27 +49,23 @@ public class GestoreIpotesiTest {
     public void testLoad() {
         System.out.println("load - id < 1");
         int id = 0;
-//        GestoreIpotesi expResult = null;
         GestoreIpotesi result = GestoreIpotesi.load(id);
         assertNull(result);
         
- /*       System.out.println("load - id = 1 - id non presente nel database");
-        id = 1;
+        System.out.println("load - id = 10 - id non presente nel database");
+        id = 10;
         result = GestoreIpotesi.load(id);
-        System.out.println("load result null? " + (result == null));
+        //System.out.println("load result null? " + (result == null));
         assertNull(result);
-   */         
         
-        System.out.println("load - id = 8 - id presente nel db");
+        System.out.println("load - id = 1 - id presente nel db");
         id = 1;
         result = GestoreIpotesi.load(id);
         assertNotNull(result);
-        
- /*       System.out.println("load - id = 9 - id non presente nel db");
-        id = 9;
-        result = GestoreIpotesi.load(id);
-        assertNull(result);
-*/
+        assertEquals(1,result.getId());
+        assertEquals(0,result.getAvantiPossibili());
+        assertEquals(0,result.getIndietroPossibili());
+        assertEquals("1",result.getMessaggio().getId());
     }
 
     /**
@@ -79,14 +75,15 @@ public class GestoreIpotesiTest {
     @Test
     public void testVisualizzaAssociazioni() {
         System.out.println("visualizzaAssociazioni");
-        GestoreIpotesi instance = GestoreIpotesi.load(8);
-        System.out.println("visualizzaAssociazioni - instance " + instance.toString());
+        GestoreIpotesi instance = GestoreIpotesi.load(2);
+        //System.out.println("visualizzaAssociazioni - instance " + instance.toString());
         List<Coppia> expResult = new ArrayList<>();
-        expResult.add(new Coppia('x','o', new Coppia(' ',' ', instance.visualizzaStoria()))); //creo un figlio della radice
-        System.out.println("visualizzaAssociazioni - expResult " + expResult.toString());      
+        Coppia c1 = new Coppia('c','a', new Coppia(' ',' ',null)); //creo un figlio della radice
+        expResult.add(c1);
+        //System.out.println("visualizzaAssociazioni - expResult " + expResult.toString());      
         List<Coppia> result = instance.visualizzaAssociazioni();
-        System.out.println("visualizzaAssociazioni - result vuoto " + result.isEmpty()); 
-        System.out.println("visualizzaAssociazioni - result elemento 0 " + result.get(0).toString()); 
+        //System.out.println("visualizzaAssociazioni - result vuoto " + result.isEmpty()); 
+        //System.out.println("visualizzaAssociazioni - result elemento 0 " + result.get(0).toString()); 
         assertEquals(expResult, result);
     }
 
@@ -95,26 +92,29 @@ public class GestoreIpotesiTest {
      */
     @Test
     public void testAggiungiIpotesi() {
-        System.out.println("aggiungiIpotesi - vecchiaLettera = x (già presente)");
-        char vecchiaLettera = 'x';
-        char nuovaLettera = 'a';
-        GestoreIpotesi instance = GestoreIpotesi.load(8);
+        System.out.println("aggiungiIpotesi - vecchiaLettera = c (già presente)");
+        char vecchiaLettera = 'c';
+        char nuovaLettera = 'r';
+        GestoreIpotesi instance = GestoreIpotesi.load(2);
         boolean expResult = false;
         boolean result = instance.aggiungiIpotesi(vecchiaLettera, nuovaLettera);
         assertEquals(expResult, result);
         
-        System.out.println("aggiungiIpotesi - nuovaLettera = o (già presente)");
-        vecchiaLettera = 'a';
-        nuovaLettera = 'o';
+        System.out.println("aggiungiIpotesi - nuovaLettera = a (già presente)");
+        vecchiaLettera = 'h';
+        nuovaLettera = 'a';
         result = instance.aggiungiIpotesi(vecchiaLettera, nuovaLettera);
         assertEquals(expResult, result);
         
         System.out.println("aggiungiIpotesi - lettere non utilizzate per le associazioni prima");
-        vecchiaLettera = 'a';
-        nuovaLettera = 's';
+        vecchiaLettera = 'h';
+        nuovaLettera = 'i';
         expResult = true;
         result = instance.aggiungiIpotesi(vecchiaLettera, nuovaLettera);
         assertEquals(expResult, result);
+        List<Coppia> list = instance.visualizzaAssociazioni();
+        assertEquals('h',list.get(list.size()-1).getVecchiaL());
+        assertEquals('i',list.get(list.size()-1).getNuovaL());
     }
 
     /**
@@ -123,12 +123,18 @@ public class GestoreIpotesiTest {
     @Test
     public void testVisualizzaStoria() {
         System.out.println("visualizzaStoria");
-        GestoreIpotesi instance = GestoreIpotesi.load(8);
+        GestoreIpotesi instance = GestoreIpotesi.load(2);
         Coppia expResult = new Coppia(' ',' ',null);
         Coppia result = instance.visualizzaStoria();
         result = new Coppia(' ',' ',null);
-        System.out.println("visualizzaStoria - coppie equals "+expResult.equals(result));
-        assertEquals(expResult, result);
+        Coppia c1 = new Coppia('c','a',result);
+        Coppia c2_1 = new Coppia('p','r',c1);
+        Coppia c2_2 = new Coppia('p','o',c1);
+        assertEquals(expResult, result); //testo la radice
+        //e testo i sui nodi figli
+        assertEquals(c1, result.getFigli().get(0));
+        assertEquals(c2_1, result.getFigli().get(0).getFigli().get(0));
+        assertEquals(c2_2, result.getFigli().get(0).getFigli().get(1));
     }
 
     /**
@@ -138,15 +144,15 @@ public class GestoreIpotesiTest {
     public void testAvanti() {
          System.out.println("avanti - n=1 possibili = 1");
         int n = 1;
-        GestoreIpotesi instance = GestoreIpotesi.load(8);
+        GestoreIpotesi instance = GestoreIpotesi.load(2);
         boolean expResult = true;
-        boolean result = instance.indietro(n);
+        boolean result = instance.avanti(n);
         assertEquals(expResult, result);
 
         System.out.println("avanti - n=4 possibili = 1");
         n = 4;
         expResult = false;
-        result = instance.indietro(n);
+        result = instance.avanti(n);
         assertEquals(expResult, result);
 
     }
@@ -156,14 +162,14 @@ public class GestoreIpotesiTest {
      */
     @Test
     public void testIndietro() {
-        System.out.println("indietro - n=1 possibili = 2");
+        System.out.println("indietro - n=1 possibili = 1");
         int n = 1;
-        GestoreIpotesi instance = GestoreIpotesi.load(8);
+        GestoreIpotesi instance = GestoreIpotesi.load(2);
         boolean expResult = true;
         boolean result = instance.indietro(n);
         assertEquals(expResult, result);
 
-        System.out.println("indietro - n=4 possibili = 2");
+        System.out.println("indietro - n=4 possibili = 1");
         n = 4;
         expResult = false;
         result = instance.indietro(n);
@@ -175,20 +181,30 @@ public class GestoreIpotesiTest {
      */
     @Test
     public void testVerificaRisoluzione() {
-        System.out.println("verificaRisoluzione - testoParziale e originale null");
-        GestoreIpotesi instance = GestoreIpotesi.load(8);
+        //System.out.println("verificaRisoluzione - testoParziale e originale null"); non posso fare un new Gestore() con i testi nullquesti vengono inizializzati,al peggio come char[] vuoti, ma cmq istanziati
+        GestoreIpotesi instance = GestoreIpotesi.load(2);
         boolean expResult = true;
+        /*boolean result = instance.verificaRisoluzione();
+        assertEquals(expResult, result);
+        */
+        /*System.out.println("verificaRisoluzione - testoParziale e originale uguali");
+        boolean result = instance.verificaRisoluzione();
+        assertEquals(expResult, result);*/
+        
+        System.out.println("verificaRisoluzione - testoParziale e originale diversi");
+        expResult = false;
+        //instance = GestoreIpotesi.load(2);
         boolean result = instance.verificaRisoluzione();
         assertEquals(expResult, result);
         
         System.out.println("verificaRisoluzione - testoParziale e originale uguali");
+        expResult = true;
+        instance.aggiungiIpotesi('s','c');
+        instance.aggiungiIpotesi('h','i');
+        instance.aggiungiIpotesi('p','o');
+        //instance = GestoreIpotesi.load(2);
         result = instance.verificaRisoluzione();
         assertEquals(expResult, result);
-        
-        System.out.println("verificaRisoluzione - testoParziale e originale diversi");
-        expResult = true;
-        result = instance.verificaRisoluzione();
-//        assertEquals(expResult, result);
     }
     
 }

@@ -63,7 +63,8 @@ public class DBTestObjects {
         //ID    avanti  indietro    stato   id_messaggio    testo_originale testo_parziale  lista
         //1     0       0           0       1               'ciao'          'ciao'          '(  ,0,)'
         sql = "INSERT INTO GESTOREIPOTESI (AVANTI,INDIETRO,STATO,ID_MESSAGGIO,TESTO_ORIGINALE,TESTO_PARZIALE,LISTA)"
-                                + " VALUES (0,0,0,1,'ciao','ciao','(  ,0,)')";
+                                + " VALUES (0,0,0,1,'shcp','shcp','(  ,0,)')"
+                                        + ",(1,1,1,1,'shcp','shAp','(  ,1,(ca,2,(pr,0,)(po,0,)))')";
         execute(sql);
         
         //SessioneDiLavoro

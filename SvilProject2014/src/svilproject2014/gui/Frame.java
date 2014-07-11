@@ -38,6 +38,7 @@ class Frame extends JFrame{
     gestisciJPanel gestisciPanel;
     spiaJPanel spiaPanel;
     proposteJPanel propostePanel;
+    int idPanelVisualizzato = 0;
     GUIController gc;
     
     public void setGC(GUIController g){
@@ -62,6 +63,7 @@ class Frame extends JFrame{
             remove(propostePanel);
         setTitle("Scelta");
         add(sceltaPanel);
+        idPanelVisualizzato = 0;
         pack();
     }
     public void visualizzaScrivi(){
@@ -75,6 +77,7 @@ class Frame extends JFrame{
             remove(propostePanel);
         setTitle("Scrivi");
         add(scriviPanel);
+        idPanelVisualizzato = 1;
         pack();
     }
     public void visualizzaGestisci(){
@@ -89,6 +92,7 @@ class Frame extends JFrame{
 
         setTitle("Gestisci");
         add(gestisciPanel);
+        idPanelVisualizzato = 2;
         pack();
     }
     public void visualizzaSpia(){
@@ -103,6 +107,7 @@ class Frame extends JFrame{
 
         setTitle("Spia");
         add(spiaPanel);
+        idPanelVisualizzato = 3;
         pack();
     }
     public void visualizzaProposte(){
@@ -117,6 +122,7 @@ class Frame extends JFrame{
 
         setTitle("Proposte");
         add(propostePanel);
+        idPanelVisualizzato = 4;
         pack();
     }
     public JPanel gridOrizz(Component[]comp){
@@ -144,7 +150,7 @@ class Frame extends JFrame{
             panel.add(south,BorderLayout.SOUTH);
         return panel;
     }
-    public JPanel editLeft(JLabel lbl,Component comp,JTextField titolo,JTextField mex,ArrayList <JButton> btns){
+    public JPanel editLeft(JLabel lbl,Component comp,JTextField titolo,JTextArea mex,ArrayList <JButton> btns){
         JPanel mexPanel=new JPanel();
         JPanel buttonPanel=new JPanel();
         JButton home=new JButton("Home");
@@ -152,6 +158,21 @@ class Frame extends JFrame{
         home.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //se ti trovi in send o spia chiedi salvataggio
+                if(idPanelVisualizzato==1){//sto uscendo da send
+                        int risp = DialogMessage.popupYesNo("Vuoi salvare una bozza?", null);
+                        if(risp==JOptionPane.YES_OPTION){
+                            scriviPanel.salva();
+                        }
+                        else if(risp==JOptionPane.CANCEL_OPTION||risp==JOptionPane.CLOSED_OPTION){
+                            return;
+                        }
+                }
+                else if(idPanelVisualizzato==3){//sto uscendo da spia
+                    
+                }
+                
+                
                 if(sceltaPanel==null)
                     sceltaPanel=new sceltaJPanel();
                 visualizzaScelta();
@@ -319,7 +340,7 @@ class Frame extends JFrame{
     public class scriviJPanel extends JPanel{
         JLabel userlbl=new JLabel("Destinatario");
         Choice user=new Choice();
-        JTextField messaggio=new JTextField("Contenuto");
+        JTextArea messaggio=new JTextArea("Contenuto");
         JTextField titolo=new JTextField("Titolo");
         JButton btn=new JButton("Invia");
         List<UserInfo> destinatari;
@@ -382,12 +403,12 @@ class Frame extends JFrame{
         public boolean salva(){
             if(msgScrivi==null){
                 msgScrivi = new MessaggioReale(gc.getUser());
-                msgScrivi.setTitolo(titolo.getText());
-                msgScrivi.setTesto(messaggio.getText());
-                msgScrivi.setSisCif(gc.getSdcAttivo(destinatari.get(user.getSelectedIndex())));
-                msgScrivi.setDestinatario(destinatari.get(user.getSelectedIndex()));
-                msgScrivi.setLingua("Italiano");
             }
+            msgScrivi.setTitolo(titolo.getText());
+            msgScrivi.setTesto(messaggio.getText());
+            msgScrivi.setSisCif(gc.getSdcAttivo(destinatari.get(user.getSelectedIndex())));
+            msgScrivi.setDestinatario(destinatari.get(user.getSelectedIndex()));
+            msgScrivi.setLingua("Italiano");
             return gc.salvaMessaggioBozza(msgScrivi);
         }
         public boolean send(){
@@ -398,7 +419,7 @@ class Frame extends JFrame{
     public class gestisciJPanel extends JPanel{
         JLabel userlbl=new JLabel("Mittente");
         JTextField user=new JTextField("");
-        JTextField messaggio=new JTextField("Contenuto");
+        JTextArea messaggio=new JTextArea("Contenuto");
         JTextField titolo=new JTextField("Titolo");
         JButton btn=new JButton("Cancella");
         /*************************************/
@@ -432,7 +453,7 @@ class Frame extends JFrame{
     public class spiaJPanel extends JPanel{
         JLabel userlbl=new JLabel("Mittente");
         JTextField user=new JTextField("");
-        JTextField messaggio=new JTextField("Contenuto");
+        JTextArea messaggio=new JTextArea("Contenuto");
         JTextField titolo=new JTextField("Titolo");
         JButton btnUndo=new JButton("<-");
         JButton btnRetry=new JButton("->");

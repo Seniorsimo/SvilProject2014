@@ -113,7 +113,7 @@ public class GestoreIpotesi {
     public List<Coppia> visualizzaAssociazioni(){
         ArrayList<Coppia> list = new ArrayList<>();
         for(int i=1; i<=indiceStatoCorrente; i++){   //indice=ultima ipotesi --> da stampare //TODO dovrebbe partire da 1 per non visualizzare la root
-            list.add(listaAssociazioni[i]);       
+            list.add(listaAssociazioni[i]);
         }
         return list;
     }
@@ -142,8 +142,11 @@ public class GestoreIpotesi {
         return temp;
     }
     
-    public Coppia visualizzaStoria(){
+    /*public Coppia visualizzaStoria(){
         return listaAssociazioni[0];
+    }*/
+    public String visualizzaStoria(){
+        return listaAssociazioni[0].print("");
     }
     
     public boolean avanti(int n){

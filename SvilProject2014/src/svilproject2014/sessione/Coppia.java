@@ -72,6 +72,28 @@ public class Coppia {
         ref.remove(0);  //tolgo l'ulima parentesi
         return last;
     }
+    
+    public String print(String spazi){
+        int size = getFigli().size();
+        if(size==0) return spazi + "(" + vecchiaL + "->" + nuovaL + ")\n";
+        int mid = size/2;
+        boolean dispari = (size%2==0?false:true);
+        List<Coppia> list = getFigli();
+        int n = 0;
+        String out = "";
+        while(n<mid){
+            out += list.get(n).print(spazi+"    ");
+            n++;
+        }
+        out += spazi + "(" + vecchiaL + "->" + nuovaL + ")\n";
+        //if(dispari) out += list.get(n).print(spazi+"       ");
+        while(n<size){
+            out += list.get(n).print(spazi+"    ");
+            n++;
+        }
+        return out;
+    }
+    
 
     public char getVecchiaL() {
         return vecchiaL;

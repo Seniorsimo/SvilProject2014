@@ -234,7 +234,7 @@ public class GUIController {
     }
     
     public void visualizzaIpotesi(){
-        Coppia c = g.visualizzaStoria();
+        String s = g.visualizzaStoria();
         //visualizza
         
     }

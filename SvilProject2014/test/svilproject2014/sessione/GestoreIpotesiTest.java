@@ -124,17 +124,14 @@ public class GestoreIpotesiTest {
     public void testVisualizzaStoria() {
         System.out.println("visualizzaStoria");
         GestoreIpotesi instance = GestoreIpotesi.load(2);
-        Coppia expResult = new Coppia(' ',' ',null);
-        Coppia result = instance.visualizzaStoria();
-        result = new Coppia(' ',' ',null);
-        Coppia c1 = new Coppia('c','a',result);
-        Coppia c2_1 = new Coppia('p','r',c1);
-        Coppia c2_2 = new Coppia('p','o',c1);
-        assertEquals(expResult, result); //testo la radice
-        //e testo i sui nodi figli
-        assertEquals(c1, result.getFigli().get(0));
-        assertEquals(c2_1, result.getFigli().get(0).getFigli().get(0));
-        assertEquals(c2_2, result.getFigli().get(0).getFigli().get(1));
+        //Coppia expResult = new Coppia(' ',' ',null);
+        String expResult = "( -> )\n" +
+"        (p->r)\n" +
+"    (c->a)\n" +
+"        (p->o)\n";
+        String result = instance.visualizzaStoria();
+        System.out.println(result);
+        assertEquals(expResult, result);
     }
 
     /**

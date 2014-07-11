@@ -40,11 +40,12 @@ public class GUIController {
     
     public static void main(String[] args){
         Frame f = new Frame();
+        f.setGC(new GUIController());
     }
     
     
     public GUIController(){
-        //vuoto
+        user = Studente.gelListaStudenti().get(2); //da spostare su una qualche richiesta
     }
     
     //UC1
@@ -115,12 +116,16 @@ public class GUIController {
         
     }
     
-    public void generaMappatura(String chiave, String metodo){
+    public Mappatura generaMappatura(String chiave, String metodo){
         key = chiave;
         sdc = new SistemaDiCifratura(chiave, metodo);
-        map = sdc.getMappatura();
-        //visualizza
-        
+        if(sdc!=null){
+            sdc.setCreatore(user.getUserInfo());
+            map = sdc.getMappatura();
+            //visualizza
+            return map;
+        }
+        return null;
     }
     
     public void mostraSceltaChiave(String metodo){
@@ -133,10 +138,11 @@ public class GUIController {
         //cesare chave pseudocasuale
     }
     
-    public void proponiSistemaCifratura(SistemaDiCifratura sdc, UserInfo partner){
-        boolean success = CommunicationController.inviaProposta(user, partner, sdc);
-        //visualizza
-        
+    public boolean proponiSistemaCifratura(/*SistemaDiCifratura sdc,*/ UserInfo partner){
+            if(salvaSistemaCifratura(sdc)) return false;
+            boolean success = CommunicationController.inviaProposta(user, partner, sdc);
+            //visualizza
+            return success;
     }
     
     public void salvaMessaggioBozza(Messaggio m){
@@ -145,10 +151,10 @@ public class GUIController {
         
     }
     
-    public void salvaSistemaCifratura(SistemaDiCifratura sdc){
+    public boolean salvaSistemaCifratura(SistemaDiCifratura sdc){
         boolean success = sdc.salva();
         //visualizza
-        
+        return success;
     }
     
     public void spedisciMessaggio(Messaggio m){
@@ -163,10 +169,10 @@ public class GUIController {
         
     }
     
-    public void vediProposteSistemaCifratura(){
+    public List<Proposta> vediProposteSistemaCifratura(){
         List<Proposta>  list = CommunicationController.getProposte(user);
         //visualizza
-        
+        return list;
     }
     
     public void visualizzaMessaggioInviato(String id){
@@ -175,10 +181,10 @@ public class GUIController {
         
     }
     
-    public void visualizzaSistemaCifratura(String id){
+    public SistemaDiCifratura visualizzaSistemaCifratura(String id){
         SistemaDiCifratura s = SistemaDiCifratura.load(id);
         //visualizza
-        
+        return s;
     }
     
     //UC2
@@ -245,10 +251,10 @@ public class GUIController {
     
     //METODI DI EMULAZIONE
     
-    public void getListaStudenti(){
+    public List<Studente> getListaStudenti(){
         List<Studente> list = Studente.gelListaStudenti();
         //visualizza
-        
+        return list;
     }
     
     public void login(Studente s){

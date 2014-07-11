@@ -17,16 +17,28 @@ public class CalcolatoreChiave extends CalcolatoreMappe{
 
     @Override
     public Mappatura calcola(String chiave) {
+        //alfabeto di partenza
+        char[] alfabeto = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
         //la chiave deve essere una parola di non più di 26 lettere
         //nel caso sia presente una lettera non dell'alfabeto l'esecuzione termina e restituisce null
         //le doppie vengono saltate
         if(chiave.length()>26){
             Logger.getLogger(CalcolatoreChiave.class.getName()).log(Level.SEVERE, "Errore: la chiave deve essere inferiore ai 26 caratteri");
-            return null;
+            chiave = chiave.substring(0, 26);
         }
+        if(chiave.length()==0) chiave = "chiavenulla";
+        chiave = chiave.toLowerCase();
+        boolean correct = true;
+        for(char c:chiave.toCharArray()) {
+            boolean found = false;
+            for(char cc:alfabeto){
+                if(c==cc) found = true;
+            }
+            if(!found) correct = false;
+        }
+        if(!correct) chiave = "chiavenulla";
         
-        //alfabeto di partenza
-        char[] alfabeto = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+        
         //es:               c   i   a   o   b   d   e   f   g   h   j   k  ...
         
         //map e inverse map

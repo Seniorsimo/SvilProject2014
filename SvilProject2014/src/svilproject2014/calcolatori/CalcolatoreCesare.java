@@ -17,7 +17,13 @@ public class CalcolatoreCesare extends CalcolatoreMappe{
     public Mappatura calcola(String chiave) {
         
         //La chiave utilizzata deve essere un numero da 0 a 25
-        int i = Integer.parseInt(chiave);
+        int i = -1;
+        try{
+            i= Integer.parseInt(chiave);
+        }
+        catch(Exception e){
+            System.out.println(e.toString());
+        }
         if(i<0||i>25){//nel caso non lo sia genero un numero a caso
             i = (int)Math.random() * 26; //il 26 è corretto.
         }

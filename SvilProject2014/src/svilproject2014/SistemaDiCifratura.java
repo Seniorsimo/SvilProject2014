@@ -34,6 +34,11 @@ public class SistemaDiCifratura {
         calcolaMappatura();
     }
     
+    public void setCreatore(UserInfo u){
+        creatore = u;
+        if(u!=null) idCreatore = u.getId();
+    }
+    
     public SistemaDiCifratura(ResultSet info){
         try {
             id = "" + info.getInt("ID");
@@ -114,6 +119,7 @@ public class SistemaDiCifratura {
                     + "'" + metodo + "',";
             if(idCreatore!=null) sql += idCreatore;
             else sql += "0";
+            sql += ")";
         }
         int i = DBManager.getDBManager().save(sql);
         

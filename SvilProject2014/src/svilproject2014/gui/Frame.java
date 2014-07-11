@@ -127,6 +127,17 @@ class Frame extends JFrame{
                     panel.add(comp[i]);
             return panel;
     }
+    public JPanel borderVert(Component north,Component center,Component south){
+        JPanel panel=new JPanel();
+        panel.setLayout(new BorderLayout());
+        if(north!=null)
+            panel.add(north,BorderLayout.NORTH);
+        if(center!=null)
+            panel.add(center,BorderLayout.CENTER);
+        if(south!=null)
+            panel.add(south,BorderLayout.SOUTH);
+        return panel;
+    }
     public JPanel editLeft(JLabel lbl,Component comp,JTextField titolo,JTextField mex,ArrayList <JButton> btns){
         JPanel mexPanel=new JPanel();
         JPanel buttonPanel=new JPanel();
@@ -346,25 +357,31 @@ class Frame extends JFrame{
             /*************************************/
             Object [][]testo={{"max210491"},{"seniorsimo"}};
             Object []nomi={"ID"};
-            JTable table1=new JTable(testo,nomi);
-            JTable table2=new JTable(testo,nomi);
-            JPanel extraPanel=new JPanel();
-            extraPanel.setLayout(new BorderLayout());
-            extraPanel.add(editTabella("Inviati",table1),BorderLayout.NORTH);
-            extraPanel.add(editTabella("Ricevuti",table2),BorderLayout.CENTER);
-            extraPanel.add(btn2,BorderLayout.SOUTH);
+            JTextField pattern=new JTextField();
+            JButton find=new JButton("Cerca");
+            JTable table=new JTable(testo,nomi);
+            table.setPreferredSize(new Dimension(300,200));
+            Component[]comp={pattern,find};
+            JPanel patternPanel=borderVert(gridOrizz(comp),table,null);
             
+            JTextField mapping=new JTextField("a|B B|c");
+            
+            JButton freq=new JButton("Frequenze");
+            freq.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    DialogMessage.popupTesto("Help Frequenze");
+                    System.out.println(DialogMessage.popupYesNo("Help Frequenze","YESNO"));
+                    System.out.println(DialogMessage.popupString("Help Frequenze","Input"));
+                    String[]opt={"palla","pollo"};
+                    System.out.println(DialogMessage.popupChoice("Help Frequenze","Input",opt));
+                }});
+            JButton grafo=new JButton("Grafo");
+            Component[] comp2={freq,grafo};
+
             /*************************************/
             setLayout(new GridLayout(1,2));
             add(editLeft(userlbl,user,titolo,messaggio,temp));
-            add(extraPanel);
-        }
-        public JPanel editTabella(String txt,JTable table){
-            JPanel panel=new JPanel();
-            panel.setLayout(new BorderLayout());
-            panel.add(new JLabel(txt),BorderLayout.NORTH);
-            panel.add(table,BorderLayout.CENTER);
-            return panel;
+            add(borderVert(patternPanel,mapping,gridOrizz(comp2)));
         }
     }
     public class sceltaJPanel extends JPanel{

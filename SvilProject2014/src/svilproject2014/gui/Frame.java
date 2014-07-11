@@ -37,6 +37,11 @@ class Frame extends JFrame{
     gestisciJPanel gestisciPanel;
     spiaJPanel spiaPanel;
     proposteJPanel propostePanel;
+    GUIController gc;
+    
+    public void setGC(GUIController g){
+        gc = g;
+    }
 
     public Frame(){
         super();
@@ -167,52 +172,71 @@ class Frame extends JFrame{
         JButton rnd=new JButton("Random");
         JTextField shift=new JTextField();
         JTextField key=new JTextField();
-        JTextField anteprima=new JTextField();
+        JTextArea anteprima=new JTextArea();
+        
+        List<Studente> studenti;
+        List<Proposta> proposte;
         /**************************************/
         JButton btn2=new JButton("Aggiorna");
+        //!!! Aggiungere refresh proposte: forse è più faciel richreare il panel, dato che bisogna ricreare la tabella.
+        
         public proposteJPanel(){
-            Choice user=new Choice();
-            user.add("Max210491");
-            user.add("SeniornSimo");
-            user.add("NoPuffi");
+            final Choice user=new Choice();
+//            user.add("Max210491");
+//            user.add("SeniornSimo");
+//            user.add("NoPuffi");
+            studenti = gc.getListaStudenti();
+            for(Studente s:studenti){
+                user.add(s.getNome()+" "+s.getCognome());
+            }
+            
             ButtonGroup group = new ButtonGroup();
             group.add(opt1);
             group.add(opt2);
             group.add(opt3);
-            anteprima.setText("Cesare "+shift.getText());
+            //anteprima.setText("Cesare "+shift.getText());
+            Mappatura map = gc.generaMappatura(shift.getText(), "cesare");
+            anteprima.setText("Metodo: cesare\nChiave: " + shift.getText() + "\n\nMappatura:\n" + String.copyValueOf(map.getMappa()) + "\n\nMappatura inversa:\n" + String.copyValueOf(map.getMappaInversa()));
+            
             opt1.setSelected(true);
             opt1.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                                anteprima.setText("Cesare "+shift.getText());
+                    Mappatura map = gc.generaMappatura(shift.getText(), "cesare");
+                    anteprima.setText("Metodo: cesare\nChiave: " + shift.getText() + "\n\nMappatura:\n" + String.copyValueOf(map.getMappa()) + "\n\nMappatura inversa:\n" + String.copyValueOf(map.getMappaInversa()));
                 }});
             opt2.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                                anteprima.setText("Chiave "+key.getText());
+                    Mappatura map = gc.generaMappatura(key.getText(), "chiave");
+                    anteprima.setText("Metodo: chiave\nChiave: " + key.getText() + "\n\nMappatura:\n" + String.copyValueOf(map.getMappa()) + "\n\nMappatura inversa:\n" + String.copyValueOf(map.getMappaInversa()));
                 }});
             opt3.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                                anteprima.setText("Casuale");
+                    Mappatura map = gc.generaMappatura("", "casuale");
+                    anteprima.setText("Metodo: casuale\nChiave: ???\n\nMappatura:\n" + String.copyValueOf(map.getMappa()) + "\n\nMappatura inversa:\n" + String.copyValueOf(map.getMappaInversa()));
                 }});
             shift.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                                anteprima.setText("Cesare "+shift.getText());
-                                opt1.setSelected(true);
+                    Mappatura map = gc.generaMappatura(shift.getText(), "cesare");
+                    anteprima.setText("Metodo: cesare\nChiave: " + shift.getText() + "\n\nMappatura:\n" + String.copyValueOf(map.getMappa()) + "\n\nMappatura inversa:\n" + String.copyValueOf(map.getMappaInversa()));
+                    opt1.setSelected(true);
                 }});
             key.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                                anteprima.setText("Chiave "+key.getText());
-                                opt2.setSelected(true);
+                    Mappatura map = gc.generaMappatura(key.getText(), "chiave");
+                    anteprima.setText("Metodo: chiave\nChiave: " + key.getText() + "\n\nMappatura:\n" + String.copyValueOf(map.getMappa()) + "\n\nMappatura inversa:\n" + String.copyValueOf(map.getMappaInversa()));
+                    opt2.setSelected(true);
                 }});
             rnd.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                                anteprima.setText("New Random");
-                                opt3.setSelected(true);
+                    Mappatura map = gc.generaMappatura("", "casuale");
+                    anteprima.setText("Metodo: casuale\nChiave: ???\n\nMappatura:\n" + String.copyValueOf(map.getMappa()) + "\n\nMappatura inversa:\n" + String.copyValueOf(map.getMappaInversa()));
+                    opt3.setSelected(true);
                 }});
             Component[]comp1={editCifrario(opt1,shift),editCifrario(opt2,key),editCifrario(opt3,rnd)};//vert
             JPanel panel=new JPanel();
@@ -232,11 +256,32 @@ class Frame extends JFrame{
                         sceltaPanel=new sceltaJPanel();
                     visualizzaScelta();
                 }});
-            Component[]comp={new Button("Invia"),home};
+            JButton invia = new JButton("Invia");
+            invia.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    gc.proponiSistemaCifratura(studenti.get(user.getSelectedIndex()).getUserInfo());
+                    //manca la visualizzazione di un alert
+                    //!!!
+                }});
+            Component[]comp={invia,home};
             left.add(gridOrizz(comp),BorderLayout.SOUTH);
             /*************************************/
-            Object [][]testo={{"max210491","tilooo1"},{"seniorsimo","tilooo2"}};
-            Object []nomi={"ID","Titolo"};
+            proposte = gc.vediProposteSistemaCifratura();
+            List<Object[]> pListTemp = new ArrayList<Object[]>();
+            for(Proposta p:proposte){
+                Object[] pTemp = {p.getId(),p.getSdc().getMetodo(),p.getSdc().getChiave()};
+                pListTemp.add(pTemp);
+            }
+            
+            //Object [][]testo={{"max210491","tilooo1"},{"seniorsimo","tilooo2"}};
+            Object[][] testo = new Object[pListTemp.size()][];
+            int index = 0;
+            for(Object[] o:pListTemp){
+                testo[index++] = o;
+            }
+            
+            Object []nomi={"ID","Metodo","Chiave"};
             JTable table1=new JTable(testo,nomi);
             JPanel panel1=new JPanel();
             JPanel panel2=new JPanel();

@@ -37,7 +37,6 @@ public class Proposta {
                 idSdc = "" + info.getInt("ID_SDC");
                 idProp = "" + info.getInt("ID_PROPONENTE");
                 idPart = "" + info.getInt("ID_PARTNER");
-                sisCif = SistemaDiCifratura.load(idSdc);
         } catch (SQLException ex) {
             Logger.getLogger(Proposta.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -47,6 +46,9 @@ public class Proposta {
         proponente = prop;
         partner = part;
         sisCif = sdc;
+        idProp = prop.getId();
+        idPart = part.getId();
+        idSdc = sdc.getId();
         //da implementare
     }
     

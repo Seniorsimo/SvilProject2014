@@ -197,11 +197,13 @@ class Frame extends JFrame{
                                 anteprima.setText("Casuale");
                 }});
             shift.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                                 anteprima.setText("Cesare "+shift.getText());
                                 opt1.setSelected(true);
                 }});
             key.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                                 anteprima.setText("Chiave "+key.getText());
                                 opt2.setSelected(true);
@@ -217,7 +219,7 @@ class Frame extends JFrame{
             panel.setLayout(new BorderLayout());
             panel.add(new JLabel("Anteprima"),BorderLayout.NORTH);
             panel.add(anteprima,BorderLayout.CENTER);
-            Component[]leftCenter={user,gridVert(comp1),panel,};
+            Component[]leftCenter={/*user,*/gridVert(comp1),panel,};
             JPanel left=new JPanel();
             left.setLayout(new  BorderLayout());
             left.add(user,BorderLayout.NORTH);

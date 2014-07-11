@@ -45,7 +45,7 @@ public class GUIController {
     
     
     public GUIController(){
-        user = Studente.getListaStudenti().get(2); //da spostare su una qualche richiesta
+        user = Studente.getListaStudenti().get(0); //da spostare su una qualche richiesta
     }
     
     //UC1
@@ -86,16 +86,16 @@ public class GUIController {
         
     }
     
-    public void elencaDestinatari(){
+    public List<UserInfo> elencaDestinatari(){
         List<UserInfo> l = CommunicationController.getDestinatari(user);
         //visualizza
-        
+        return l;
     }
     
-    public void elencaMessaggiBozza(){
+    public List<Messaggio> elencaMessaggiBozza(){
         List<Messaggio> l = Messaggio.caricaBozze(user);
         //visualizza
-        
+        return l;
     }
     
     public void elencaMessaggiInviati(){

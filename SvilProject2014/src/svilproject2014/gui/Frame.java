@@ -306,26 +306,47 @@ class Frame extends JFrame{
         JTextField messaggio=new JTextField("Contenuto");
         JTextField titolo=new JTextField("Titolo");
         JButton btn=new JButton("Invia");
+        List<UserInfo> destinatari;
         /*************************************/
-        Object [][]testo={{"max210491","tilooo1"},{"seniorsimo","tilooo2"}};
-        Object []nomi={"ID","Titolo"};
-        JTable table1=new JTable(testo,nomi);
+        List<Messaggio> bozze = gc.elencaMessaggiBozza();
+        
+        //Object [][]testo={{"max210491","tilooo1"},{"seniorsimo","tilooo2"}};
+        Object []nomi={"Destinatario","Titolo"};
         JPanel panel1=new JPanel();
         JPanel panel2=new JPanel();
         JButton btn2=new JButton("Cancella");
+        
         public scriviJPanel(){
             super();
             /*************************************/
             btn.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("Inviato a "+user.getSelectedItem()+" Mex: "+messaggio.getText());
                 }});
             ArrayList<JButton> temp=new ArrayList<JButton>();
             temp.add(btn);
-            user.add("Max210491");
-            user.add("SeniornSimo");
-            user.add("NoPuffi");
+//            user.add("Max210491");
+//            user.add("SeniornSimo");
+//            user.add("NoPuffi");
+            destinatari = gc.elencaDestinatari();
+            for(UserInfo s:destinatari){
+                user.add(s.getNome()+" "+s.getCognome());
+            }
+            
             /*************************************/
+            List<Object[]> sListTemp = new ArrayList<Object[]>();
+            for(Messaggio m:bozze){
+                Object[] mTemp = {m.getDestinatario().getNome() + " " + m.getDestinatario().getCognome(),m.getTitolo()};
+                sListTemp.add(mTemp);
+            }
+            Object[][] testo = new Object[sListTemp.size()][];
+            int index = 0;
+            for(Object[] o:sListTemp){
+                testo[index++] = o;
+            }
+            JTable table1=new JTable(testo,nomi);
+            
             panel2.setLayout(new GridLayout(1,1));
             panel2.add(editTabella("BOZZE",table1));
             panel1.setLayout(new BorderLayout());

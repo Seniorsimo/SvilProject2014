@@ -38,6 +38,10 @@ public class GUIController {
     private GestoreIpotesi g;
     private SessioneDiLavoro sdl;
     
+    public static void main(String[] args){
+        Frame f = new Frame();
+    }
+    
     
     public GUIController(){
         //vuoto

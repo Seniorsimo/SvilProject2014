@@ -163,6 +163,7 @@ class Frame extends JFrame{
                         int risp = DialogMessage.popupYesNo("Vuoi salvare una bozza?", null);
                         if(risp==JOptionPane.YES_OPTION){
                             scriviPanel.salva();
+                            scriviPanel.nuovo();
                         }
                         else if(risp==JOptionPane.CANCEL_OPTION||risp==JOptionPane.CLOSED_OPTION){
                             return;

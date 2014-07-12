@@ -46,7 +46,7 @@ public class GUIController {
     
     
     public GUIController(){
-        user = Studente.getListaStudenti().get(0); //da spostare su una qualche richiesta
+        user = Studente.getListaStudenti().get(1); //da spostare su una qualche richiesta
     }
     
     //UC1

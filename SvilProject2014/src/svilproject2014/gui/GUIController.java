@@ -46,21 +46,21 @@ public class GUIController {
     
     
     public GUIController(){
-        user = Studente.getListaStudenti().get(1); //da spostare su una qualche richiesta
+        user = Studente.getListaStudenti().get(0); //da spostare su una qualche richiesta
     }
     
     //UC1
     
-    public void apriMessaggoBozza(String id){
+    public Messaggio apriMessaggoBozza(String id){
         Messaggio m = Messaggio.load(id);
         //visualizza qualcosa
-        msgScrivi = m;
+        return m;
     }
     
-    public void apriMessaggioRicevuto(String id){
+    public Messaggio apriMessaggioRicevuto(String id){
         Messaggio m = CommunicationController.apriMessaggioRicevuto(id);
         //visualizza
-        msgLeggi = m;
+        return m;
     }
     
     public void cifra(String testo, SistemaDiCifratura sdc){
@@ -75,10 +75,10 @@ public class GUIController {
         
     }
     
-    public void comunicaDecisione(Proposta p, String decisione){
+    public boolean comunicaDecisione(Proposta p, String decisione){
         boolean success = CommunicationController.inviaDecisione(p, decisione);
         //visualizza
-        
+        return success;
     }
     
     public void decifraMessaggio(Messaggio m){
@@ -99,16 +99,16 @@ public class GUIController {
         return l;
     }
     
-    public void elencaMessaggiInviati(){
+    public List<Messaggio> elencaMessaggiInviati(){
         List<Messaggio> l = Messaggio.caricaInviati(user);
         //visualizza
-        
+        return l;
     }
     
-    public void elencaMessaggiRicevuti(){
+    public List<Messaggio> elencaMessaggiRicevuti(){
         List<Messaggio> l = Messaggio.caricaRicevuti(user);
         //visualizza
-        
+        return l;
     }
     
     public void eliminaSistemaCifratura(SistemaDiCifratura sdc){
@@ -180,10 +180,10 @@ public class GUIController {
         return list;
     }
     
-    public void visualizzaMessaggioInviato(String id){
+    public Messaggio visualizzaMessaggioInviato(String id){
         Messaggio m = Messaggio.load(id);
         //visualizza
-        msgLeggi = m;
+        return m;
     }
     
     public SistemaDiCifratura visualizzaSistemaCifratura(String id){

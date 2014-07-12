@@ -154,6 +154,10 @@ public class Proposta {
     public boolean isNotificata() {
         return notificata;
     }
+
+    public void setNotificata(boolean notificata) {
+        this.notificata = notificata;
+    }
     
     
 }

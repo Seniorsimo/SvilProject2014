@@ -170,11 +170,13 @@ class Frame extends JFrame{
                             scriviPanel.nuovo();
                         }
                         else if(risp==JOptionPane.CANCEL_OPTION||risp==JOptionPane.CLOSED_OPTION){
-                            return;
+                            //return;
                         }
                 }
-                else if(idPanelVisualizzato==3){//sto uscendo da spia
-                    
+                else if(idPanelVisualizzato==3&&spiaPanel.modificato){//sto uscendo da spia
+                    int risp = DialogMessage.popupYesNo("Vuoi salvare una bozza?", null);
+                    if(!spiaPanel.salva())
+                        DialogMessage.popupTesto("Impossibile salvate la sessione.");
                 }
                 
                 
@@ -340,6 +342,21 @@ class Frame extends JFrame{
         }
          
          public boolean carica(){
+             //verifica anche la presenza di proposte da notificare
+             List<Proposta> notificare = gc.vediNotificheAccettazioneProposte();
+             if(notificare!=null&&notificare.size()!=0){
+                 for(Proposta p : notificare){
+                     
+                     String txt;
+                     UserInfo par = UserInfo.load(p.getIdPartner());
+                     if(p.getStato().equals("accepted")) txt = "La proposta fatta a " + par.getNome() + " " + par.getCognome() + " è stata accettata.";
+                     else txt = "La proposta fatta a " + par.getNome() + " " + par.getCognome() + " è stata rifiutata.";
+                     DialogMessage.popupTesto(txt);
+                     p.setNotificata(true);
+                     p.salva();
+                 }
+             }
+             
             proposte = gc.vediProposteSistemaCifratura();
             List<Object[]> pListTemp = new ArrayList<Object[]>();
             for(Proposta p:proposte){
@@ -756,6 +773,8 @@ class Frame extends JFrame{
         JTable table;
         JPanel panel;
         JTextField pattern;
+        boolean modificato = false;
+        JTextField mapping;
         /*************************************/
         public SpiaJPanel(){
             super();
@@ -777,9 +796,10 @@ class Frame extends JFrame{
                     String out = DialogMessage.popupChoice("Scegli la lettera da decifrare", "Aggiungi", scelta);
                     String out2 = DialogMessage.popupChoice("Scegli con che lettera sostituirla", "Aggiungi", scelta);
                     if(!gc.aggiungiIpotesi(out.charAt(0), out2.charAt(0))){
-                    DialogMessage.popupTesto("Impossibile aggiungere la lettera");
-                    return;
+                        DialogMessage.popupTesto("Impossibile aggiungere la lettera");
+                        return;
                     }
+                    modificato = true;
                     aggiornaVista();
                 }});
             btnUndo.addActionListener(new ActionListener() {
@@ -787,6 +807,7 @@ class Frame extends JFrame{
                 public void actionPerformed(ActionEvent e) {
                     if(!gc.vaiIndietroNelleIpotesi(1))
                         DialogMessage.popupTesto("Impossibile torare indietro");
+                    modificato = true;
                     aggiornaVista();
                 }});
             btnRetry.addActionListener(new ActionListener() {
@@ -794,6 +815,7 @@ class Frame extends JFrame{
                 public void actionPerformed(ActionEvent e) {
                     if(!gc.vaiAvantiNelleIpotesi(1))
                         DialogMessage.popupTesto("Impossibile ripristinare");
+                    modificato = true;
                     aggiornaVista();
                 }});
             /*************************************/
@@ -816,7 +838,9 @@ class Frame extends JFrame{
             
             JPanel patternPanel=borderVert(gridOrizz(comp),panel,null);
             //patternPanel=borderVert(gridOrizz(comp),table,null);
-            JTextField mapping=new JTextField("a|B B|c");
+            //JTextField mapping=new JTextField("a|B B|c");
+            mapping=new JTextField("");
+            mapping.setEditable(false);
             
             JButton freq=new JButton("Frequenze");
             freq.addActionListener(new ActionListener() {
@@ -824,7 +848,7 @@ class Frame extends JFrame{
                 public void actionPerformed(ActionEvent e) {
                     String out = "";
                     for(char c: alfabeto){
-                        out += "" + gc.visualizzaFrequenza(c) + "\n";
+                        out += c + ": " + gc.visualizzaFrequenza(c) + "\n";
                     }
                     DialogMessage.popupTesto("Frequenze\n" + out);
                 }});
@@ -842,6 +866,15 @@ class Frame extends JFrame{
             add(editLeft(userlbl,user,titolo,messaggio,temp));
             add(borderVert(null,borderVert(null,patternPanel,mapping),gridOrizz(comp2)));
             aggiornaVista();
+        }
+        
+        public boolean salva(){
+            if(!modificato) return false;
+            if(DialogMessage.popupYesNo("Vuoi salvare?", "Salva")==JOptionPane.YES_OPTION){
+                modificato = false;
+                return gc.salvaSessioneDiLavoro();
+            }
+            return false;
         }
         
         public void stampaRisultatiRicerca(){
@@ -870,6 +903,26 @@ class Frame extends JFrame{
         }
         
         public boolean proponi(){
+            //verifica se ci sono messaggi salvati
+            List<SessioneDiLavoro> slist = gc.mostraSessioniSalvate();
+            if(slist!=null&&slist.size()!=0){
+                if(DialogMessage.popupYesNo("Ci sono delle sessioni da lavoro salvate. Vuoi riprenderne una?", "Carica sessione")==JOptionPane.YES_OPTION){
+                    String[] option = new String[slist.size()];
+                    for(int i=0; i<slist.size(); i++){
+                        option[i] = slist.get(i).getMessaggio().getTitolo();
+                    }
+                    String selezionato = DialogMessage.popupChoice("Scegli la sessione da caricare.", "Carica sessione", option);
+                    int i=0;
+                    while(i<option.length){
+                        if(selezionato.equals(option[i])) break;
+                        i++;
+                    }
+                    gc.caricaSessioneDiLavoro(slist.get(i).getId());
+                    modificato = false;
+                    return true;
+                }
+            }
+            
             List<Messaggio> spiabili = gc.mostraMessaggiSpiabili();
             Messaggio msgSpia = null;
             int i = 0;
@@ -895,6 +948,7 @@ class Frame extends JFrame{
             }
             if(msgSpia==null) return false;
             gc.avviaSessione(msgSpia);
+            modificato = false;
             //sessione.setMessaggio(msgSpia);
              return true;
             //user.setText(msgSpia.getMittente().getNome() + " " + msgSpia.getMittente().getCognome() + " - " + msgSpia.getDestinatario().getNome() + " " + msgSpia.getDestinatario().getCognome());
@@ -908,6 +962,7 @@ class Frame extends JFrame{
                 titolo.setText(msgSpia.getTitolo());
             }
             messaggio.setText(gc.visualizzaTestoParziale());
+            mapping.setText(gc.visualizzaAssociazioni());
         }
     }
     public class SceltaJPanel extends JPanel{

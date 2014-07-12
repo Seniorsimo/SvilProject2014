@@ -119,10 +119,10 @@ public class GUIController {
         
     }
     
-    public void cifraMessaggio(Messaggio m){
+    public String cifraMessaggio(Messaggio m){
         String s = m.cifra();
         //visualizza
-        
+        return s;
     }
     
     public boolean comunicaDecisione(Proposta p, String decisione){
@@ -131,10 +131,10 @@ public class GUIController {
         return success;
     }
     
-    public void decifraMessaggio(Messaggio m){
+    public String decifraMessaggio(Messaggio m){
         String s = m.decifra();
         //visualizza
-        
+        return s;
     }
     
     public List<UserInfo> elencaDestinatari(){
@@ -209,7 +209,7 @@ public class GUIController {
     }
     
     public boolean spedisciMessaggio(Messaggio m){
-        String temp = m.cifra();
+        String temp = cifraMessaggio(m);
         if(temp!=null){
             m.setTestoCifrato(temp);
             if(!m.salva())return false;
@@ -218,10 +218,10 @@ public class GUIController {
         return false;
     }
     
-    public void vediNotificheAccettazioneProposte(){
+    public List<Proposta> vediNotificheAccettazioneProposte(){
         List<Proposta>  list = CommunicationController.getAccettazioneProposte(user);
         //visualizza
-        
+        return list;
     }
     
     public List<Proposta> vediProposteSistemaCifratura(){
@@ -280,10 +280,15 @@ public class GUIController {
         return list;
     }
     
-    public void salvaSessioneDiLavoro(){
+    public List<SessioneDiLavoro> mostraSessioniSalvate(){
+        List<SessioneDiLavoro> list = SessioneDiLavoro.caricaSalvate(user.getUserInfo());
+        return list;
+    }
+    
+    public boolean salvaSessioneDiLavoro(){
         boolean success = sdl.salva();
         //visualizza
-        
+        return success;
     }
     
     public boolean vaiAvantiNelleIpotesi(int n){
@@ -298,10 +303,15 @@ public class GUIController {
         return success;
     }
     
-    public void visualizzaAssociazioni(){
+    public String visualizzaAssociazioni(){
+        if(sdl==null) return "";
         List<Coppia> list = sdl.getGestoreIpotesi().visualizzaAssociazioni();
         //visualizza
-        
+        String out = "";
+        for(Coppia c:list){
+            out += c.getVecchiaL() + "|" + Character.toUpperCase(c.getNuovaL()) + " ";
+        }
+        return out;
     }
     
     public String visualizzaIpotesi(){

@@ -6,11 +6,14 @@ package svilproject2014.sessione;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import svilproject2014.DBManager;
 import svilproject2014.Messaggio;
 import svilproject2014.Studente;
+import svilproject2014.UserInfo;
 
 /**
  *
@@ -50,6 +53,25 @@ public class SessioneDiLavoro {
         } catch (SQLException ex) {
             Logger.getLogger(Messaggio.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static List<SessioneDiLavoro> caricaSalvate(UserInfo stud){
+        String idStud = stud.getId();
+        
+        String sql = "SELECT * FROM SESSIONEDILAVORO WHERE ID_UTENTE='" + idStud + "'";
+        ResultSet rs = DBManager.getDBManager().execute(sql);
+        ArrayList<SessioneDiLavoro> list = new ArrayList<>();
+        while(createNextSessioneDiLavoro(rs, list));
+        return list;
+    }
+    
+    private static boolean createNextSessioneDiLavoro(ResultSet rs, List<SessioneDiLavoro> list){
+        SessioneDiLavoro m = SessioneDiLavoro.creaSessioneDiLavoro(rs);
+        if(m!=null){
+            list.add(m);
+            return true;
+        }
+        return false;
     }
 
     public GestoreIpotesi getGestoreIpotesi() {

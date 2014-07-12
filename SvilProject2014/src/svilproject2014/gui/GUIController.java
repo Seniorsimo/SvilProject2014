@@ -46,7 +46,7 @@ public class GUIController {
     
     
     public GUIController(){
-        user = Studente.getListaStudenti().get(0); //da spostare su una qualche richiesta
+        user = Studente.getListaStudenti().get(1); //da spostare su una qualche richiesta
     }
     
     //UC1
@@ -141,7 +141,6 @@ public class GUIController {
     
     public boolean proponiSistemaCifratura(/*SistemaDiCifratura sdc,*/ UserInfo partner){
             if(!salvaSistemaCifratura(sdc)) return false;
-            System.out.println("sonovivo");
             boolean success = CommunicationController.inviaProposta(user, partner, sdc);
             //visualizza
             return success;

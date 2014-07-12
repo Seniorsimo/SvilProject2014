@@ -206,15 +206,19 @@ class Frame extends JFrame{
         JTextField shift=new JTextField();
         JTextField key=new JTextField();
         JTextArea anteprima=new JTextArea();
+        final Choice user=new Choice();
         
         List<Studente> studenti;
         List<Proposta> proposte;
+        JTable table1;
+        Object []nomi={"ID","Metodo","Chiave"};
+        JPanel panel2=new JPanel();
         /**************************************/
         JButton btn2=new JButton("Aggiorna");
         //!!! Aggiungere refresh proposte: forse è più faciel richreare il panel, dato che bisogna ricreare la tabella.
         
         public proposteJPanel(){
-            final Choice user=new Choice();
+            
 //            user.add("Max210491");
 //            user.add("SeniornSimo");
 //            user.add("NoPuffi");
@@ -304,26 +308,14 @@ class Frame extends JFrame{
             Component[]comp={invia,home};
             left.add(gridOrizz(comp),BorderLayout.SOUTH);
             /*************************************/
-            proposte = gc.vediProposteSistemaCifratura();
-            List<Object[]> pListTemp = new ArrayList<Object[]>();
-            for(Proposta p:proposte){
-                Object[] pTemp = {p.getId(),p.getSdc().getMetodo(),p.getSdc().getChiave()};
-                pListTemp.add(pTemp);
-            }
             
-            //Object [][]testo={{"max210491","tilooo1"},{"seniorsimo","tilooo2"}};
-            Object[][] testo = new Object[pListTemp.size()][];
-            int index = 0;
-            for(Object[] o:pListTemp){
-                testo[index++] = o;
-            }
             
-            Object []nomi={"ID","Metodo","Chiave"};
-            JTable table1=new JTable(testo,nomi);
-            JPanel panel1=new JPanel();
-            JPanel panel2=new JPanel();
+            //table1 = new JTable(testo,nomi);
             panel2.setLayout(new GridLayout(1,1));
-            panel2.add(editTabella("Proposte",table1));
+            carica();
+            JPanel panel1=new JPanel();
+            
+            //panel2.add(editTabella("Proposte",table1));
             panel1.setLayout(new BorderLayout());
             panel1.add(panel2,BorderLayout.NORTH);
             panel1.add(btn2,BorderLayout.SOUTH);
@@ -335,6 +327,58 @@ class Frame extends JFrame{
          public JPanel editCifrario(JRadioButton opt,Component obj){
             Component[]comp={opt,obj};
             return gridVert(comp);
+        }
+         
+         public boolean carica(){
+            proposte = gc.vediProposteSistemaCifratura();
+            List<Object[]> pListTemp = new ArrayList<Object[]>();
+            for(Proposta p:proposte){
+                UserInfo u = UserInfo.load(p.getIdProponente());
+                Object[] pTemp = {u.getNome()+" "+u.getCognome(),p.getSdc().getMetodo(),p.getSdc().getChiave()};
+                pListTemp.add(pTemp);
+            }
+            
+            //Object [][]testo={{"max210491","tilooo1"},{"seniorsimo","tilooo2"}};
+            Object[][] testo = new Object[pListTemp.size()][];
+            int index = 0;
+            for(Object[] o:pListTemp){
+                testo[index++] = o;
+            }
+            
+            
+            table1 = new JTable(testo,nomi);
+            table1.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    //if (e.getClickCount() == 2) {
+                        JTable target = (JTable) e.getSource();
+                        int row = target.getSelectedRow();
+                        //int column = target.getSelectedColumn();
+                        // do some action if appropriate column
+                        carica();
+                        int r = DialogMessage.popupYesNo("Vuoi accettare questa proposta?", "Proposta");
+                        if(r==JOptionPane.YES_OPTION){
+                            proposte.get(row).setStato("accepted");
+                            proposte.get(row).salva();
+                        }
+                        else if(r==JOptionPane.NO_OPTION){
+                            proposte.get(row).setStato("refused");
+                            proposte.get(row).salva();
+                        }
+//                        opt1.setSelected(true);
+//                        if(user.getItemCount()!=0){
+//                            user.select(0);
+//                        }
+                    //}
+                }
+            });
+            
+            panel2.removeAll();
+            panel2.add(editTabella("BOZZE",table1));
+            panel2.repaint();
+            panel2.revalidate();
+            
+            return true;
         }
     }
     public class scriviJPanel extends JPanel{
@@ -401,6 +445,7 @@ class Frame extends JFrame{
             });
             
             /*************************************/
+            panel2.setLayout(new GridLayout(1,1));
             carica();
             btn2.addActionListener(new ActionListener() {
                 @Override
@@ -410,10 +455,10 @@ class Frame extends JFrame{
                 }});
             
             //=new JTable(testo,nomi);
-            panel2.removeAll();
-            panel2.add(editTabella("BOZZE",table1));
+            //panel2.removeAll();
+            //panel2.add(editTabella("BOZZE",table1));
             
-            panel2.setLayout(new GridLayout(1,1));
+            
             //panel2.add(tabella);
             panel1.setLayout(new BorderLayout());
             panel1.add(panel2,BorderLayout.NORTH);
@@ -433,7 +478,9 @@ class Frame extends JFrame{
             msgScrivi = null;
             titolo.setText("Titolo");
             messaggio.setText("Testo");
-            user.select(0);
+            if(user.getItemCount()!=0){
+                user.select(0);
+            }
             modificato = false;
             carica();
             return true;
@@ -441,14 +488,17 @@ class Frame extends JFrame{
         
         public boolean salva(){
             if(!modificato) return false;
+            if(user.getItemCount()==0) return false;
             
             if(msgScrivi==null){
                 msgScrivi = new MessaggioReale(gc.getUser());
             }
             msgScrivi.setTitolo(titolo.getText());
             msgScrivi.setTesto(messaggio.getText());
+            
             msgScrivi.setSisCif(gc.getSdcAttivo(destinatari.get(user.getSelectedIndex())));
             msgScrivi.setDestinatario(destinatari.get(user.getSelectedIndex()));
+            
             msgScrivi.setLingua("Italiano");
             modificato = false;
             return gc.salvaMessaggioBozza(msgScrivi);
@@ -495,7 +545,7 @@ class Frame extends JFrame{
             panel2.removeAll();
             panel2.add(editTabella("BOZZE",table1));
             panel2.repaint();
-            
+            panel2.revalidate();
         }
         
         public boolean send(){

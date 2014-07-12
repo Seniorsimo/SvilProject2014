@@ -27,6 +27,7 @@ import java.lang.*;
 import java.util.*;
 import javax.swing.event.*;
 import svilproject2014.messaggio.MessaggioReale;
+import svilproject2014.sessione.SessioneDiLavoro;
 /*public class prova{
 	public static void main(String[]args){
 			new Frame();
@@ -109,6 +110,7 @@ class Frame extends JFrame{
         add(spiaPanel);
         idPanelVisualizzato = 3;
         pack();
+        
     }
     public void visualizzaProposte(){
         if(sceltaPanel!=null)
@@ -622,8 +624,8 @@ class Frame extends JFrame{
             temp.add(btn);
             /*************************************/
             
-            table1=new JTable(testo,nomi);
-            table2=new JTable(testo,nomi);
+            //table1=new JTable(testo,nomi);
+            //table2=new JTable(testo,nomi);
             JPanel extraPanel=new JPanel();
             
             panel.setLayout(new GridLayout(2,1));
@@ -734,52 +736,176 @@ class Frame extends JFrame{
         }
     }
     public class SpiaJPanel extends JPanel{
-        JLabel userlbl=new JLabel("Mittente");
+        JLabel userlbl=new JLabel("Da - a");
         JTextField user=new JTextField("");
         JTextArea messaggio=new JTextArea("Contenuto");
         JTextField titolo=new JTextField("Titolo");
         JButton btnUndo=new JButton("<-");
         JButton btnRetry=new JButton("->");
         JButton btnAdd=new JButton("+");
+        SessioneDiLavoro sessione;
+        
+        char[] alfabeto;
+        String[] scelta;
         
         JButton btn2=new JButton("Aggiorna");
+        Object [][]testo;
+        Object []nomi={"ID"};
+        JTable table;
+        JPanel panel;
+        JTextField pattern;
         /*************************************/
         public SpiaJPanel(){
             super();
+            String tempAlp = "abcdefghijklmnopqrstuvwxyz";
+            alfabeto = tempAlp.toCharArray();
+            scelta = new String[alfabeto.length];
+            for(int i=0; i<alfabeto.length; i++){
+                scelta[i] = ""+alfabeto[i];
+            }
             messaggio.setEditable(false);
             user.setEditable(false);
             ArrayList<JButton> temp=new ArrayList<JButton>();
             temp.add(btnUndo);
             temp.add(btnRetry);
             temp.add(btnAdd);
+            btnAdd.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String out = DialogMessage.popupChoice("Scegli la lettera da decifrare", "Aggiungi", scelta);
+                    String out2 = DialogMessage.popupChoice("Scegli con che lettera sostituirla", "Aggiungi", scelta);
+                    if(!gc.aggiungiIpotesi(out.charAt(0), out2.charAt(0))){
+                    DialogMessage.popupTesto("Impossibile aggiungere la lettera");
+                    return;
+                    }
+                    aggiornaVista();
+                }});
+            btnUndo.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if(!gc.vaiIndietroNelleIpotesi(1))
+                        DialogMessage.popupTesto("Impossibile torare indietro");
+                    aggiornaVista();
+                }});
+            btnRetry.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if(!gc.vaiAvantiNelleIpotesi(1))
+                        DialogMessage.popupTesto("Impossibile ripristinare");
+                    aggiornaVista();
+                }});
             /*************************************/
-            Object [][]testo={{"max210491"},{"seniorsimo"}};
-            Object []nomi={"ID"};
-            JTextField pattern=new JTextField();
-            JButton find=new JButton("Cerca");
-            JTable table=new JTable(testo,nomi);
-            table.setPreferredSize(new Dimension(300,200));
-            Component[]comp={pattern,find};
-            JPanel patternPanel=borderVert(gridOrizz(comp),table,null);
+            //Object [][]testo={{"max210491"},{"seniorsimo"}};
             
+            pattern=new JTextField();
+            JButton find=new JButton("Cerca");
+            find.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    stampaRisultatiRicerca();
+            
+                }});
+            //table=new JTable(testo,nomi);
+            Component[]comp ={pattern,find};
+            panel = new JPanel();
+            panel.setLayout(new GridLayout(1,1));
+            
+            stampaRisultatiRicerca();
+            
+            JPanel patternPanel=borderVert(gridOrizz(comp),panel,null);
+            //patternPanel=borderVert(gridOrizz(comp),table,null);
             JTextField mapping=new JTextField("a|B B|c");
             
             JButton freq=new JButton("Frequenze");
             freq.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
-                    DialogMessage.popupTesto("Help Frequenze");
-                    System.out.println(DialogMessage.popupYesNo("Help Frequenze","YESNO"));
-                    System.out.println(DialogMessage.popupString("Help Frequenze","Input"));
-                    String[]opt={"palla","pollo"};
-                    System.out.println(DialogMessage.popupChoice("Help Frequenze","Input",opt));
+                    String out = "";
+                    for(char c: alfabeto){
+                        out += "" + gc.visualizzaFrequenza(c) + "\n";
+                    }
+                    DialogMessage.popupTesto("Frequenze\n" + out);
                 }});
             JButton grafo=new JButton("Grafo");
+            grafo.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String out = gc.visualizzaIpotesi();
+                    DialogMessage.popupTesto("Ipotesi fatte\n" + out);
+                }});
             Component[] comp2={freq,grafo};
 
             /*************************************/
             setLayout(new GridLayout(1,2));
             add(editLeft(userlbl,user,titolo,messaggio,temp));
-            add(borderVert(patternPanel,mapping,gridOrizz(comp2)));
+            add(borderVert(null,borderVert(null,patternPanel,mapping),gridOrizz(comp2)));
+            aggiornaVista();
+        }
+        
+        public void stampaRisultatiRicerca(){
+            List<String> list = gc.cercaPatternSulDizionario(pattern.getText());
+                    //ricevuti = gc.elencaMessaggiRicevuti();
+                    List<Object[]> sListTemp2 = new ArrayList<Object[]>();
+                    int i = 1;
+                    for(String m:list){
+                        Object[] mTemp = {m};
+                        sListTemp2.add(mTemp);
+                    }
+                    Object[][] testo2 = new Object[sListTemp2.size()][];
+                    int index2 = 0;
+                    for(Object[] o:sListTemp2){
+                        testo2[index2++] = o;
+                    }
+                    
+                    table = new JTable(testo2,nomi);
+                    table.setPreferredSize(new Dimension(300,200));
+                    
+                   //patternPanel=borderVert(gridOrizz(comp),table,null);
+            panel.removeAll();        
+            panel.add(table,BorderLayout.CENTER);
+            panel.repaint();
+            panel.revalidate();
+        }
+        
+        public boolean proponi(){
+            List<Messaggio> spiabili = gc.mostraMessaggiSpiabili();
+            Messaggio msgSpia = null;
+            int i = 0;
+            boolean goBack = false;
+            if(spiabili.size()==0){
+                DialogMessage.popupTesto("Non ci sono messaggi da spiare.");
+            }
+            while(i<spiabili.size()){
+                int response = DialogMessage.popupYesNo("Vuoi decifrare questo messaggio?\n"+ spiabili.get(i).getTitolo() + "\n" + spiabili.get(i).getTestoCifrato(), "Seleziona");
+                if(response==JOptionPane.YES_OPTION){
+                    msgSpia = spiabili.get(i);
+                    break;
+                }
+                else if(response==JOptionPane.NO_OPTION){
+                    i++;
+                }
+                else{
+                    break;
+                }
+            }
+            if(i==spiabili.size()){
+                DialogMessage.popupTesto("Non ci sono altri messaggi da spiare.");
+            }
+            if(msgSpia==null) return false;
+            gc.avviaSessione(msgSpia);
+            //sessione.setMessaggio(msgSpia);
+             return true;
+            //user.setText(msgSpia.getMittente().getNome() + " " + msgSpia.getMittente().getCognome() + " - " + msgSpia.getDestinatario().getNome() + " " + msgSpia.getDestinatario().getCognome());
+            
+        }
+        
+        public void aggiornaVista(){
+            Messaggio msgSpia = gc.visualizzaMessaggioSessione();
+            if(msgSpia!=null){
+                user.setText(msgSpia.getMittente().getNome() + " " + msgSpia.getMittente().getCognome() + " - " + msgSpia.getDestinatario().getNome() + " " + msgSpia.getDestinatario().getCognome());
+                titolo.setText(msgSpia.getTitolo());
+            }
+            messaggio.setText(gc.visualizzaTestoParziale());
         }
     }
     public class SceltaJPanel extends JPanel{
@@ -809,6 +935,8 @@ class Frame extends JFrame{
                     if(spiaPanel==null)
                         spiaPanel=new SpiaJPanel();
                     visualizzaSpia();
+                    if(!spiaPanel.proponi()) visualizzaScelta();
+                    else spiaPanel.aggiornaVista();
                 }});
             button4.addActionListener(new ActionListener() {
                 @Override

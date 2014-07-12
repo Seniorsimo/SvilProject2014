@@ -4,6 +4,7 @@
  */
 package svilproject2014.gui;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -210,10 +211,15 @@ public class GUIController {
         
     }
     
-    public void aggiungiIpotesi(char old, char nuovo){
-        boolean success = g.aggiungiIpotesi(old, nuovo);
+    public boolean aggiungiIpotesi(char old, char nuovo){
+        boolean success = sdl.getGestoreIpotesi().aggiungiIpotesi(old, nuovo);
         //visualizza
-        
+        return success;
+    }
+    
+    public void avviaSessione(Messaggio m){
+        sdl = new SessioneDiLavoro(user);
+        sdl.setMessaggio(m);
     }
     
     public void caricaSessioneDiLavoro(int id){
@@ -222,16 +228,17 @@ public class GUIController {
         
     }
     
-    public void cercaPatternSulDizionario(String pattern){
-        List<String> list = sos.cercaPatternSulDizionario(pattern);
+    public List<String> cercaPatternSulDizionario(String pattern){
+        if(sdl==null)return new ArrayList<String>();
+        List<String> list = sdl.getStrumentiSupporto().cercaPatternSulDizionario(pattern);
         //visualizza
-        
+        return list;
     }
     
-    public void mostraMessaggiSpiabili(){
+    public List<Messaggio> mostraMessaggiSpiabili(){
         List<Messaggio> list = Messaggio.caricaSpiabili(user);
         //visualizza
-        
+        return list;
     }
     
     public void salvaSessioneDiLavoro(){
@@ -240,28 +247,43 @@ public class GUIController {
         
     }
     
-    public void vaiAvantiNelleIpotesi(int n){
-        boolean success = g.avanti(n);
+    public boolean vaiAvantiNelleIpotesi(int n){
+        boolean success = sdl.getGestoreIpotesi().avanti(n);
         //visualizza
-        
+        return success;
     }
     
-    public void vaiIndietroNelleIpotesi(int n){
-        boolean success = g.indietro(n);
+    public boolean vaiIndietroNelleIpotesi(int n){
+        boolean success = sdl.getGestoreIpotesi().indietro(n);
         //visualizza
-        
+        return success;
     }
     
     public void visualizzaAssociazioni(){
-        List<Coppia> list = g.visualizzaAssociazioni();
+        List<Coppia> list = sdl.getGestoreIpotesi().visualizzaAssociazioni();
         //visualizza
         
     }
     
-    public void visualizzaIpotesi(){
-        String s = g.visualizzaStoria();
+    public String visualizzaIpotesi(){
+        String s = sdl.getGestoreIpotesi().visualizzaStoria();
         //visualizza
-        
+        return s;
+    }
+    
+    public double visualizzaFrequenza(char c){
+        if(sdl==null) return 0;
+        return sdl.getStrumentiSupporto().getFrequenza(c);
+    }
+    
+    public Messaggio visualizzaMessaggioSessione(){
+        if(sdl==null) return null;
+        return sdl.getMessaggio();
+    }
+    
+    public String visualizzaTestoParziale(){
+        if(sdl==null) return null;
+        return sdl.getGestoreIpotesi().getTestoParziale();
     }
     
     //METODI DI EMULAZIONE

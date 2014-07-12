@@ -161,7 +161,12 @@ public class SessioneDiLavoro {
         this.stato = stato;
     }
     
-    
+    public void setMessaggio(Messaggio m){
+        messaggio = m;
+        id_messaggio = Integer.parseInt(messaggio.getId());
+        gestoreIpotesi = new GestoreIpotesi(messaggio);
+        strumentiSupporto = new StrumentiDiSupporto(id_lingua);
+    }
     
     
 }

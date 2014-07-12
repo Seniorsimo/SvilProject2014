@@ -278,6 +278,10 @@ public class GestoreIpotesi {
         return indietroPossibili;
     }
     
+    public String getTestoParziale(){
+        return String.copyValueOf(testoParziale);
+    }
+    
     
     
     @Override

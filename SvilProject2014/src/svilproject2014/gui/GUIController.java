@@ -49,12 +49,14 @@ public class GUIController {
     
     
     public GUIController(){
+
         try {
             user = Studente.getListaStudenti().get(2); //da spostare su una qualche richiesta
         } catch(IndexOutOfBoundsException e) {
             Logger.getLogger(GUIController.class.getName()).log(Level.WARNING,"Nel sistema non sono registrati studenti.");
             //TODO: exit
         }
+
     }
     
     //UC1

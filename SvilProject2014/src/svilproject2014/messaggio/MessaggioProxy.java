@@ -143,7 +143,7 @@ public class MessaggioProxy extends Messaggio{
 
     @Override
     public UserInfo getDestinatario() {
-        if(messaggio==null) return UserInfo.load(idMitt);
+        if(messaggio==null) return UserInfo.load(idDest);
         return messaggio.getDestinatario();
     }
     

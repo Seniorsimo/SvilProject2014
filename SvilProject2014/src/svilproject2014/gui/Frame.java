@@ -159,7 +159,7 @@ class Frame extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //se ti trovi in send o spia chiedi salvataggio
-                if(idPanelVisualizzato==1){//sto uscendo da send
+                if(idPanelVisualizzato==1&&scriviPanel.modificato){//sto uscendo da send
                         int risp = DialogMessage.popupYesNo("Vuoi salvare una bozza?", null);
                         if(risp==JOptionPane.YES_OPTION){
                             scriviPanel.salva();
@@ -340,13 +340,17 @@ class Frame extends JFrame{
     public class scriviJPanel extends JPanel{
         JLabel userlbl=new JLabel("Destinatario");
         Choice user=new Choice();
-        JTextArea messaggio=new JTextArea("Contenuto");
+        JTextArea messaggio=new JTextArea("Testo");
         JTextField titolo=new JTextField("Titolo");
         JButton btn=new JButton("Invia");
+        JButton nuovo=new JButton("Nuovo");
         List<UserInfo> destinatari;
         Messaggio msgScrivi;
+        boolean modificato = false;
+        JPanel tabella;
+        JTable table1;
         /*************************************/
-        List<Messaggio> bozze = gc.elencaMessaggiBozza();
+        List<Messaggio> bozze;
         
         //Object [][]testo={{"max210491","tilooo1"},{"seniorsimo","tilooo2"}};
         Object []nomi={"Destinatario","Titolo"};
@@ -361,22 +365,97 @@ class Frame extends JFrame{
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     boolean success = send();
-                    String out;
-                    if(success) out="Messaggio inviato";
-                    else out = "Impossibile inviare il messaggio";
-                    DialogMessage.popupTesto(out);
+                    visualizzaScrivi();
                 }});
+            nuovo();
             ArrayList<JButton> temp=new ArrayList<JButton>();
             temp.add(btn);
 //            user.add("Max210491");
 //            user.add("SeniornSimo");
 //            user.add("NoPuffi");
+            nuovo.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    salva();
+                    boolean success = nuovo();
+                    visualizzaScrivi();
+                }});
+            temp.add(nuovo);
+            user.addItemListener(new ItemListener(){
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+                    modificato = true;
+                }
+            });
+            titolo.addCaretListener(new CaretListener(){
+                @Override
+                public void caretUpdate(CaretEvent e) {
+                    modificato = true;
+                }
+            });
+            messaggio.addCaretListener(new CaretListener(){
+                @Override
+                public void caretUpdate(CaretEvent e) {
+                    modificato = true;
+                }
+            });
+            
+            /*************************************/
+            carica();
+            btn2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    boolean success = cancella();
+                    visualizzaScrivi();
+                }});
+            
+            //=new JTable(testo,nomi);
+            panel2.removeAll();
+            panel2.add(editTabella("BOZZE",table1));
+            
+            panel2.setLayout(new GridLayout(1,1));
+            //panel2.add(tabella);
+            panel1.setLayout(new BorderLayout());
+            panel1.add(panel2,BorderLayout.NORTH);
+            panel1.add(btn2,BorderLayout.SOUTH);   
+            /*************************************/
+            setLayout(new GridLayout(1,2));
+            add(editLeft(userlbl,user,titolo,messaggio,temp));
+            add(panel1);
+        }
+        
+        public boolean nuovo(){
             destinatari = gc.elencaDestinatari();
+            user.removeAll();
             for(UserInfo s:destinatari){
                 user.add(s.getNome()+" "+s.getCognome());
             }
+            msgScrivi = null;
+            titolo.setText("Titolo");
+            messaggio.setText("Testo");
+            user.select(0);
+            modificato = false;
+            carica();
+            return true;
+        }
+        
+        public boolean salva(){
+            if(!modificato) return false;
             
-            /*************************************/
+            if(msgScrivi==null){
+                msgScrivi = new MessaggioReale(gc.getUser());
+            }
+            msgScrivi.setTitolo(titolo.getText());
+            msgScrivi.setTesto(messaggio.getText());
+            msgScrivi.setSisCif(gc.getSdcAttivo(destinatari.get(user.getSelectedIndex())));
+            msgScrivi.setDestinatario(destinatari.get(user.getSelectedIndex()));
+            msgScrivi.setLingua("Italiano");
+            modificato = false;
+            return gc.salvaMessaggioBozza(msgScrivi);
+        }
+        
+        public void carica(){
+            bozze = gc.elencaMessaggiBozza();
             List<Object[]> sListTemp = new ArrayList<Object[]>();
             for(Messaggio m:bozze){
                 Object[] mTemp = {m.getDestinatario().getNome() + " " + m.getDestinatario().getCognome(),m.getTitolo()};
@@ -387,33 +466,65 @@ class Frame extends JFrame{
             for(Object[] o:sListTemp){
                 testo[index++] = o;
             }
-            JTable table1=new JTable(testo,nomi);
             
-            panel2.setLayout(new GridLayout(1,1));
+            
+            table1 = new JTable(testo,nomi);
+            table1.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    //if (e.getClickCount() == 2) {
+                        JTable target = (JTable) e.getSource();
+                        int row = target.getSelectedRow();
+                        //int column = target.getSelectedColumn();
+                        // do some action if appropriate column
+                        salva();
+                        carica();
+                        msgScrivi = bozze.get(row);
+                        titolo.setText(msgScrivi.getTitolo());
+                        messaggio.setText(msgScrivi.getTesto());
+                        String id = msgScrivi.getDestinatario().getId();
+                        for(UserInfo u : destinatari){
+                            if(u.getId().equals(id)) user.select(destinatari.indexOf(u));
+                        }
+                        modificato = false;
+                        
+                    //}
+                }
+            });
+            
+            panel2.removeAll();
             panel2.add(editTabella("BOZZE",table1));
-            panel1.setLayout(new BorderLayout());
-            panel1.add(panel2,BorderLayout.NORTH);
-            panel1.add(btn2,BorderLayout.SOUTH);   
-            /*************************************/
-            setLayout(new GridLayout(1,2));
-            add(editLeft(userlbl,user,titolo,messaggio,temp));
-            add(panel1);
+            panel2.repaint();
+            
         }
         
-        public boolean salva(){
-            if(msgScrivi==null){
-                msgScrivi = new MessaggioReale(gc.getUser());
-            }
-            msgScrivi.setTitolo(titolo.getText());
-            msgScrivi.setTesto(messaggio.getText());
-            msgScrivi.setSisCif(gc.getSdcAttivo(destinatari.get(user.getSelectedIndex())));
-            msgScrivi.setDestinatario(destinatari.get(user.getSelectedIndex()));
-            msgScrivi.setLingua("Italiano");
-            return gc.salvaMessaggioBozza(msgScrivi);
-        }
         public boolean send(){
-            if(!salva())return false;
-            return gc.spedisciMessaggio(msgScrivi);
+            if(!salva()){
+                DialogMessage.popupTesto("Impossibile inviare un messaggio vuoto.");
+                return false;
+            }
+            if(!gc.spedisciMessaggio(msgScrivi)){
+                DialogMessage.popupTesto("Impossibile inviare il messaggio");
+                return false;
+            }
+            return true;
+        }
+        
+        public boolean cancella(){
+            if(msgScrivi==null){
+                DialogMessage.popupTesto("Selezionare un messaggio");
+                return false;
+            }
+            //chiede conferma
+            int out = DialogMessage.popupYesNo("Cancellare "+titolo.getText()+"?", "Cancella");
+            boolean success = false;
+            if(out==JOptionPane.YES_OPTION){
+                success = msgScrivi.elimina();
+                if(!success) DialogMessage.popupTesto("Impossibile eliminare il messaggio");
+            }
+            carica();
+            nuovo();
+            return success;
         }
     }
     public class gestisciJPanel extends JPanel{

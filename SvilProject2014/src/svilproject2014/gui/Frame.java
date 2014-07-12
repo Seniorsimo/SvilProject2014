@@ -51,7 +51,8 @@ class Frame extends JFrame{
         sceltaPanel=new SceltaJPanel();
         visualizzaScelta();
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
     }
     public void visualizzaScelta(){
         if(scriviPanel!=null)
@@ -154,6 +155,7 @@ class Frame extends JFrame{
     }
     public JPanel editLeft(JLabel lbl,Component comp,JTextField titolo,JTextArea mex,ArrayList <JButton> btns){
         JPanel mexPanel=new JPanel();
+        mex.setLineWrap(rootPaneCheckingEnabled);
         JPanel buttonPanel=new JPanel();
         JButton home=new JButton("Home");
         mex.setPreferredSize(new Dimension(300,200));
@@ -218,7 +220,7 @@ class Frame extends JFrame{
         JPanel panel2=new JPanel();
         /**************************************/
         JButton btn2=new JButton("Aggiorna");
-        //!!! Aggiungere refresh proposte: forse è più faciel richreare il panel, dato che bisogna ricreare la tabella.
+        //!!! Aggiungere refresh proposte: forse Ã¨ piÃ¹ faciel richreare il panel, dato che bisogna ricreare la tabella.
         
         public ProposteJPanel(){
             
@@ -235,7 +237,7 @@ class Frame extends JFrame{
             group.add(opt2);
             group.add(opt3);
             //anteprima.setText("Cesare "+shift.getText());
-            Mappatura map = gc.generaMappatura(shift.getText(), "cesare");
+            Mappatura map = gc.generaMappatura("0"/*shift.getText()*/, "cesare");
             anteprima.setText("Metodo: cesare\nChiave: " + shift.getText() + "\n\nMappatura:\n" + String.copyValueOf(map.getMappa()) + "\n\nMappatura inversa:\n" + String.copyValueOf(map.getMappaInversa()));
             
             opt1.setSelected(true);
@@ -305,7 +307,7 @@ class Frame extends JFrame{
                     boolean success = gc.proponiSistemaCifratura(studenti.get(user.getSelectedIndex()).getUserInfo());
                     String out;
                     if(success) out="Proposta di un sistema di cifratura inviata correttamente.";
-                    else out="Si è verificato un errore. Impossibile inviare la proposta.";
+                    else out="Si Ã¨ verificato un errore. Impossibile inviare la proposta.";
                     DialogMessage.popupTesto(out);
                 }});
             btn2.addActionListener(new ActionListener() {

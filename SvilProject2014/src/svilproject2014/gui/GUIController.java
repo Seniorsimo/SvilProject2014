@@ -4,10 +4,17 @@
  */
 package svilproject2014.gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import svilproject2014.CommunicationController;
 import svilproject2014.Mappatura;
 import svilproject2014.Messaggio;
@@ -43,16 +50,48 @@ public class GUIController {
     private Messaggio msgScrivi, msgLeggi;
     
     public static void main(String[] args){
-        Frame f = new Frame();
-        f.setGC(new GUIController());
+        JFrame f = new JFrame("Scelta utente");
+        f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setLocationRelativeTo(null);
         
+        JPanel studenti = new JPanel();
+        
+        final List<Studente> list = Studente.getListaStudenti();
+        final ButtonGroup radioStudenti = new ButtonGroup();
+        final List<JRadioButton> listaSelezione = new ArrayList<>();        
+        for(Studente s:list) {
+            JRadioButton r = new JRadioButton(s.getNome()+" "+s.getCognome());
+            radioStudenti.add(r);
+            studenti.add(r);
+            listaSelezione.add(r);
+        }
+        
+        JButton conferma = new JButton("Conferma");
+        conferma.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) { 
+                for(JRadioButton studente:listaSelezione) {
+                    if(studente.isSelected()) {
+                        Frame f = new Frame();
+                        f.setGC(new GUIController(listaSelezione.indexOf(studente)));
+                    }
+                }
+                
+            }
+            
+        });
+        studenti.add(conferma);
+        f.add(studenti);
+        f.pack();
     }
     
     
-    public GUIController(){
+    public GUIController(int idStudente){
 
         try {
-            user = Studente.getListaStudenti().get(2); //da spostare su una qualche richiesta
+            user = Studente.getListaStudenti().get(idStudente); //da spostare su una qualche richiesta
         } catch(IndexOutOfBoundsException e) {
             Logger.getLogger(GUIController.class.getName()).log(Level.WARNING,"Nel sistema non sono registrati studenti.");
             //TODO: exit
@@ -229,7 +268,7 @@ public class GUIController {
     }
     
     public List<String> cercaPatternSulDizionario(String pattern){
-        if(sdl==null)return new ArrayList<String>();
+        if(sdl==null)return new ArrayList<>();
         List<String> list = sdl.getStrumentiSupporto().cercaPatternSulDizionario(pattern);
         //visualizza
         return list;

@@ -5,6 +5,8 @@
 package svilproject2014.gui;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import svilproject2014.CommunicationController;
 import svilproject2014.Mappatura;
 import svilproject2014.Messaggio;
@@ -42,11 +44,17 @@ public class GUIController {
     public static void main(String[] args){
         Frame f = new Frame();
         f.setGC(new GUIController());
+        
     }
     
     
     public GUIController(){
-        user = Studente.getListaStudenti().get(0); //da spostare su una qualche richiesta
+        try {
+            user = Studente.getListaStudenti().get(0); //da spostare su una qualche richiesta
+        } catch(IndexOutOfBoundsException e) {
+            Logger.getLogger(GUIController.class.getName()).log(Level.WARNING,"Nel sistema non sono registrati studenti.");
+            //TODO: exit
+        }
     }
     
     //UC1

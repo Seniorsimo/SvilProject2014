@@ -33,11 +33,11 @@ import svilproject2014.messaggio.MessaggioReale;
   }
 }*/
 class Frame extends JFrame{
-    sceltaJPanel sceltaPanel;
-    scriviJPanel scriviPanel;
-    gestisciJPanel gestisciPanel;
-    spiaJPanel spiaPanel;
-    proposteJPanel propostePanel;
+    SceltaJPanel sceltaPanel;
+    ScriviJPanel scriviPanel;
+    GestisciJPanel gestisciPanel;
+    SpiaJPanel spiaPanel;
+    ProposteJPanel propostePanel;
     int idPanelVisualizzato = 0;
     GUIController gc;
     
@@ -47,7 +47,7 @@ class Frame extends JFrame{
 
     public Frame(){
         super();
-        sceltaPanel=new sceltaJPanel();
+        sceltaPanel=new SceltaJPanel();
         visualizzaScelta();
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -174,7 +174,7 @@ class Frame extends JFrame{
                 
                 
                 if(sceltaPanel==null)
-                    sceltaPanel=new sceltaJPanel();
+                    sceltaPanel=new SceltaJPanel();
                 visualizzaScelta();
             }});
         Component[]comp1={lbl,comp};//orizz
@@ -198,7 +198,7 @@ class Frame extends JFrame{
         panel.add(table,BorderLayout.CENTER);
         return panel;
     }
-    public class proposteJPanel extends JPanel{
+    public class ProposteJPanel extends JPanel{
         JRadioButton opt1 = new JRadioButton("Cifrario di Cesare");
         JRadioButton opt2 = new JRadioButton("Cifrario a Chiave");
         JRadioButton opt3 = new JRadioButton("Cifrario Casuale");
@@ -217,7 +217,7 @@ class Frame extends JFrame{
         JButton btn2=new JButton("Aggiorna");
         //!!! Aggiungere refresh proposte: forse è più faciel richreare il panel, dato che bisogna ricreare la tabella.
         
-        public proposteJPanel(){
+        public ProposteJPanel(){
             
 //            user.add("Max210491");
 //            user.add("SeniornSimo");
@@ -292,7 +292,7 @@ class Frame extends JFrame{
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(sceltaPanel==null)
-                        sceltaPanel=new sceltaJPanel();
+                        sceltaPanel=new SceltaJPanel();
                     visualizzaScelta();
                 }});
             JButton invia = new JButton("Invia");
@@ -388,9 +388,9 @@ class Frame extends JFrame{
             return true;
         }
     }
-    public class scriviJPanel extends JPanel{
+    public class ScriviJPanel extends JPanel{
         JLabel userlbl=new JLabel("Destinatario");
-        Choice user=new Choice();
+        Choice sceltaDestinatario=new Choice();
         JTextArea messaggio=new JTextArea("Testo");
         JTextField titolo=new JTextField("Titolo");
         JButton btn=new JButton("Invia");
@@ -409,7 +409,7 @@ class Frame extends JFrame{
         JPanel panel2=new JPanel();
         JButton btn2=new JButton("Cancella");
         
-        public scriviJPanel(){
+        public ScriviJPanel(){
             super();
             /*************************************/
             btn.addActionListener(new ActionListener() {
@@ -432,7 +432,7 @@ class Frame extends JFrame{
                     visualizzaScrivi();
                 }});
             temp.add(nuovo);
-            user.addItemListener(new ItemListener(){
+            sceltaDestinatario.addItemListener(new ItemListener(){
                 @Override
                 public void itemStateChanged(ItemEvent e) {
                     modificato = true;
@@ -472,21 +472,21 @@ class Frame extends JFrame{
             panel1.add(btn2,BorderLayout.SOUTH);   
             /*************************************/
             setLayout(new GridLayout(1,2));
-            add(editLeft(userlbl,user,titolo,messaggio,temp));
+            add(editLeft(userlbl,sceltaDestinatario,titolo,messaggio,temp));
             add(panel1);
         }
         
         public boolean nuovo(){
             destinatari = gc.elencaDestinatari();
-            user.removeAll();
+            sceltaDestinatario.removeAll();
             for(UserInfo s:destinatari){
-                user.add(s.getNome()+" "+s.getCognome());
+                sceltaDestinatario.add(s.getNome()+" "+s.getCognome());
             }
             msgScrivi = null;
             titolo.setText("Titolo");
             messaggio.setText("Testo");
-            if(user.getItemCount()!=0){
-                user.select(0);
+            if(sceltaDestinatario.getItemCount()!=0){
+                sceltaDestinatario.select(0);
             }
             modificato = false;
             carica();
@@ -495,7 +495,7 @@ class Frame extends JFrame{
         
         public boolean salva(){
             if(!modificato) return false;
-            if(user.getItemCount()==0) return false;
+            if(sceltaDestinatario.getItemCount()==0) return false;
             
             if(msgScrivi==null){
                 msgScrivi = new MessaggioReale(gc.getUser());
@@ -503,8 +503,8 @@ class Frame extends JFrame{
             msgScrivi.setTitolo(titolo.getText());
             msgScrivi.setTesto(messaggio.getText());
             
-            msgScrivi.setSisCif(gc.getSdcAttivo(destinatari.get(user.getSelectedIndex())));
-            msgScrivi.setDestinatario(destinatari.get(user.getSelectedIndex()));
+            msgScrivi.setSisCif(gc.getSdcAttivo(destinatari.get(sceltaDestinatario.getSelectedIndex())));
+            msgScrivi.setDestinatario(destinatari.get(sceltaDestinatario.getSelectedIndex()));
             
             msgScrivi.setLingua("Italiano");
             modificato = false;
@@ -542,7 +542,7 @@ class Frame extends JFrame{
                         messaggio.setText(msgScrivi.getTesto());
                         String id = msgScrivi.getDestinatario().getId();
                         for(UserInfo u : destinatari){
-                            if(u.getId().equals(id)) user.select(destinatari.indexOf(u));
+                            if(u.getId().equals(id)) sceltaDestinatario.select(destinatari.indexOf(u));
                         }
                         modificato = false;
                         
@@ -586,7 +586,7 @@ class Frame extends JFrame{
             return success;
         }
     }
-    public class gestisciJPanel extends JPanel{
+    public class GestisciJPanel extends JPanel{
         JLabel userlbl=new JLabel("");
         JTextField user=new JTextField("");
         JTextArea messaggio=new JTextArea("Contenuto");
@@ -600,7 +600,7 @@ class Frame extends JFrame{
         Object [][]testo={{"max210491","tilooo1"},{"seniorsimo","tilooo2"}};
         Object []nomi={"ID","Titolo"};
         JPanel panel=new JPanel();
-        public gestisciJPanel(){
+        public GestisciJPanel(){
             super();
             messaggio.setEditable(false);
             user.setEditable(false);
@@ -732,7 +732,7 @@ class Frame extends JFrame{
             return success;
         }
     }
-    public class spiaJPanel extends JPanel{
+    public class SpiaJPanel extends JPanel{
         JLabel userlbl=new JLabel("Mittente");
         JTextField user=new JTextField("");
         JTextArea messaggio=new JTextArea("Contenuto");
@@ -743,7 +743,7 @@ class Frame extends JFrame{
         
         JButton btn2=new JButton("Aggiorna");
         /*************************************/
-        public spiaJPanel(){
+        public SpiaJPanel(){
             super();
             messaggio.setEditable(false);
             user.setEditable(false);
@@ -781,39 +781,39 @@ class Frame extends JFrame{
             add(borderVert(patternPanel,mapping,gridOrizz(comp2)));
         }
     }
-    public class sceltaJPanel extends JPanel{
+    public class SceltaJPanel extends JPanel{
         JButton button1=new JButton("Scrivi");
         JButton button2=new JButton("Gestisci");
         JButton button3=new JButton("Spia");
         JButton button4=new JButton("Proposte");
-        public sceltaJPanel(){
+        public SceltaJPanel(){
             super();
             button1.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(scriviPanel==null)
-                        scriviPanel=new scriviJPanel();
+                        scriviPanel=new ScriviJPanel();
                     visualizzaScrivi();
                 }});
             button2.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(gestisciPanel==null)
-                        gestisciPanel=new gestisciJPanel();
+                        gestisciPanel=new GestisciJPanel();
                     visualizzaGestisci();
                 }});
             button3.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(spiaPanel==null)
-                        spiaPanel=new spiaJPanel();
+                        spiaPanel=new SpiaJPanel();
                     visualizzaSpia();
                 }});
             button4.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(propostePanel==null)
-                                    propostePanel=new proposteJPanel();
+                                    propostePanel=new ProposteJPanel();
                     visualizzaProposte();
                 }});
             Component[]temp={button1,button4,button2,button3};

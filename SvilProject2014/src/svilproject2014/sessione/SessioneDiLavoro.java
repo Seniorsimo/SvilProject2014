@@ -46,10 +46,10 @@ public class SessioneDiLavoro {
                 id_utente = info.getInt("ID_UTENTE");
                 stato = info.getString("STATO");
                 
-                gestoreIpotesi = GestoreIpotesi.load(id_gestore);
-                messaggio = gestoreIpotesi.getMessaggio();
-                strumentiSupporto = new StrumentiDiSupporto(id_lingua);
-                
+//                gestoreIpotesi = GestoreIpotesi.load(id_gestore);
+//                messaggio = gestoreIpotesi.getMessaggio();
+                //strumentiSupporto = new StrumentiDiSupporto(id_lingua);
+//                
         } catch (SQLException ex) {
             Logger.getLogger(Messaggio.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -58,7 +58,7 @@ public class SessioneDiLavoro {
     public static List<SessioneDiLavoro> caricaSalvate(UserInfo stud){
         String idStud = stud.getId();
         
-        String sql = "SELECT * FROM SESSIONEDILAVORO WHERE ID_UTENTE='" + idStud + "'";
+        String sql = "SELECT * FROM SESSIONEDILAVORO WHERE ID_UTENTE=" + idStud + "";
         ResultSet rs = DBManager.getDBManager().execute(sql);
         ArrayList<SessioneDiLavoro> list = new ArrayList<>();
         while(createNextSessioneDiLavoro(rs, list));
@@ -75,10 +75,15 @@ public class SessioneDiLavoro {
     }
 
     public GestoreIpotesi getGestoreIpotesi() {
+        if(gestoreIpotesi==null){
+            gestoreIpotesi = GestoreIpotesi.load(id_gestore);
+            messaggio = gestoreIpotesi.getMessaggio();
+        }
         return gestoreIpotesi;
     }
 
     public StrumentiDiSupporto getStrumentiSupporto() {
+        if(strumentiSupporto==null) strumentiSupporto = new StrumentiDiSupporto(id_lingua);
         return strumentiSupporto;
     }
     
@@ -107,7 +112,9 @@ public class SessioneDiLavoro {
     
     public boolean salva(){
         if(!gestoreIpotesi.salva()) return false;
-        id_lingua = strumentiSupporto.getLingua();
+        id_gestore = gestoreIpotesi.getId();
+        
+        if(strumentiSupporto!=null) id_lingua = strumentiSupporto.getLingua();
         
         //salvo su db
         String sql;

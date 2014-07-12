@@ -174,7 +174,7 @@ class Frame extends JFrame{
                         }
                 }
                 else if(idPanelVisualizzato==3&&spiaPanel.modificato){//sto uscendo da spia
-                    int risp = DialogMessage.popupYesNo("Vuoi salvare una bozza?", null);
+                    
                     if(!spiaPanel.salva())
                         DialogMessage.popupTesto("Impossibile salvate la sessione.");
                 }
@@ -963,6 +963,7 @@ class Frame extends JFrame{
             }
             messaggio.setText(gc.visualizzaTestoParziale());
             mapping.setText(gc.visualizzaAssociazioni());
+            if(gc.verificaSoluzione()) DialogMessage.popupTesto("Messaggio decifrato");
         }
     }
     public class SceltaJPanel extends JPanel{

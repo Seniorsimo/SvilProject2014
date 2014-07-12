@@ -362,4 +362,9 @@ public class GUIController {
         return Proposta.caricaAttiva(user.getId(), partner.getId()).getSdc();
     }
     
+    public boolean verificaSoluzione(){
+        if(sdl==null) return false;
+        return sdl.getGestoreIpotesi().verificaRisoluzione();
+    }
+    
 }

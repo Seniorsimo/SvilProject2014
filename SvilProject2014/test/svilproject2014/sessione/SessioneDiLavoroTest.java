@@ -60,6 +60,7 @@ public class SessioneDiLavoroTest {
     public void testSalva() {
         System.out.println("salva");
         SessioneDiLavoro instance = SessioneDiLavoro.load(1);
+        instance.getGestoreIpotesi();
         boolean expResult = true;
         boolean result = instance.salva();
         assertEquals(expResult, result);
@@ -73,6 +74,7 @@ public class SessioneDiLavoroTest {
         System.out.println("abbandona");
         SessioneDiLavoro instance = SessioneDiLavoro.load(1);
         boolean expResult = true;
+        instance.getGestoreIpotesi();
         boolean result = instance.abbandona();
         assertEquals(expResult, result);
         assertEquals("abbandonato", instance.getStato());

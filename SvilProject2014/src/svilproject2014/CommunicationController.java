@@ -72,7 +72,8 @@ public class CommunicationController {
     }
 
     public static List<Proposta> getAccettazioneProposte(Studente usr) {
-        String sql = "SELECT * FROM PROPOSTE WHERE ID_PARTNER=" + usr.getId() + " AND NOTIFICATA=0 AND (STATO='accepted' OR STATO='refused')";
+        //String sql = "SELECT * FROM PROPOSTE WHERE ID_PARTNER=" + usr.getId() + " AND NOTIFICATA=0 AND (STATO='accepted' OR STATO='refused')";
+        String sql = "SELECT * FROM PROPOSTE WHERE ID=" + usr.getId() + " AND NOTIFICATA=0 AND (STATO='accepted' OR STATO='refused')";
         ResultSet rs = DBManager.getDBManager().execute(sql);
         ArrayList<Proposta> listaProp = new ArrayList<>();
 

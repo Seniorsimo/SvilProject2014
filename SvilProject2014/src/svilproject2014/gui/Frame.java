@@ -26,6 +26,7 @@ import javax.swing.*;
 import java.lang.*;
 import java.util.*;
 import javax.swing.event.*;
+import javax.swing.table.DefaultTableModel;
 import svilproject2014.messaggio.MessaggioReale;
 import svilproject2014.sessione.SessioneDiLavoro;
 /*public class prova{
@@ -373,7 +374,11 @@ class Frame extends JFrame{
             }
             
             
-            table1 = new JTable(testo,nomi);
+            table1 = new JTable(testo,nomi){  
+                public boolean isCellEditable(int row, int column){  
+                  return false;  
+                }  
+              };
             table1.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -547,7 +552,11 @@ class Frame extends JFrame{
             }
             
             
-            table1 = new JTable(testo,nomi);
+            table1 = new JTable(testo,nomi){  
+                public boolean isCellEditable(int row, int column){  
+                  return false;  
+                }  
+              };  
             table1.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -675,7 +684,11 @@ class Frame extends JFrame{
             }
             
             
-            table1 = new JTable(testo,nomi);
+            table1 = new JTable(testo,nomi){  
+                public boolean isCellEditable(int row, int column){  
+                  return false;  
+                }  
+            };  
             table1.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -710,7 +723,11 @@ class Frame extends JFrame{
             }
             
             
-            table2 = new JTable(testo2,nomi);
+            table2 = new JTable(testo2,nomi){  
+                public boolean isCellEditable(int row, int column){  
+                  return false;  
+                }  
+              };  
             table2.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -892,7 +909,11 @@ class Frame extends JFrame{
                         testo2[index2++] = o;
                     }
                     
-                    table = new JTable(testo2,nomi);
+                    table = new JTable(testo2,nomi){  
+                        public boolean isCellEditable(int row, int column){  
+                          return false;  
+                        }  
+                      };  
                     table.setPreferredSize(new Dimension(300,200));
                     
                    //patternPanel=borderVert(gridOrizz(comp),table,null);

@@ -55,7 +55,6 @@ public class GestoreIpotesiTest {
         System.out.println("load - id = 10 - id non presente nel database");
         id = 10;
         result = GestoreIpotesi.load(id);
-        //System.out.println("load result null? " + (result == null));
         assertNull(result);
         
         System.out.println("load - id = 1 - id presente nel db");
@@ -76,14 +75,10 @@ public class GestoreIpotesiTest {
     public void testVisualizzaAssociazioni() {
         System.out.println("visualizzaAssociazioni");
         GestoreIpotesi instance = GestoreIpotesi.load(2);
-        //System.out.println("visualizzaAssociazioni - instance " + instance.toString());
         List<Coppia> expResult = new ArrayList<>();
         Coppia c1 = new Coppia('c','a', new Coppia(' ',' ',null)); //creo un figlio della radice
-        expResult.add(c1);
-        //System.out.println("visualizzaAssociazioni - expResult " + expResult.toString());      
-        List<Coppia> result = instance.visualizzaAssociazioni();
-        //System.out.println("visualizzaAssociazioni - result vuoto " + result.isEmpty()); 
-        //System.out.println("visualizzaAssociazioni - result elemento 0 " + result.get(0).toString()); 
+        expResult.add(c1);      
+        List<Coppia> result = instance.visualizzaAssociazioni(); 
         assertEquals(expResult, result);
     }
 
